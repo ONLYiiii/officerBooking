@@ -12,67 +12,28 @@
 
     <div class="pa-10">
       <v-row>
-        <v-col cols="7">
+        <v-col cols="12" lg="7">
+          <!-- Left Side -->
           <v-row class="mt-2">
-            <v-col>
-              <p style="font-color: #1f4680">
-                จังหวัด<span style="color: red">*</span>
-              </p>
-              <v-autocomplete
-                :rules="Provincerules"
-                v-model="selectedProvince"
-                variant="outlined"
-                :items="province"
-                item-title="ccDesc"
-                item-value="ccCode"
-                required
-                color="#1081E9"
-              ></v-autocomplete>
-            </v-col>
-            <v-col>
-              <p>อำเภอ/เขต<span style="color: red">*</span></p>
-              <v-autocomplete
-                :rules="Districtrules"
-                v-model="selectedDistrict"
-                variant="outlined"
-                :items="updateDistrict"
-                required
-                color="#1081E9"
-                item-title="aaDesc"
-                item-value="aaCode"
-                :disabled="!selectedProvince"
-              ></v-autocomplete>
+            <!-- Only 4 Autocomplete Component -->
+            <v-col
+              cols="12"
+              lg="6"
+              v-for="(item, key) in autocompleteProps"
+              :key="key"
+            >
+              <Autocomplete
+                :header="item.header"
+                :rules="item.rules"
+                :items="item.items"
+                :itemTitle="item.itemTitle"
+                :itemValue="item.itemValue"
+                :disabled="item.disabled"
+                v-model="item.modelValue"
+              />
             </v-col>
           </v-row>
-          <v-row class="mt-4">
-            <v-col>
-              <p>ประเภทงาน<span style="color: red">*</span></p>
-              <v-autocomplete
-                :rules="Typerules"
-                v-model="selectedType"
-                variant="outlined"
-                :items="typework"
-                required
-                color="#1081E9"
-                item-title="work"
-                item-value="code"
-              ></v-autocomplete>
-            </v-col>
-            <v-col>
-              <p>งานบริการ<span style="color: red">*</span></p>
-              <v-autocomplete
-                :rules="Servicerules"
-                v-model="selectedService"
-                variant="outlined"
-                :items="updateService"
-                required
-                color="#1081E9"
-                :disabled="!selectedType"
-                item-title="service"
-                item-value="code"
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
+
           <v-row>
             <v-col>
               <p style="color: #7d7d7d; font-family: 'Kanit'">
@@ -161,6 +122,9 @@
 </template>
 
 <script>
+//Component Import
+import Autocomplete from "@/components/inputComponent/autocomplete.vue";
+
 import DialogInfo from "@/components/DialogInfo.vue";
 import Calendar from "@/components/Calendar.vue";
 import holiday from "../json/holiday.json";
@@ -175,51 +139,76 @@ import { mapStores } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
 export default {
   data: () => ({
+    autocompleteProps: {
+      province: {
+        header: "จังหวัด",
+        rules: [
+          (value) => {
+            if (value) return true;
+            return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
+          },
+        ],
+        items: provinceJson,
+        itemTitle: "ccDesc",
+        itemValue: "ccCode",
+        oldModelValue: null,
+        modelValue: null,
+        disabled: false,
+      },
+      district: {
+        header: "อำเภอ/เขต",
+        rules: [
+          (value) => {
+            if (value) return true;
+
+            return "กรุณาเลือกอำเภอ/เขตที่ต้องการเข้ารับบริการ";
+          },
+        ],
+        items: [],
+        itemTitle: "aaDesc",
+        itemValue: "aaCode",
+        modelValue: null,
+        disabled: false,
+      },
+      work: {
+        header: "ประเภทงาน",
+        rule: [
+          (value) => {
+            if (value) return true;
+
+            return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
+          },
+        ],
+        items: typework,
+        itemTitle: "work",
+        itemValue: "code",
+        oldModelValue: null,
+        modelValue: null,
+        disabled: false,
+      },
+      service: {
+        header: "งานบริการ",
+        rule: [
+          (value) => {
+            if (value) return true;
+
+            return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
+          },
+        ],
+        items: [],
+        itemTitle: "service",
+        itemValue: "code",
+        modelValue: null,
+        disabled: false,
+      },
+    },
+
     holiday: holiday,
-    province: provinceJson,
     district11: district11Json,
     district12: district12Json,
     district13: district13Json,
-    typework: typework,
     service: service,
-    updateDistrict: [],
-    updateService: [],
-    selectedProvince: null,
-    selectedDate: new Date(),
-    selectedwork: null,
-    items: ["item1", "item2", "item3", "item4"],
-    Provincerules: [
-      (value) => {
-        if (value) return true;
-        return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
-      },
-    ],
-    selectedDistrict: null,
-    Districtrules: [
-      (value) => {
-        if (value) return true;
-
-        return "กรุณาเลือกอำเภอ/เขตที่ต้องการเข้ารับบริการ";
-      },
-    ],
-    selectedType: null,
-    Typerules: [
-      (value) => {
-        if (value) return true;
-
-        return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
-      },
-    ],
-    selectedService: null,
-    Servicerules: [
-      (value) => {
-        if (value) return true;
-
-        return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
-      },
-    ],
     dialogVisible: false,
-
     Bookingtime: "",
     selectedDate: null,
   }),
@@ -276,15 +265,16 @@ export default {
   components: {
     DialogInfo,
     Calendar,
+    Autocomplete,
   },
   computed: {
     ...mapStores(useBookingDetailsStore),
     allFieldsFilled() {
       return !!(
-        this.selectedProvince &&
-        this.selectedDistrict &&
-        this.selectedType &&
-        this.selectedService
+        this.autocompleteProps.province.modelValue &&
+        this.autocompleteProps.district.modelValue &&
+        this.autocompleteProps.work.modelValue &&
+        this.autocompleteProps.service.modelValue
       );
     },
     isCodeVisible() {
@@ -339,29 +329,46 @@ export default {
     },
   },
   watch: {
-    selectedProvince: function (newProvince) {
-      this.selectedDistrict = null;
-      switch (newProvince) {
-        case "11":
-          this.updateDistrict = this.district11;
-          break;
-        case "12":
-          this.updateDistrict = this.district12;
-          break;
-        case "13":
-          this.updateDistrict = this.district13;
-          break;
-        default:
-          this.updateDistrict = null;
-      }
-    },
-    selectedType: function (setService) {
-      // const typeCode = `${setService > 9 ? "" : "0"}${setService}`; If type is integer
+    autocompleteProps: {
+      handler(newValue) {
+        //* Province and District
+        if (
+          newValue.province.modelValue !== null &&
+          newValue.province.modelValue !== newValue.province.oldModelValue
+        ) {
+          this.autocompleteProps.district.modelValue = null;
+          switch (newValue.province.modelValue) {
+            case "11":
+              this.autocompleteProps.district.items = this.district11;
+              break;
+            case "12":
+              this.autocompleteProps.district.items = this.district12;
+              break;
+            case "13":
+              this.autocompleteProps.district.items = this.district13;
+              break;
+            default:
+              this.autocompleteProps.district.items = null;
+          }
+          this.autocompleteProps.province.oldModelValue =
+            newValue.province.modelValue;
+        }
 
-      this.selectedService = null;
-      this.updateService = this.service.filter((value) =>
-        value.code.startsWith(setService)
-      );
+        //* Work and Service
+        if (
+          newValue.work.modelValue !== null &&
+          newValue.work.modelValue !== newValue.work.oldModelValue
+        ) {
+          // const typeCode = `${setService > 9 ? "" : "0"}${setService}`; If type is integer
+
+          this.autocompleteProps.service.modelValue = null;
+          this.autocompleteProps.service.items = this.service.filter((value) =>
+            value.code.startsWith(newValue.work.modelValue)
+          );
+          this.autocompleteProps.work.oldModelValue = newValue.work.modelValue;
+        }
+      },
+      deep: true,
     },
     allFieldsFilled: function (newValue) {
       if (!newValue) {
