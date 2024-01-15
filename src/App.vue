@@ -5,3 +5,7 @@
 <script>
 //
 </script>
+
+<style>
+@import "./styles/main.scss";
+</style>

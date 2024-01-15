@@ -39,11 +39,11 @@
               <p style="color: #7d7d7d; font-family: 'Kanit'">
                 เลือกวันที่จะเข้ารับบริการ
               </p>
-              <calendar
+              <custom-calendar
                 v-if="allFieldsFilled"
                 :date="selectedDate"
                 @update-date="updateDate"
-              ></calendar>
+              ></custom-calendar>
             </v-col>
           </v-row>
         </v-col>
@@ -64,7 +64,9 @@
             </h3>
 
             <h3 class="Info-custom">
-              นัดหมายขอเข้ารับบริการ{{ selectedTypeTitle }}:
+              นัดหมายขอเข้ารับบริการ{{ selectedTypeTitle }} :
+            </h3>
+            <h3 class="Info-custom">
               {{ selectedServiceTitle }}
             </h3>
           </div>
@@ -108,10 +110,10 @@
               :selected-service-title="selectedServiceTitle"
               :selected-type-title="selectedTypeTitle"
               :selected-district-title="selectedDistrictTitle"
-              :select-province="selectedProvince"
-              :selectedDistrict="selectedDistrict"
-              :selectedType="selectedType"
-              :selectedService="selectedService"
+              :select-province="autocompleteProps.province.modelValue"
+              :selectedDistrict="autocompleteProps.district.modelValue"
+              :selectedType="autocompleteProps.work.modelValue"
+              :selectedService="autocompleteProps.service.modelValue"
               :get-formatted-date="getFormattedDate"
             ></dialog-info>
           </v-dialog>
@@ -126,7 +128,7 @@
 import Autocomplete from "@/components/inputComponent/autocomplete.vue";
 
 import DialogInfo from "@/components/DialogInfo.vue";
-import Calendar from "@/components/Calendar.vue";
+import CustomCalendar from "@/components/CustomCalendar.vue";
 import holiday from "../json/holiday.json";
 import provinceJson from "../json/province.json";
 import district11Json from "../json/district-11.json";
@@ -137,6 +139,9 @@ import service from "../json/service.json";
 import { getFullDate } from "@/utilities/addDate";
 import { mapStores } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
+import { formatDate } from "../utilities/formatDate";
+import Swal from "sweetalert2";
+
 export default {
   data: () => ({
     autocompleteProps: {
@@ -233,38 +238,10 @@ export default {
     updateDate(newValue) {
       this.selectedDate = newValue;
     },
-    getFormattedDate() {
-      const day = this.selectedDate.getDate();
-      const month = this.getMonthName(this.selectedDate.getMonth());
-      const year = this.selectedDate.getFullYear() + 543; // Adding 543 to get the Buddhist era year
-
-      return `${day} ${month} ${year}`;
-    },
-    getMonthName(month) {
-      const monthNames = [
-        "มกราคม",
-        "กุมภาพันธ์",
-        "มีนาคม",
-        "เมษายน",
-        "พฤษภาคม",
-        "มิถุนายน",
-        "กรกฎาคม",
-        "สิงหาคม",
-        "กันยายน",
-        "ตุลาคม",
-        "พฤศจิกายน",
-        "ธันวาคม",
-      ];
-
-      return monthNames[month];
-    },
-    updateDate(newDate) {
-      this.selectedDate = newDate;
-    },
   },
   components: {
     DialogInfo,
-    Calendar,
+    CustomCalendar,
     Autocomplete,
   },
   computed: {
@@ -281,51 +258,47 @@ export default {
       return this.selectedDate !== null;
     },
     selectedProvinceTitle() {
-      if (this.selectedProvince) {
-        const index = this.province.findIndex(
-          (value) => value.ccCode === this.selectedProvince
+      if (this.autocompleteProps.province.modelValue) {
+        const index = this.autocompleteProps.province.items.findIndex(
+          (value) => value.ccCode === this.autocompleteProps.province.modelValue
         );
-        return this.province[index].ccDesc;
+        return this.autocompleteProps.province.items[index].ccDesc;
       }
 
       return "กรุณาเลือกจังหวัด";
     },
     selectedDistrictTitle() {
-      if (this.selectedDistrict) {
-        const index = this.updateDistrict.findIndex(
-          (value) => value.aaCode === this.selectedDistrict
+      if (this.autocompleteProps.district.modelValue) {
+        const index = this.autocompleteProps.district.items.findIndex(
+          (value) => value.aaCode === this.autocompleteProps.district.modelValue
         );
-        return this.updateDistrict[index].aaDesc;
+        return this.autocompleteProps.district.items[index].aaDesc;
       }
 
       return "กรุณาเลือกอำเภอ/เขต";
     },
     selectedTypeTitle() {
-      if (this.selectedType) {
-        const index = this.typework.findIndex(
-          (value) => value.code === this.selectedType
+      if (this.autocompleteProps.work.modelValue) {
+        const index = this.autocompleteProps.work.items.findIndex(
+          (value) => value.code === this.autocompleteProps.work.modelValue
         );
-        return this.typework[index].work;
+        return this.autocompleteProps.work.items[index].work;
       }
 
       return "กรุณาเลือกประเภทงาน";
     },
     selectedServiceTitle() {
-      if (this.selectedService) {
-        const index = this.service.findIndex(
-          (value) => value.code === this.selectedService
+      if (this.autocompleteProps.service.modelValue) {
+        const index = this.autocompleteProps.service.items.findIndex(
+          (value) => value.code === this.autocompleteProps.service.modelValue
         );
-        return this.service[index].service;
+        return this.autocompleteProps.service.items[index].service;
       }
 
       return "กรุณาเลือกงานบริการ";
     },
     getFormattedDate() {
-      const day = this.selectedDate.getDate();
-      const month = this.getMonthName(this.selectedDate.getMonth());
-      const year = this.selectedDate.getFullYear() + 543; // Adding 543 to get the Buddhist era year
-
-      return `${day} ${month} ${year}`;
+      return formatDate(this.selectedDate);
     },
   },
   watch: {
@@ -359,13 +332,27 @@ export default {
           newValue.work.modelValue !== null &&
           newValue.work.modelValue !== newValue.work.oldModelValue
         ) {
-          // const typeCode = `${setService > 9 ? "" : "0"}${setService}`; If type is integer
+          const typeCode = `${newValue.work.modelValue > 9 ? "" : "0"}${
+            newValue.work.modelValue
+          }`; //If type is integer
 
           this.autocompleteProps.service.modelValue = null;
           this.autocompleteProps.service.items = this.service.filter((value) =>
-            value.code.startsWith(newValue.work.modelValue)
+            value.code.startsWith(typeCode)
           );
           this.autocompleteProps.work.oldModelValue = newValue.work.modelValue;
+        }
+
+        //* Uncomplete Input Data Alert
+        if (newValue.service.modelValue && !this.allFieldsFilled) {
+          Swal.fire({
+            title: "กรอกข้อมูลไม่ครบถ้วน!",
+            text: `กรุณาใส่${
+              !newValue.province.modelValue ? "จังหวัดและอำเภอ/เขต" : "อำเภอเขต"
+            }`,
+            icon: "error",
+            confirmButtonText: "close",
+          });
         }
       },
       deep: true,
@@ -382,9 +369,12 @@ export default {
       if (index === -1) {
         return;
       } else {
-        alert(
-          `ไม่สามารถเลือกวันที่นี้ได้เนื่องจากเป็น${this.holiday[index].title}`
-        );
+        Swal.fire({
+          title: "กรอกข้อมูลไม่ครบถ้วน!",
+          text: `ไม่สามารถเลือกวันที่นี้ได้เนื่องจากเป็น${this.holiday[index].title}`,
+          icon: "error",
+          confirmButtonText: "Close",
+        });
         this.selectedDate = oldDate;
       }
     },

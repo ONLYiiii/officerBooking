@@ -13,9 +13,8 @@
         <h1 style="font-family: 'Kanit'; color: #1081e9; letter-spacing: 4px">
           {{ bookingDetails.booking_id }}
         </h1>
-        <h2 style="font-family: 'Kanit'">
-          บริการ{{ typeworkName }} : {{ serviceName }}
-        </h2>
+        <h2 style="font-family: 'Kanit'">บริการ{{ typeworkName }} :</h2>
+        <h2 style="font-family: 'Kanit'">{{ serviceName }}</h2>
         <h2 style="font-family: 'Kanit'">
           จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}
         </h2>
@@ -94,6 +93,7 @@ import typework from "../json/typework.json";
 import service from "../json/service.json";
 import { useBookingDetailsStore } from "@/stores/booking_details";
 import { mapState, mapActions } from "pinia";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -122,11 +122,25 @@ export default {
         this.provinceName,
         this.districtName,
         this.typeworkName,
-        this.serviceName
+        this.serviceName,
+        true
       );
     },
     sendEmail() {
-      alert(`ส่งสรุปข้อมูลการนัดหมายไปที่อีเมลล์ ${this.emailSummary} สำเร็จ`);
+      print(
+        this.bookingDetails,
+        this.provinceName,
+        this.districtName,
+        this.typeworkName,
+        this.serviceName,
+        false
+      );
+      Swal.fire({
+        title: "เเจ้งเตือน!",
+        text: `ส่งสรุปข้อมูลการนัดหมายไปที่อีเมลล์ ${this.emailSummary} สำเร็จ`,
+        icon: "error",
+        confirmButtonText: "close",
+      });
     },
   },
   computed: {

@@ -11,7 +11,7 @@
         :view-mode="viewMode"
         @update:view-mode="updateViewMode"
         :min="new Date()"
-        :max="addDate(new Date(), 30)"
+        :max="addDate(new Date(), 60)"
       >
         <template v-slot:title>
           <v-btn

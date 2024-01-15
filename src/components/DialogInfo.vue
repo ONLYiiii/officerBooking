@@ -1,13 +1,14 @@
 <template>
-  <v-card>
-    <v-card-title class="titledialog">ยืนยันการจอง</v-card-title>
+  <v-card min-height="20vh" min-width="58vh">
+    <v-card-title class="titledialog d-flex align-center"
+      >ยืนยันการจอง</v-card-title
+    >
+
     <v-card-text
       >ยืนยันการจองนัดหมายขอเข้ารับบริการ วันที่ {{ getFormattedDate }}
     </v-card-text>
-    <v-card-text
-      >เข้ารับบริการ{{ selectedTypeTitle }} :
-      {{ selectedServiceTitle }}</v-card-text
-    >
+    <v-card-text>เข้ารับบริการ{{ selectedTypeTitle }} : </v-card-text>
+    <v-card-text> {{ selectedServiceTitle }}</v-card-text>
     <v-card-text
       >ที่จังหวัด{{ selectedProvinceTitle }} อำเภอ/เขต{{
         selectedDistrictTitle

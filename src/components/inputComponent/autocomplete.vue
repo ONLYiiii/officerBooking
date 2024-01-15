@@ -13,11 +13,13 @@
       required
       color="#1081E9"
       :disabled="disabled"
+      @click="noUpdateData"
     ></v-autocomplete>
   </div>
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
   props: [
     "header",
@@ -37,6 +39,20 @@ export default {
       set(newValue) {
         this.$emit("update:modelValue", newValue);
       },
+    },
+  },
+  methods: {
+    noUpdateData() {
+      if (this.items.length === 0) {
+        Swal.fire({
+          title: "ข้อมูลไม่ครบถ้วน!",
+          text: `กรุณาเลือก${
+            this.header === "อำเภอ/เขต" ? "จังหวัด" : "ประเภทงาน"
+          }ที่ต้องการเข้ารับบริการ`,
+          icon: "error",
+          confirmButtonText: "Cool",
+        });
+      }
     },
   },
 };

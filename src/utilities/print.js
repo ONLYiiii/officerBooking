@@ -1,6 +1,8 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { fonts } from "./customfont";
+import { formatDateString } from "../utilities/formatDate";
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
@@ -10,22 +12,25 @@ export default function print(
   provinceName,
   districtName,
   typeworkName,
-  serviceName
+  serviceName,
+  isPrint
 ) {
+  const formattedDate = formatDateString(bookingDetails.date_booking);
   var docDefinition = {
     pageSize: "A5",
     content: [
       {
         text: [
-          `หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :\n`,
+          `เลขนัดหมายขอเข้ารับบริการของคุณคือ :\n`,
           {
             text: `${bookingDetails.booking_id}\n`,
             fontSize: 18,
             color: "#1081E9",
             characterSpacing: 2,
           },
-          `วันที่ ${bookingDetails.date_booking}\n`,
-          `บริการ${typeworkName} : ${serviceName}\n`,
+          `วันที่  ${formattedDate}\n`,
+          `บริการ${typeworkName} : \n`,
+          `${serviceName} \n`,
           `จังหวัด${provinceName} ${districtName}\n`,
           `${
             bookingDetails.time_booking === 1
@@ -53,5 +58,13 @@ export default function print(
     },
   };
 
-  pdfMake.createPdf(docDefinition).open();
+  const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+
+  if (isPrint) {
+    pdfDocGenerator.open();
+  } else {
+    pdfDocGenerator.getBase64((data) => {
+      console.log(data);
+    });
+  }
 }
