@@ -1,5 +1,5 @@
 <template>
-  <v-card min-height="20vh" min-width="58vh">
+  <v-card min-height="10vh" min-width="30vw">
     <v-card-title class="titledialog d-flex align-center"
       >ยืนยันการจอง</v-card-title
     >
