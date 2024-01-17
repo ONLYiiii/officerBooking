@@ -52,7 +52,7 @@ export default function print(
     ],
 
     defaultStyle: {
-      font: "Sarabun",
+      font: "Kanit",
       bold: true,
       lineHeight: 2.25,
     },

@@ -50,7 +50,7 @@ export default {
             this.header === "อำเภอ/เขต" ? "จังหวัด" : "ประเภทงาน"
           }ที่ต้องการเข้ารับบริการ`,
           icon: "error",
-          confirmButtonText: "Cool",
+          confirmButtonText: "close",
         });
       }
     },

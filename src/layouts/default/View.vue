@@ -1,7 +1,5 @@
 <template>
-  <v-main class="h-screen">
-    <router-view />
-  </v-main>
+  <router-view />
 </template>
 
 <script setup>

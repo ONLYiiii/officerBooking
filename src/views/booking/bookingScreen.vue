@@ -1,148 +1,132 @@
 <template>
-  <v-card
-    class="mx-auto mt-7"
-    max-width="85vw"
-    max-height="95vh"
-    elevation="5"
-    rounded="lg"
-  >
-    <v-card class="text-h6 custom-title d-flex align-center">
-      <v-card-title class="ml-5">ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title>
-    </v-card>
-
-    <div class="pa-10">
-      <v-row>
-        <v-col cols="12" lg="7">
+  <v-container>
+    <v-card>
+      <v-card-title
+        :style="{
+          backgroundColor: $vuetify.theme.global.current.colors.primary,
+          color: 'whitesmoke',
+          paddingTop: '14px',
+          paddingRight: '16px',
+          paddingBottom: '14px',
+          paddingLeft: '36px',
+        }"
+        >ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
+      >
+      <v-card-text style="padding: 40px">
+        <v-row>
           <!-- Left Side -->
-          <v-row class="mt-2">
-            <!-- Only 4 Autocomplete Component -->
-            <v-col
-              cols="12"
-              lg="6"
-              v-for="(item, key) in autocompleteProps"
-              :key="key"
-            >
-              <Autocomplete
-                :header="item.header"
-                :rules="item.rules"
-                :items="item.items"
-                :itemTitle="item.itemTitle"
-                :itemValue="item.itemValue"
-                :disabled="item.disabled"
-                v-model="item.modelValue"
-              />
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col>
-              <p style="color: #7d7d7d; font-family: 'Kanit'">
-                เลือกวันที่จะเข้ารับบริการ
-              </p>
-              <custom-calendar
-                v-if="allFieldsFilled"
-                :date="selectedDate"
-                @update-date="updateDate"
-              ></custom-calendar>
-            </v-col>
-          </v-row>
-        </v-col>
-
-        <v-col
-          v-if="isCodeVisible"
-          cols="4"
-          class="ml-5 mt-4"
-          style="line-height: 50px"
-        >
-          <div style="line-height: 60px">
-            <h3 class="Info-custom">วันที่ {{ getFormattedDate }}</h3>
-
-            <h3 class="Info-custom">
-              จังหวัด{{ selectedProvinceTitle }} อำเภอ/เขต{{
-                selectedDistrictTitle
-              }}
-            </h3>
-
-            <h3 class="Info-custom">
-              นัดหมายขอเข้ารับบริการ{{ selectedTypeTitle }} :
-            </h3>
-            <h3 class="Info-custom">
-              {{ selectedServiceTitle }}
-            </h3>
-          </div>
-          <v-row class="mt-2">
-            <v-col class="d-flex flex-column align-start">
-              <h3 style="color: red; font-family: 'Kanit'">
-                ช่วงเช้า (เวลา 09.00 - 11.00)
-              </h3>
-              <v-btn
-                style="font-family: 'Kanit'"
-                rounded="lg"
-                size="x-large"
-                width="80%"
-                color="#154C8B"
-                @click="BookMorningTime"
+          <v-col cols="12" lg="7">
+            <v-row>
+              <!-- 4 Autocomplete Component -->
+              <v-col
+                cols="12"
+                sm="6"
+                v-for="(item, key) in autocompleteProps"
+                :key="key"
               >
-                จองคิว</v-btn
-              >
-            </v-col>
-            <v-col class="d-flex flex-column align-center">
-              <h3 style="color: red; font-family: 'Kanit'">
-                ช่วงบ่าย (เวลา 13.00 - 15.00)
-              </h3>
-              <v-btn
-                style="font-family: 'Kanit'"
-                rounded="lg"
-                size="x-large"
-                width="80%"
-                color="#154C8B"
-                @click="BookAfternoonTime"
-                >จองคิว
-              </v-btn>
-            </v-col>
-          </v-row>
-          <v-dialog v-model="dialogVisible" persistent width="auto">
-            <dialog-info
-              @close-dialog="dialogVisible = false"
-              :bookTime="Bookingtime"
-              :selected-date="selectedDate"
-              :selected-province-title="selectedProvinceTitle"
-              :selected-service-title="selectedServiceTitle"
-              :selected-type-title="selectedTypeTitle"
-              :selected-district-title="selectedDistrictTitle"
-              :select-province="autocompleteProps.province.modelValue"
-              :selectedDistrict="autocompleteProps.district.modelValue"
-              :selectedType="autocompleteProps.work.modelValue"
-              :selectedService="autocompleteProps.service.modelValue"
+                <Autocomplete
+                  :header="item.header"
+                  :rules="item.rules"
+                  :items="item.items"
+                  :itemTitle="item.itemTitle"
+                  :itemValue="item.itemValue"
+                  :disabled="item.disabled"
+                  v-model="item.modelValue"
+                />
+              </v-col>
+              <!-- /4 Autocomplete Component -->
+
+              <!-- Date Picker Component -->
+              <v-col cols="12" v-if="allFieldsFilled">
+                <p style="color: #7d7d7d; font-family: 'Kanit'">
+                  เลือกวันที่จะเข้ารับบริการ
+                </p>
+              </v-col>
+              <v-col v-if="allFieldsFilled">
+                <custom-calendar
+                  v-if="!mobileBreak"
+                  :date="selectedDate"
+                  @update-date="updateDate"
+                ></custom-calendar>
+                <v-btn v-else @click="() => (calendarDialog = !calendarDialog)">
+                  เลือกวันที่
+                </v-btn>
+                <CalendarDialog
+                  v-model:dialog="calendarDialog"
+                  v-model:selectDate="selectedDate"
+                />
+              </v-col>
+              <!-- /Date Picker Component -->
+            </v-row>
+          </v-col>
+          <!-- /Left Side -->
+
+          <!-- Right Side -->
+          <v-col v-if="isCodeVisible">
+            <BookingSummary
+              :is-code-visible="isCodeVisible"
               :get-formatted-date="getFormattedDate"
-            ></dialog-info>
-          </v-dialog>
-        </v-col>
-      </v-row>
-    </div>
-  </v-card>
+              :selected-province-title="selectedProvinceTitle"
+              :selected-district-title="selectedDistrictTitle"
+              :selected-type-title="selectedTypeTitle"
+              :selected-service-title="selectedServiceTitle"
+              @book-morning-time="bookMorningTime"
+              @book-afternoon-time="bookAfternoonTime"
+            />
+          </v-col>
+          <!-- /Right Side -->
+        </v-row>
+      </v-card-text>
+    </v-card>
+    <dialog-info
+      v-if="isCodeVisible"
+      @toggle-dialog-visible="(newValue) => (dialogVisible = newValue)"
+      :dialogVisible="dialogVisible"
+      :screenOrientation="screenOrientation"
+      :bookTime="Bookingtime"
+      :selected-date="selectedDate"
+      :selected-province-title="selectedProvinceTitle"
+      :selected-service-title="selectedServiceTitle"
+      :selected-type-title="selectedTypeTitle"
+      :selected-district-title="selectedDistrictTitle"
+      :select-province="autocompleteProps.province.modelValue"
+      :selectedDistrict="autocompleteProps.district.modelValue"
+      :selectedType="autocompleteProps.work.modelValue"
+      :selectedService="autocompleteProps.service.modelValue"
+      :get-formatted-date="getFormattedDate"
+    ></dialog-info>
+  </v-container>
 </template>
 
 <script>
 //Component Import
-import Autocomplete from "@/components/inputComponent/autocomplete.vue";
+import Autocomplete from "@/components/booking/inputComponent/autocomplete.vue";
+import DialogInfo from "@/components/booking/DialogInfo.vue";
+import CustomCalendar from "@/components/booking/CustomCalendar.vue";
+import BookingSummary from "@/components/booking/BookingSummary.vue";
+import CalendarDialog from "@/components/booking/CalendarDialog.vue";
 
-import DialogInfo from "@/components/DialogInfo.vue";
-import CustomCalendar from "@/components/CustomCalendar.vue";
-import holiday from "../json/holiday.json";
-import provinceJson from "../json/province.json";
-import district11Json from "../json/district-11.json";
-import district12Json from "../json/district-12.json";
-import district13Json from "../json/district-13.json";
-import typework from "../json/typework.json";
-import service from "../json/service.json";
+import holiday from "@/json/holiday.json";
+import provinceJson from "@/json/province.json";
+import district11Json from "@/json/district-11.json";
+import district12Json from "@/json/district-12.json";
+import district13Json from "@/json/district-13.json";
+import typework from "@/json/typework.json";
+import service from "@/json/service.json";
 import { getFullDate } from "@/utilities/addDate";
 import { mapStores } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
-import { formatDate } from "../utilities/formatDate";
+import { formatDate } from "@/utilities/formatDate";
 import Swal from "sweetalert2";
 
 export default {
+  components: {
+    DialogInfo,
+    CustomCalendar,
+    Autocomplete,
+    BookingSummary,
+    CalendarDialog,
+  },
   data: () => ({
     autocompleteProps: {
       province: {
@@ -216,6 +200,7 @@ export default {
     dialogVisible: false,
     Bookingtime: "",
     selectedDate: null,
+    calendarDialog: false,
   }),
   methods: {
     showSummaryInfo() {
@@ -227,22 +212,17 @@ export default {
     closeDialog() {
       this.dialogVisible = false;
     },
-    BookMorningTime() {
+    bookMorningTime() {
       this.Bookingtime = 1;
       this.showDialog();
     },
-    BookAfternoonTime() {
+    bookAfternoonTime() {
       this.Bookingtime = 2;
       this.showDialog();
     },
     updateDate(newValue) {
       this.selectedDate = newValue;
     },
-  },
-  components: {
-    DialogInfo,
-    CustomCalendar,
-    Autocomplete,
   },
   computed: {
     ...mapStores(useBookingDetailsStore),
@@ -299,6 +279,16 @@ export default {
     },
     getFormattedDate() {
       return formatDate(this.selectedDate);
+    },
+    mobileBreak() {
+      return this.$vuetify.display.mobile;
+    },
+    screenOrientation() {
+      const orientation =
+        this.$vuetify.display.width > this.$vuetify.display.height
+          ? "landscape"
+          : "portrait";
+      return orientation;
     },
   },
   watch: {
@@ -378,20 +368,20 @@ export default {
         this.selectedDate = oldDate;
       }
     },
+    mobileBreak: function () {
+      this.calendarDialog = false;
+    },
   },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Kanit");
 .custom-title {
-  font-family: "Kanit";
   background-color: #154c8b;
   height: 60px;
   color: whitesmoke;
 }
 .Info-custom {
-  font-family: "Kanit";
   color: #154c8b;
 }
 </style>

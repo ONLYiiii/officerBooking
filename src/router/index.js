@@ -9,17 +9,33 @@ const routes = [
       {
         path: "/",
         name: "bookingScreen",
-        component: () => import("@/views/bookingScreen.vue"),
+        component: () => import("@/views/booking/bookingScreen.vue"),
       },
       {
         path: "/pdf",
         name: "printpdfScreen",
-        component: () => import("@/views/printpdfScreen.vue"),
+        component: () => import("@/views/booking/printpdfScreen.vue"),
       },
       {
         path: "/list",
         name: "bookingListScreen",
-        component: () => import("@/views/bookingListScreen.vue"),
+        component: () => import("@/views/booking/bookingListScreen.vue"),
+      },
+    ],
+  },
+  {
+    path: "/officer",
+    component: () => import("@/layouts/default/Default.vue"),
+    children: [
+      {
+        path: "/officer",
+        name: "bookingListOfficerScreen",
+        component: () => import("@/views/officerBooking/bookingListScreen.vue"),
+      },
+      {
+        path: "/officer/stat",
+        name: "statScreen",
+        component: () => import("@/views/officerBooking/statScreen.vue"),
       },
     ],
   },

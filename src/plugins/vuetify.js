@@ -21,7 +21,7 @@ export default createVuetify({
     themes: {
       light: {
         colors: {
-          primary: "#1867C0",
+          primary: "#154C8B",
           secondary: "#5CBBF6",
         },
       },
@@ -29,5 +29,8 @@ export default createVuetify({
   },
   locale: {
     adapter: createVueI18nAdapter({ i18n, useI18n }),
+  },
+  display: {
+    mobileBreakpoint: "sm",
   },
 });

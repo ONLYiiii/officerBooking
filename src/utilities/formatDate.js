@@ -8,7 +8,7 @@ export function formatDate(date) {
 
 export function formatDateString(dateString) {
   const day = dateString.substring(6);
-  const month = getMonthName(+dateString.substring(4, 6));
+  const month = getMonthName(+dateString.substring(4, 6) - 1);
   const year = dateString.substring(0, 4); // Adding 543 to get the Buddhist era year
 
   return `${day} ${month} ${year}`;

@@ -7,26 +7,24 @@
   >
     <v-row>
       <v-col style="line-height: 70px">
-        <h2 style="font-family: 'Kanit'">
-          หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :
-        </h2>
-        <h1 style="font-family: 'Kanit'; color: #1081e9; letter-spacing: 4px">
-          {{ bookingDetails.booking_id }}
-        </h1>
-        <h2 style="font-family: 'Kanit'">บริการ{{ typeworkName }} :</h2>
-        <h2 style="font-family: 'Kanit'">{{ serviceName }}</h2>
-        <h2 style="font-family: 'Kanit'">
-          จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}
-        </h2>
-        <h2 style="font-family: 'Kanit'">
-          {{
-            bookingDetails.time_booking === 1
-              ? "ช่วงเช้า (เวลา 09.00 - 11.00)"
-              : "ช่วงบ่าย (เวลา 13.00 - 15.00)"
-          }}
-        </h2>
+        <div :style="{ fontSize: computedFontSize }">
+          <h2>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :</h2>
+          <h1 style="color: #1081e9; letter-spacing: 4px">
+            {{ bookingDetails.booking_id }}
+          </h1>
+          <h2>บริการ{{ typeworkName }} :</h2>
+          <h2>{{ serviceName }}</h2>
+          <h2>จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}</h2>
+          <h2>
+            {{
+              bookingDetails.time_booking === 1
+                ? "ช่วงเช้า (เวลา 09.00 - 11.00)"
+                : "ช่วงบ่าย (เวลา 13.00 - 15.00)"
+            }}
+          </h2>
+        </div>
         <v-row justify="center" class="mt-5" align="center">
-          <v-col cols="2">
+          <v-col cols="10" sm="10" lg="3" md="5">
             <v-btn
               size="x-large"
               elevation="1"
@@ -39,7 +37,7 @@
               >พิมพ์</v-btn
             >
           </v-col>
-          <v-col cols="3">
+          <v-col cols="10" sm="10" lg="3" md="5">
             <v-btn
               v-if="!showTextField"
               size="x-large"
@@ -74,7 +72,14 @@
             </v-text-field>
           </v-col>
         </v-row>
-        <v-card-text style="color: red; font-size: 18px; line-height: 30px">
+        <v-card-text
+          :style="{
+            color: 'red',
+            lineHeight: '30px',
+            fontSize: computedFontSizebelow,
+            fontWeight: '600',
+          }"
+        >
           *กรุณาแจ้ง หมายเลขนัดหมายล่วงหน้า หรือ<br />
           เลขประจำตัวประชาชนต่อเจ้าหน้าที่เมื่อเข้ารับบริการตามวันเวลาที่จอง<br />
           เเละมาตามวันที่เเละเวลาที่นัดหมาย
@@ -85,12 +90,12 @@
 </template>
 <script>
 import print from "@/utilities/print";
-import provinceJson from "../json/province.json";
-import district11Json from "../json/district-11.json";
-import district12Json from "../json/district-12.json";
-import district13Json from "../json/district-13.json";
-import typework from "../json/typework.json";
-import service from "../json/service.json";
+import provinceJson from "@/json/province.json";
+import district11Json from "@/json/district-11.json";
+import district12Json from "@/json/district-12.json";
+import district13Json from "@/json/district-13.json";
+import typework from "@/json/typework.json";
+import service from "@/json/service.json";
 import { useBookingDetailsStore } from "@/stores/booking_details";
 import { mapState, mapActions } from "pinia";
 import Swal from "sweetalert2";
@@ -138,7 +143,7 @@ export default {
       Swal.fire({
         title: "เเจ้งเตือน!",
         text: `ส่งสรุปข้อมูลการนัดหมายไปที่อีเมลล์ ${this.emailSummary} สำเร็จ`,
-        icon: "error",
+        icon: "success",
         confirmButtonText: "close",
       });
     },
@@ -200,6 +205,20 @@ export default {
         return this.service[index].service;
       }
       return null;
+    },
+    computedFontSize() {
+      return this.$vuetify.display.smAndDown
+        ? "14px"
+        : this.$vuetify.display.mdAndDown
+        ? "15px"
+        : "18px";
+    },
+    computedFontSizebelow() {
+      return this.$vuetify.display.smAndDown
+        ? "16px"
+        : this.$vuetify.display.mdAndDown
+        ? "17px"
+        : "18px";
     },
   },
   mounted() {
