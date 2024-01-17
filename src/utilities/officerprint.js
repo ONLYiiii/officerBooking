@@ -17,7 +17,7 @@ export default function print(filteredData) {
   const tableBody = [];
   const tableHeader = [
     { text: "รหัสการจอง", alignment: "center" },
-    { text: "เลขประจำตัวประชาชน", alignment: "center" },
+    { text: "เลขประจำตัว\nประชาชน", alignment: "center" },
     { text: "ประเภทงาน", alignment: "center" },
     { text: "บริการที่เข้ารับ", alignment: "center" },
     { text: "ช่วงเวลา", alignment: "center" },
@@ -43,7 +43,7 @@ export default function print(filteredData) {
     content: [
       {
         table: {
-          widths: [90, 90, "*", "*", 40, 100],
+          widths: [110, 130, 200, 120, 50, 100],
           headerRows: 1,
           body: tableBody,
         },
@@ -51,8 +51,8 @@ export default function print(filteredData) {
     ],
     defaultStyle: {
       font: "Kanit",
-      lineHeight: 2.25,
-      fontSize: 8,
+      // lineHeight: 2.25,
+      fontSize: 14,
     },
   };
 

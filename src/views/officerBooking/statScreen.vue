@@ -180,7 +180,12 @@ export default {
   methods: {
     handleServiceInput() {
       if (!this.selectedWork) {
-        Swal.fire("กรุณาเลือกประเภทงานที่ต้องการ");
+        Swal.fire({
+          title: "เเจ้งเตือน",
+          text: "กรุณาเลือกประเภทงาน",
+          icon: "info",
+          confirmButtonText: "ปิด",
+        });
         this.selectedService.length = 0;
       }
     },

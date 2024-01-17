@@ -11,12 +11,11 @@
       <v-card-text
         >ยืนยันการจองนัดหมายขอเข้ารับบริการ วันที่ {{ getFormattedDate }}
       </v-card-text>
-      <v-card-text>เข้ารับบริการ{{ selectedTypeTitle }} : </v-card-text>
-      <v-card-text> {{ selectedServiceTitle }}</v-card-text>
+      <v-card-text>เข้ารับบริการ : {{ selectedTypeTitle }}</v-card-text>
+      <v-card-text>งานบริการ : {{ selectedServiceTitle }}</v-card-text>
       <v-card-text
-        >ที่จังหวัด{{ selectedProvinceTitle }} อำเภอ/เขต{{
-          selectedDistrictTitle
-        }}</v-card-text
+        >สถานที่จังหวัด {{ selectedProvinceTitle }} อำเภอ/เขต
+        {{ selectedDistrictTitle }}</v-card-text
       >
       <v-card-text>{{ bookTimeString }}</v-card-text>
       <v-card-actions>

@@ -12,8 +12,8 @@
           <h1 style="color: #1081e9; letter-spacing: 4px">
             {{ bookingDetails.booking_id }}
           </h1>
-          <h2>บริการ{{ typeworkName }} :</h2>
-          <h2>{{ serviceName }}</h2>
+          <h2>ประเภทงาน : {{ typeworkName }}</h2>
+          <h2>งานบริการ : {{ serviceName }}</h2>
           <h2>จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}</h2>
           <h2>
             {{
@@ -210,8 +210,8 @@ export default {
       return this.$vuetify.display.smAndDown
         ? "14px"
         : this.$vuetify.display.mdAndDown
-        ? "15px"
-        : "18px";
+        ? "13px"
+        : "13px";
     },
     computedFontSizebelow() {
       return this.$vuetify.display.smAndDown
