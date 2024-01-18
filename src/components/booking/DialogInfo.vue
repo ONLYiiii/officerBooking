@@ -14,7 +14,7 @@
       <v-card-text>เข้ารับบริการ : {{ selectedTypeTitle }}</v-card-text>
       <v-card-text>งานบริการ : {{ selectedServiceTitle }}</v-card-text>
       <v-card-text
-        >สถานที่จังหวัด {{ selectedProvinceTitle }} อำเภอ/เขต
+        >จังหวัด {{ selectedProvinceTitle }} อำเภอ/เขต
         {{ selectedDistrictTitle }}</v-card-text
       >
       <v-card-text>{{ bookTimeString }}</v-card-text>
@@ -35,7 +35,7 @@
   </v-dialog>
 </template>
 <script>
-import { getFullDate } from "@/utilities/addDate";
+import { getFullDate } from "@/utilities/formatDate";
 import { mapActions } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
 export default {

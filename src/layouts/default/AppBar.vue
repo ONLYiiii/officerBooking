@@ -2,7 +2,7 @@
   <v-card min-height="100vh">
     <v-layout>
       <!-- App Bar Component -->
-      <v-app-bar color="primary" :height="90">
+      <v-app-bar color="primary">
         <template v-slot:prepend>
           <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
         </template>

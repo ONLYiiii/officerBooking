@@ -1,15 +1,16 @@
 <template>
-  <v-card
-    class="d-flex mt-10"
-    style="text-align: center"
-    max-width="450vw"
-    min-height="550vh"
-  >
+  <v-container fluid class="text-center">
     <v-row>
-      <v-col style="line-height: 70px">
+      <v-col style="line-height: 80px">
         <div :style="{ fontSize: computedFontSize }">
           <h2>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :</h2>
-          <h1 style="color: #1081e9; letter-spacing: 4px">
+          <h1
+            :style="{
+              color: '#1081e9',
+              letterSpacing: '4px',
+              fontSize: bookingIdFontSize,
+            }"
+          >
             {{ bookingDetails.booking_id }}
           </h1>
           <h2>ประเภทงาน : {{ typeworkName }}</h2>
@@ -75,9 +76,9 @@
         <v-card-text
           :style="{
             color: 'red',
-            lineHeight: '30px',
+            lineHeight: '40px',
             fontSize: computedFontSizebelow,
-            fontWeight: '600',
+            fontWeight: 'bold',
           }"
         >
           *กรุณาแจ้ง หมายเลขนัดหมายล่วงหน้า หรือ<br />
@@ -86,7 +87,7 @@
         </v-card-text>
       </v-col>
     </v-row>
-  </v-card>
+  </v-container>
 </template>
 <script>
 import print from "@/utilities/print";
@@ -208,17 +209,24 @@ export default {
     },
     computedFontSize() {
       return this.$vuetify.display.smAndDown
-        ? "14px"
+        ? "10px"
         : this.$vuetify.display.mdAndDown
         ? "13px"
         : "13px";
     },
     computedFontSizebelow() {
       return this.$vuetify.display.smAndDown
-        ? "16px"
+        ? "14px"
         : this.$vuetify.display.mdAndDown
-        ? "17px"
+        ? "15px"
         : "18px";
+    },
+    bookingIdFontSize() {
+      return this.$vuetify.display.smAndDown
+        ? "30px"
+        : this.$vuetify.display.mdAndDown
+        ? "35px"
+        : "40px";
     },
   },
   mounted() {

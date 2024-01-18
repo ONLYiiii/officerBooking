@@ -13,6 +13,5 @@ module.exports = {
       },
     ],
     "vue/multi-word-component-names": "warn",
-    "vue/valid-v-model": "off",
   },
 };

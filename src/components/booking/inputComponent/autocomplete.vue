@@ -45,12 +45,12 @@ export default {
     noUpdateData() {
       if (this.items.length === 0) {
         Swal.fire({
-          title: "ข้อมูลไม่ครบถ้วน!",
+          title: "เเจ้งเตือน",
           text: `กรุณาเลือก${
             this.header === "อำเภอ/เขต" ? "จังหวัด" : "ประเภทงาน"
           }ที่ต้องการเข้ารับบริการ`,
-          icon: "error",
-          confirmButtonText: "close",
+          icon: "info",
+          confirmButtonText: "ปิด",
         });
       }
     },

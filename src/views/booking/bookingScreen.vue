@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid class="pa-8">
     <v-card>
       <v-card-title
         :style="{
@@ -113,10 +113,9 @@ import district12Json from "@/json/district-12.json";
 import district13Json from "@/json/district-13.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
-import { getFullDate } from "@/utilities/addDate";
+import { getFullDate, formatDate } from "@/utilities/formatDate";
 import { mapStores } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
-import { formatDate } from "@/utilities/formatDate";
 import Swal from "sweetalert2";
 
 export default {
@@ -168,7 +167,7 @@ export default {
             return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
           },
         ],
-        items: typework,
+        items: typework.slice(1),
         itemTitle: "work",
         itemValue: "code",
         oldModelValue: null,
@@ -336,12 +335,12 @@ export default {
         //* Uncomplete Input Data Alert
         if (newValue.service.modelValue && !this.allFieldsFilled) {
           Swal.fire({
-            title: "กรอกข้อมูลไม่ครบถ้วน!",
+            title: "เเจ้งเตือน",
             text: `กรุณาใส่${
               !newValue.province.modelValue ? "จังหวัดและอำเภอ/เขต" : "อำเภอเขต"
             }`,
-            icon: "error",
-            confirmButtonText: "close",
+            icon: "info",
+            confirmButtonText: "ปิด",
           });
         }
       },
@@ -360,10 +359,10 @@ export default {
         return;
       } else {
         Swal.fire({
-          title: "กรอกข้อมูลไม่ครบถ้วน!",
+          title: "เเจ้งเตือน",
           text: `ไม่สามารถเลือกวันที่นี้ได้เนื่องจากเป็น${this.holiday[index].title}`,
-          icon: "error",
-          confirmButtonText: "Close",
+          icon: "info",
+          confirmButtonText: "ปิด",
         });
         this.selectedDate = oldDate;
       }

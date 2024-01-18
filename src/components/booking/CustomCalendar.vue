@@ -7,16 +7,16 @@
         color="#154C8B"
         @update:year="updateYear"
         v-model="selectedDate"
-        :allowed-dates="allowedDate"
+        :allowed-dates="callAllowedDate"
         :view-mode="viewMode"
         @update:view-mode="updateViewMode"
         :min="new Date()"
-        :max="addDate(new Date(), 60)"
+        :max="maxDateComputed"
       >
         <template v-slot:title>
           <v-btn
             variant="text"
-            class="v-date-picker__title"
+            class="v-date-picker_220.032_title"
             @click="changeViewMode"
           >
             {{ $vuetify.locale.messages.th.$vuetify.datePicker.title }}
@@ -28,8 +28,10 @@
 </template>
 
 <script>
+import { maxDate, allowedDate } from "@/utilities/calendarConfig";
+
 export default {
-  props: ["date"],
+  props: ["date", "maxDate"],
   emits: ["update-date"],
   data() {
     return {
@@ -45,6 +47,9 @@ export default {
         this.$emit("update-date", newValue);
       },
     },
+    maxDateComputed() {
+      return maxDate();
+    },
   },
   methods: {
     updateYear(year) {
@@ -52,15 +57,8 @@ export default {
         year + 543
       }`;
     },
-    addDate(date, dateCount) {
-      const d = date.getDate();
-      date.setDate(d + dateCount);
-      return date.toISOString();
-    },
-    allowedDate(val) {
-      const isAllowedDate = val.getDay() !== 0 && val.getDay() !== 6;
-      // '2024-01-18'
-      return isAllowedDate;
+    callAllowedDate(val) {
+      return allowedDate(val);
     },
     changeViewMode() {
       if (this.viewMode === "year") {

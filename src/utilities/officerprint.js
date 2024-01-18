@@ -1,6 +1,7 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { fonts } from "./customfont";
+import { formatDate } from "@/utilities/formatDate";
 
 import {
   convertWorkCode,
@@ -13,7 +14,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
 
-export default function print(filteredData) {
+export default function print(filteredData, startEndDate) {
   const tableBody = [];
   const tableHeader = [
     { text: "รหัสการจอง", alignment: "center" },
@@ -37,13 +38,31 @@ export default function print(filteredData) {
     tableBody.push(row);
   });
 
+  let contentText;
+
+  if (startEndDate) {
+    if (startEndDate.length === 2) {
+      const formattedDateStart = formatDate(startEndDate[0]);
+      const formattedDateEnd = formatDate(startEndDate[1]);
+
+      contentText = `ข้อมูลสถิติรายการนัดหมาย วันที่ ${formattedDateStart} ถึง วันที่ ${formattedDateEnd}`;
+    } else {
+      const formattedDate = formatDate(startEndDate);
+
+      contentText = `ข้อมูลสถิติรายการนัดหมาย วันที่ ${formattedDate}`;
+    }
+  } else {
+    contentText = "ข้อมูลสถิติรายการนัดหมาย";
+  }
+
   var docDefinition = {
     pageSize: "A4",
     pageOrientation: "landscape",
     content: [
+      { text: contentText },
       {
         table: {
-          widths: [110, 130, 200, 120, 50, 100],
+          widths: [95, 95, 180, 200, 45, 90],
           headerRows: 1,
           body: tableBody,
         },
@@ -51,8 +70,15 @@ export default function print(filteredData) {
     ],
     defaultStyle: {
       font: "Kanit",
-      // lineHeight: 2.25,
-      fontSize: 14,
+      lineHeight: 1.4,
+      fontSize: 11,
+    },
+    footer: function (currentPage, pageCount) {
+      return {
+        text: currentPage.toString() + " / " + pageCount,
+        alignment: "right",
+        margin: [12, 0],
+      };
     },
   };
 

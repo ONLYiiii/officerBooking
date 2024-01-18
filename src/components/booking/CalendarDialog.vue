@@ -2,7 +2,12 @@
   <v-dialog v-model="dialogModel">
     <v-card>
       <v-card-text class="d-flex justify-center pa-0">
-        <v-date-picker v-model="selectedDate"></v-date-picker>
+        <v-date-picker
+          v-model="selectedDate"
+          :allowed-dates="callAllowedDate"
+          :min="new Date()"
+          :max="maxDateComputed"
+        ></v-date-picker>
       </v-card-text>
       <v-card-action class="d-flex justify-end pa-2">
         <v-btn
@@ -19,6 +24,8 @@
 </template>
 
 <script>
+import { maxDate, allowedDate } from "@/utilities/calendarConfig";
+
 export default {
   props: ["dialog", "selectDate"],
   emits: ["update:dialog", "update:selectDate"],
@@ -31,6 +38,9 @@ export default {
     confirmDate() {
       this.$emit("update:selectDate", this.selectedDate);
       this.$emit("update:dialog", false);
+    },
+    callAllowedDate(val) {
+      return allowedDate(val);
     },
   },
   computed: {
@@ -49,6 +59,9 @@ export default {
       set(newValue) {
         this.$emit("update:selectDate", newValue);
       },
+    },
+    maxDateComputed() {
+      return maxDate();
     },
   },
   watch: {

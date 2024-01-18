@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" :justify="justify">
+  <v-row align="center" :justify="justify" v-if="!$vuetify.display.mobile">
     <v-col
       v-for="(item, i) in titleAmount"
       :key="i"
@@ -25,7 +25,10 @@
             </p>
             <h1
               class="text-center"
-              :style="{ 'font-size': textSize.amountFontSize }"
+              :style="{
+                'font-size': textSize.amountFontSize,
+                color: item.color,
+              }"
             >
               {{ item.amount }}
             </h1>
@@ -102,6 +105,7 @@ export default {
           cols: this.gridCols[0].cols,
           sm: this.gridCols[0].sm,
           lg: this.gridCols[0].lg,
+          color: "#00A725",
         },
         {
           title: "<p>จำนวนคนนัดหมาย<br>มารับบริการช่วงเช้า</p>",
@@ -109,6 +113,7 @@ export default {
           cols: this.gridCols[1].cols,
           sm: this.gridCols[1].sm,
           lg: this.gridCols[1].lg,
+          color: "#1081E9",
         },
         {
           title: "<p>จำนวนคนนัดหมาย<br>มารับบริการช่วงบ่าย</p>",
@@ -116,6 +121,7 @@ export default {
           cols: this.gridCols[2].cols,
           sm: this.gridCols[2].sm,
           lg: this.gridCols[2].lg,
+          color: "#F77329",
         },
       ];
     },

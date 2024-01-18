@@ -8,8 +8,10 @@
         <v-col cols="3">
           <vue-date-picker
             v-model="startEndDate"
+            locale="th-TH"
             :format="formatDatePicker"
             :enable-time-picker="false"
+            :start-time="startTime"
             model-auto
             range
           />
@@ -86,13 +88,7 @@
           >
         </v-col>
       </v-row>
-      <v-data-table
-        v-model="selected"
-        :items="filteredData"
-        :headers="headers"
-        item-value="name"
-        class
-      >
+      <v-data-table :items="filteredData" :headers="headers">
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
         </template>
@@ -130,7 +126,11 @@ import {
   convertTimeBooking,
   convertDate,
 } from "@/utilities/convertCode.js";
-import { formatDate } from "@/utilities/formatDate";
+import {
+  formatDate,
+  formatDateString,
+  splitDateString,
+} from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
 export default {
   components: {
@@ -146,6 +146,16 @@ export default {
       dataTable: fakeData,
       filterService: [],
       startEndDate: null,
+      startTime: [
+        {
+          hours: 0,
+          minutes: 0,
+        },
+        {
+          hours: 0,
+          minutes: 0,
+        },
+      ],
 
       headers: [
         { title: "รหัสการจอง", key: "BookingID" },
@@ -190,7 +200,7 @@ export default {
       }
     },
     handlePrint() {
-      print(this.filteredData);
+      print(this.filteredData, this.startEndDate);
     },
     converter(mode, data) {
       switch (mode) {
@@ -207,26 +217,64 @@ export default {
       }
     },
     formatDatePicker(date) {
-      const date1 = formatDate(date[0]);
-      const date2 = formatDate(date[1]);
+      const date1 = date[0] ? formatDate(date[0]) : "";
+      const date2 = date[1] ? formatDate(date[1]) : "";
 
-      return `${date1} ถึง ${date2}`;
+      if (date.length === 2 && date[1] !== null) {
+        return `${date1} ถึง ${date2}`;
+      } else {
+        return date1;
+      }
     },
   },
   computed: {
     filteredData() {
+      const data = [];
+
+      if (this.startEndDate) {
+        if (this.startEndDate.length === 2) {
+          // startEndDate สามารถใช้ได้เลย
+          const timeStart = this.startEndDate[0].getTime();
+          const timeEnd = this.startEndDate[1].getTime();
+
+          const filterTimeData = this.dataTable.filter((item) => {
+            const itemDateSplit = splitDateString(item.dateBooking);
+            const itemTime = new Date(...itemDateSplit).getTime();
+
+            return timeStart <= itemTime && itemTime <= timeEnd;
+          });
+
+          data.push(...filterTimeData);
+        } else {
+          const selectedDate = formatDate(this.startEndDate, true);
+
+          // Debuging
+          console.log(`Selected Date: ${selectedDate}`);
+
+          const filterTimeData = this.dataTable.filter((item) => {
+            const itemDate = formatDateString(item.dateBooking);
+
+            // Debuging
+            console.log(`Item Date: ${itemDate}`);
+
+            return selectedDate === itemDate;
+          });
+          data.push(...filterTimeData);
+        }
+      } else {
+        data.push(...this.dataTable);
+      }
+
       if (this.selectedWork === 0) {
-        return this.dataTable;
+        return data;
       } else if (this.selectedService.length !== 0) {
-        return this.dataTable.filter(
+        return data.filter(
           (item) =>
             item.typeWork === this.selectedWork &&
             this.selectedService.includes(item.typeService)
         );
       } else {
-        return this.dataTable.filter(
-          (item) => item.typeWork === this.selectedWork
-        );
+        return data.filter((item) => item.typeWork === this.selectedWork);
       }
     },
     countRows() {

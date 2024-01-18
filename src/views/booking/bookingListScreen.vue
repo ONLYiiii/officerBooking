@@ -4,15 +4,13 @@
       <div style="background-color: #dadada; height: 50px; display: flex">
         <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
       </div>
-      <v-data-table
-        v-model="selected"
-        :items="items"
-        :headers="headers"
-        item-value="name"
-        show-select
-      >
-        <template v-slot:item.cancel="{}">
-          <v-btn class="text-none ms-4 text-white" color="red" variant="flat"
+      <v-data-table :items="items" :headers="headers">
+        <template v-slot:item.cancel="{ item }">
+          <v-btn
+            class="text-none ms-4 text-white"
+            color="red"
+            variant="flat"
+            @click="cancelBooking(item)"
             >ยกเลิก</v-btn
           >
         </template>
@@ -23,38 +21,52 @@
 <script>
 import { mapStores } from "pinia";
 import { useBookingDetailsStore } from "@/stores/booking_details";
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      selected: [],
       headers: [
-        { title: "รหัสการจอง", value: "BookingID" },
-        { title: "ประเภทการจอง", value: "Type" },
-        { title: "บริการที่เข้ารับ", value: "Service" },
-        { title: "ช่วงเวลา", value: "Time" },
-        { title: "วันที่จอง", value: "Date" },
+        { title: "รหัสการจอง", value: "bookingId" },
+        { title: "ประเภทการจอง", value: "type" },
+        { title: "บริการที่เข้ารับ", value: "service" },
+        { title: "ช่วงเวลา", value: "time" },
+        { title: "วันที่จอง", value: "date" },
         { title: "ยกเลิกนัดหมาย", key: "cancel", sortable: false },
       ],
       items: [
         {
-          BookingID: "123456",
-          Type: "โรงเเรม",
-          Service: "ขอใบอนุญาติประกอบธุกิจโรงเเรม",
-          Time: "บ่าย",
-          Date: "13 ธันวาคม 2566",
+          bookingId: "000555500054",
+          type: "โรงเเรม",
+          service: "ขอใบอนุญาติประกอบธุกิจโรงเเรม",
+          time: "บ่าย",
+          date: "13 ธันวาคม 2566",
         },
         {
-          BookingID: "123456",
-          Type: "โรงเเรม",
-          Service: "ขอใบอนุญาติประกอบธุกิจโรงเเรม",
-          Time: "บ่าย",
-          Date: "13 ธันวาคม 2566",
+          bookingId: "000000000054",
+          type: "โรงเเรม",
+          service: "ขอใบอนุญาติประกอบธุกิจโรงเเรม",
+          time: "บ่าย",
+          date: "13 ธันวาคม 2566",
         },
       ],
     };
   },
   computed: {
     ...mapStores(useBookingDetailsStore),
+  },
+  methods: {
+    cancelBooking(item) {
+      const index = this.items.indexOf(item);
+      if (index !== -1) {
+        this.items.splice(index, 1);
+      }
+      Swal.fire({
+        title: "เเจ้งเตือน",
+        text: "ระบบยกเลิกรายการจองเรียบร้อยเเล้ว",
+        icon: "success",
+        confirmButtonText: "ปิด",
+      });
+    },
   },
 };
 </script>

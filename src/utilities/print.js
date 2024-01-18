@@ -24,12 +24,13 @@ export default function print(
           `เลขนัดหมายขอเข้ารับบริการของคุณคือ :\n`,
           {
             text: `${bookingDetails.booking_id}\n`,
-            fontSize: 18,
+            fontSize: 20,
             color: "#1081E9",
             characterSpacing: 2,
+            bold: true,
           },
           `วันที่  ${formattedDate}\n`,
-          `บริการ${typeworkName} : \n`,
+          `ประเภท${typeworkName} \n`,
           `${serviceName} \n`,
           `จังหวัด${provinceName} ${districtName}\n`,
           `${
@@ -53,8 +54,8 @@ export default function print(
 
     defaultStyle: {
       font: "Kanit",
-      bold: true,
-      lineHeight: 2.25,
+
+      lineHeight: 1.7,
     },
   };
 

@@ -1,4 +1,4 @@
-import { formatDateString } from "@/utilities/formatDate";
+import { formatDateString, formatShortDate } from "@/utilities/formatDate";
 
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
@@ -19,5 +19,6 @@ export function convertTimeBooking(timeBooking) {
   return timeBooking === 0 ? "เช้า" : "บ่าย";
 }
 export function convertDate(dateBooking) {
-  return formatDateString(dateBooking);
+  return formatShortDate(dateBooking);
+  // return formatDateString(dateBooking);
 }
