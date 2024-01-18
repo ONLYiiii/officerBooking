@@ -2,10 +2,10 @@
   <v-container>
     <v-col align-content="center" class="pa-5">
       <v-row no-gutters align="center">
-        <v-col cols="2">
+        <v-col cols="6" md="2" lg="2">
           <p>ข้อมูลนัดหมายวันที่</p>
         </v-col>
-        <v-col cols="3">
+        <v-col cols="12" md="5" lg="5">
           <vue-date-picker
             v-model="startEndDate"
             locale="th-TH"
@@ -18,11 +18,11 @@
         </v-col>
       </v-row>
       <v-row align="center">
-        <v-col cols="12" md="2">
+        <v-col cols="12" lg="2">
           <p>เลือกประเภทงานเเละบริการที่ต้องการ</p>
         </v-col>
 
-        <v-col cols="12" md="5">
+        <v-col cols="12" lg="5">
           <div>
             <br />
             <v-autocomplete
@@ -36,7 +36,7 @@
             ></v-autocomplete>
           </div>
         </v-col>
-        <v-col cols="12" md="5">
+        <v-col cols="12" lg="5">
           <div>
             <br />
             <v-autocomplete
