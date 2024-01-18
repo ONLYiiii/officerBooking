@@ -138,16 +138,16 @@
     {
         "BookingID": "000000123459",
         "citizenId": "111447572427",
-        "typeWork": 10,
-        "typeService": "1001",
-        "timeBooking": 1,
+        "typeWork": 4,
+        "typeService": "0402",
+        "timeBooking": 0,
         "dateBooking": "25670118"
     },
     {
         "BookingID": "000000123459",
         "citizenId": "111447572427",
-        "typeWork": 10,
-        "typeService": "1001",
+        "typeWork": 4,
+        "typeService": "0401",
         "timeBooking": 1,
         "dateBooking": "25670118"
     }

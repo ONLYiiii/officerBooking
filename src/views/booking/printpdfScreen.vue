@@ -208,17 +208,21 @@ export default {
       return null;
     },
     computedFontSize() {
-      return this.$vuetify.display.smAndDown
-        ? "10px"
-        : this.$vuetify.display.mdAndDown
+      return this.$vuetify.display.xs
         ? "13px"
-        : "13px";
-    },
-    computedFontSizebelow() {
-      return this.$vuetify.display.smAndDown
+        : this.$vuetify.display.smAndDown
         ? "14px"
         : this.$vuetify.display.mdAndDown
         ? "15px"
+        : "15px";
+    },
+    computedFontSizebelow() {
+      return this.$vuetify.display.xs
+        ? "14px"
+        : this.$vuetify.display.smAndDown
+        ? "15px"
+        : this.$vuetify.display.mdAndDown
+        ? "16px"
         : "18px";
     },
     bookingIdFontSize() {
