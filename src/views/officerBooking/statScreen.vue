@@ -1,59 +1,83 @@
 <template>
   <v-container>
-    <v-col align-content="center" class="pa-5">
-      <v-row no-gutters align="center">
-        <v-col cols="6" md="2" lg="2">
-          <p>ข้อมูลนัดหมายวันที่</p>
-        </v-col>
-        <v-col cols="12" md="5" lg="5">
-          <vue-date-picker
-            v-model="startEndDate"
-            locale="th-TH"
-            :format="formatDatePicker"
-            :enable-time-picker="false"
-            :start-time="startTime"
-            model-auto
-            range
-          />
-        </v-col>
-      </v-row>
-      <v-row align="center">
-        <v-col cols="12" lg="2">
-          <p>เลือกประเภทงานเเละบริการที่ต้องการ</p>
-        </v-col>
+    <v-row class="pa-5">
+      <v-col cols="12">
+        <v-row align="center">
+          <v-col cols="6" md="2" lg="2">
+            <p>ข้อมูลนัดหมายวันที่</p>
+          </v-col>
+          <v-col cols="12" md="5" lg="5">
+            <vue-date-picker
+              v-model="startEndDate"
+              locale="th-TH"
+              :format="formatDatePicker"
+              :enable-time-picker="false"
+              :start-time="startTime"
+              :clearable="false"
+              input-class-name="customDatePicker"
+              model-auto
+              range
+            />
+          </v-col>
+          <v-col>
+            <v-row align="center">
+              <v-col cols="3">
+                <p>สถานนะการนัดหมาย</p>
+              </v-col>
+              <v-col cols="4">
+                <br />
+                <v-select
+                  v-model="selectedStatus"
+                  label="Select"
+                  item-title="status"
+                  item-value="key"
+                  :items="status"
+                  variant="outlined"
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-col>
+      <v-col cols="12">
+        <v-row align="center">
+          <v-col cols="12" lg="2">
+            <p>เลือกประเภทงานเเละบริการที่ต้องการ</p>
+          </v-col>
 
-        <v-col cols="12" lg="5">
-          <div>
-            <br />
-            <v-autocomplete
-              label="เลือกประเภทงาน"
-              v-model="selectedWork"
-              :loading="false"
-              :items="typework"
-              item-title="work"
-              item-value="code"
-              variant="outlined"
-            ></v-autocomplete>
-          </div>
-        </v-col>
-        <v-col cols="12" lg="5">
-          <div>
-            <br />
-            <v-autocomplete
-              :items="filterService"
-              v-model="selectedService"
-              item-title="service"
-              item-value="code"
-              label="เลือกงานบริการ"
-              multiple
-              chips
-              variant="outlined"
-              @click="handleServiceInput"
-            ></v-autocomplete>
-          </div>
-        </v-col>
-      </v-row>
-    </v-col>
+          <v-col cols="12" lg="5">
+            <div>
+              <br />
+              <v-autocomplete
+                label="เลือกประเภทงาน"
+                v-model="selectedWork"
+                :loading="false"
+                :items="typework"
+                item-title="work"
+                item-value="code"
+                variant="outlined"
+              ></v-autocomplete>
+            </div>
+          </v-col>
+          <v-col cols="12" lg="5">
+            <div>
+              <br />
+              <v-autocomplete
+                :items="filterService"
+                v-model="selectedService"
+                item-title="service"
+                item-value="code"
+                label="เลือกงานบริการ"
+                multiple
+                chips
+                variant="outlined"
+                @click="handleServiceInput"
+              ></v-autocomplete>
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
 
     <data-box
       :grid-cols="gridCols"
@@ -88,7 +112,7 @@
           >
         </v-col>
       </v-row>
-      <v-data-table :items="filteredData" :headers="headers">
+      <v-data-table :items="dataTable" :headers="headers">
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
         </template>
@@ -108,17 +132,20 @@
     </v-card>
   </v-container>
 </template>
+
 <script>
 //Package Import
 import Swal from "sweetalert2";
 //JSON Import
 import typework from "@/json/typework.json";
+import statusData from "@/json/statusData.json";
 import service from "@/json/service.json";
-import fakeData from "@/json/fakeData.json";
+// import fakeData from "@/json/fakeData.json";
 //Component Import
 import dataBox from "@/components/officerBooking/dataBox.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import api from "@/api/booking.js";
 //Utilities Import
 import {
   convertWorkCode,
@@ -126,11 +153,7 @@ import {
   convertTimeBooking,
   convertDate,
 } from "@/utilities/convertCode.js";
-import {
-  formatDate,
-  formatDateString,
-  splitDateString,
-} from "@/utilities/formatDate";
+import { getFullDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
 export default {
   components: {
@@ -143,9 +166,11 @@ export default {
       selectedWork: 0,
       selectedService: [],
       typework: typework,
-      dataTable: fakeData,
+      status: statusData,
+      dataTable: [],
       filterService: [],
-      startEndDate: null,
+      startEndDate: new Date(),
+      selectedStatus: null,
       startTime: [
         {
           hours: 0,
@@ -216,73 +241,102 @@ export default {
           return null;
       }
     },
-    formatDatePicker(date) {
-      const date1 = date[0] ? formatDate(date[0]) : "";
-      const date2 = date[1] ? formatDate(date[1]) : "";
+    // formatDatePicker(date) {
+    //   const date1 = date[0] ? formatDate(date[0]) : "";
+    //   const date2 = date[1] ? formatDate(date[1]) : "";
 
-      if (date.length === 2 && date[1] !== null) {
-        return `${date1} ถึง ${date2}`;
-      } else {
-        return date1;
+    //   if (date.length === 2 && date[1] !== null) {
+    //     return `${date1} ถึง ${date2}`;
+    //   } else {
+    //     return date1;
+    //   }
+    // },
+
+    async getReport() {
+      try {
+        this.dataTable.length = 0;
+        let dateStart;
+        let dateEnd;
+        if (this.startEndDate[0]) {
+          dateStart = getFullDate(this.startEndDate[0]);
+          dateEnd = getFullDate(this.startEndDate[1]);
+        } else {
+          dateStart = getFullDate(this.startEndDate);
+          dateEnd = getFullDate(this.startEndDate);
+        }
+        const typeService =
+          this.selectedService.length > 0 ? this.selectedService : null;
+
+        let resDatas = await api.getReport(
+          dateStart,
+          dateEnd,
+          this.selectedWork,
+          typeService,
+          this.status
+        );
+        this.dataTable.push(...resDatas);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
+
   computed: {
-    filteredData() {
-      const data = [];
+    // filteredData() {
+    //   const data = [];
 
-      if (this.startEndDate) {
-        if (this.startEndDate.length === 2) {
-          // startEndDate สามารถใช้ได้เลย
-          const timeStart = this.startEndDate[0].getTime();
-          const timeEnd = this.startEndDate[1].getTime();
+    //   if (this.startEndDate) {
+    //     if (this.startEndDate.length === 2) {
+    //       // startEndDate สามารถใช้ได้เลย
+    //       const timeStart = this.startEndDate[0].getTime();
+    //       const timeEnd = this.startEndDate[1].getTime();
 
-          const filterTimeData = this.dataTable.filter((item) => {
-            const itemDateSplit = splitDateString(item.dateBooking);
-            const itemTime = new Date(...itemDateSplit).getTime();
+    //       const filterTimeData = this.dataTable.filter((item) => {
+    //         const itemDateSplit = splitDateString(item.dateBooking);
+    //         const itemTime = new Date(...itemDateSplit).getTime();
 
-            return timeStart <= itemTime && itemTime <= timeEnd;
-          });
+    //         return timeStart <= itemTime && itemTime <= timeEnd;
+    //       });
 
-          data.push(...filterTimeData);
-        } else {
-          const selectedDate = formatDate(this.startEndDate, true);
+    //       data.push(...filterTimeData);
+    //     } else {
+    //       const selectedDate = formatDate(this.startEndDate, true);
 
-          // Debuging
-          console.log(`Selected Date: ${selectedDate}`);
+    //       // Debuging
+    //       console.log(`Selected Date: ${selectedDate}`);
 
-          const filterTimeData = this.dataTable.filter((item) => {
-            const itemDate = formatDateString(item.dateBooking);
+    //       const filterTimeData = this.dataTable.filter((item) => {
+    //         const itemDate = formatDateString(item.dateBooking);
 
-            // Debuging
-            console.log(`Item Date: ${itemDate}`);
+    //         // Debuging
+    //         console.log(`Item Date: ${itemDate}`);
 
-            return selectedDate === itemDate;
-          });
-          data.push(...filterTimeData);
-        }
-      } else {
-        data.push(...this.dataTable);
-      }
+    //         return selectedDate === itemDate;
+    //       });
+    //       data.push(...filterTimeData);
+    //     }
+    //   } else {
+    //     data.push(...this.dataTable);
+    //   }
 
-      if (this.selectedWork === 0) {
-        return data;
-      } else if (this.selectedService.length !== 0) {
-        return data.filter(
-          (item) =>
-            item.typeWork === this.selectedWork &&
-            this.selectedService.includes(item.typeService)
-        );
-      } else {
-        return data.filter((item) => item.typeWork === this.selectedWork);
-      }
-    },
+    //   if (this.selectedWork === 0) {
+    //     return data;
+    //   } else if (this.selectedService.length !== 0) {
+    //     return data.filter(
+    //       (item) =>
+    //         item.typeWork === this.selectedWork &&
+    //         this.selectedService.includes(item.typeService)
+    //     );
+    //   } else {
+    //     return data.filter((item) => item.typeWork === this.selectedWork);
+    //   }
+    // },
     countRows() {
       let totalCount = 0;
       let morningCount = 0;
       let afternoonCount = 0;
 
-      this.filteredData.forEach((item) => {
+      this.dataTable.forEach((item) => {
         totalCount++;
         if (item.timeBooking) {
           afternoonCount++;
@@ -310,8 +364,23 @@ export default {
       }
       //-----------------------------------------------------
       this.selectedService.length = 0;
+      this.getReport();
+    },
+    startEndDate: function () {
+      this.getReport();
+    },
+    selectedService: function () {
+      this.getReport();
+    },
+    selectedStatus: function () {
+      this.getReport();
     },
   },
 };
 </script>
-<style></style>
+<style>
+.customDatePicker {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+</style>

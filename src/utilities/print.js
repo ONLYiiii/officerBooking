@@ -30,8 +30,8 @@ export default function print(
             bold: true,
           },
           `วันที่  ${formattedDate}\n`,
-          `ประเภท${typeworkName} \n`,
-          `${serviceName} \n`,
+          `ประเภทงาน : ${typeworkName} \n`,
+          `งานบริการ : ${serviceName} \n`,
           `จังหวัด${provinceName} ${districtName}\n`,
           `${
             bookingDetails.time_booking === 1
@@ -64,8 +64,10 @@ export default function print(
   if (isPrint) {
     pdfDocGenerator.open();
   } else {
+    let fileBase64 = null;
     pdfDocGenerator.getBase64((data) => {
-      console.log(data);
+      fileBase64 = data;
     });
+    return fileBase64;
   }
 }

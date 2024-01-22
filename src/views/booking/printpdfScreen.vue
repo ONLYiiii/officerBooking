@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="text-center">
     <v-row>
-      <v-col style="line-height: 80px">
+      <v-col style="line-height: 70px">
         <div :style="{ fontSize: computedFontSize }">
           <h2>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :</h2>
           <h1
@@ -13,6 +13,7 @@
           >
             {{ bookingDetails.booking_id }}
           </h1>
+          <h2>วันที่ {{ getFormattedDate }}</h2>
           <h2>ประเภทงาน : {{ typeworkName }}</h2>
           <h2>งานบริการ : {{ serviceName }}</h2>
           <h2>จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}</h2>
@@ -25,7 +26,7 @@
           </h2>
         </div>
         <v-row justify="center" class="mt-5" align="center">
-          <v-col cols="10" sm="10" lg="3" md="5">
+          <v-col cols="10" sm="10" lg="2" md="5">
             <v-btn
               size="x-large"
               elevation="1"
@@ -90,17 +91,31 @@
   </v-container>
 </template>
 <script>
+//* Utilities Import
 import print from "@/utilities/print";
+import { formatDateString } from "@/utilities/formatDate";
+import sendEmail from "@/utilities/sendMail";
+
+//* JSON Import
 import provinceJson from "@/json/province.json";
-import district11Json from "@/json/district-11.json";
-import district12Json from "@/json/district-12.json";
-import district13Json from "@/json/district-13.json";
+// import district11Json from "@/json/district-11.json";
+// import district12Json from "@/json/district-12.json";
+// import district13Json from "@/json/district-13.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
+
+//* Stores Import
 import { useBookingDetailsStore } from "@/stores/booking_details";
-import { mapState, mapActions } from "pinia";
+
+//* API Import
+import api from "@/api/booking.js";
+
+//* Package Import
+import { mapState } from "pinia";
 import Swal from "sweetalert2";
+
 export default {
+  inject: ["citizenNameProvide"],
   data() {
     return {
       showTextField: false,
@@ -110,15 +125,16 @@ export default {
         return valid || "กรุณากรอกที่อยู่อีเมลล์ที่ถูกต้อง";
       },
       province: provinceJson,
-      district11: district11Json,
-      district12: district12Json,
-      district13: district13Json,
+      updateDistrict: [],
+      // district11: district11Json,
+      // district12: district12Json,
+      // district13: district13Json,
       typework: typework,
       service: service,
+      citizenName: this.citizenNameProvide,
     };
   },
   methods: {
-    ...mapActions(useBookingDetailsStore, ["printData"]),
     toggleTextField() {
       this.showTextField = true;
     },
@@ -132,8 +148,28 @@ export default {
         true
       );
     },
-    sendEmail() {
-      print(
+    async getDistrict(cc) {
+      try {
+        let resDatas = await api.getDistrict(cc);
+        let datas = resDatas.data;
+        datas.push({
+          code: "0083",
+          description: "ศูนย์บริการประชาชน",
+          descriptionEnglish: "",
+        });
+        datas.push({
+          code: "0084",
+          description: "กองทะเบียน",
+          descriptionEnglish: "",
+        });
+        datas.push(datas);
+        return datas;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async sendEmail() {
+      const fileBase64 = print(
         this.bookingDetails,
         this.provinceName,
         this.districtName,
@@ -141,6 +177,20 @@ export default {
         this.serviceName,
         false
       );
+      const sendData = {
+        email: this.emailSummary,
+        name: this.citizenName,
+        bookingId: this.bookingDetails.booking_id,
+        work: this.typeworkName,
+        service: this.serviceName,
+        province: this.provinceName,
+        district: this.districtName,
+        dateBooking: this.getFormattedDate,
+        fileBase64: fileBase64,
+      };
+
+      await sendEmail(sendData);
+
       Swal.fire({
         title: "เเจ้งเตือน!",
         text: `ส่งสรุปข้อมูลการนัดหมายไปที่อีเมลล์ ${this.emailSummary} สำเร็จ`,
@@ -162,29 +212,13 @@ export default {
       return null;
     },
     districtName() {
-      const updateDistrict = [];
-
-      switch (this.bookingDetails.rcode.substring(0, 2)) {
-        case "11":
-          updateDistrict.push(...this.district11);
-          break;
-        case "12":
-          updateDistrict.push(...this.district12);
-          break;
-        case "13":
-          updateDistrict.push(...this.district13);
-          break;
-        default:
-          break;
-      }
-
       const rcode_district = this.bookingDetails.rcode.substring(2);
 
-      if (rcode_district && updateDistrict.length !== 0) {
-        const index = updateDistrict.findIndex(
+      if (rcode_district && this.updateDistrict.length !== 0) {
+        const index = this.updateDistrict.findIndex(
           (value) => value.aaCode === rcode_district
         );
-        return updateDistrict[index].aaDesc;
+        return this.updateDistrict[index].aaDesc;
       }
 
       return null;
@@ -209,12 +243,12 @@ export default {
     },
     computedFontSize() {
       return this.$vuetify.display.xs
-        ? "13px"
+        ? "12px"
         : this.$vuetify.display.smAndDown
-        ? "14px"
+        ? "13px"
         : this.$vuetify.display.mdAndDown
-        ? "15px"
-        : "15px";
+        ? "14px"
+        : "13px";
     },
     computedFontSizebelow() {
       return this.$vuetify.display.xs
@@ -232,9 +266,14 @@ export default {
         ? "35px"
         : "40px";
     },
+    getFormattedDate() {
+      return formatDateString(this.bookingDetails.date_booking);
+    },
   },
-  mounted() {
-    this.printData();
+  async mounted() {
+    this.updateDistrict.push(
+      await this.getDistrict(this.bookingDetails.rcode.substring(0, 2))
+    );
   },
 };
 </script>

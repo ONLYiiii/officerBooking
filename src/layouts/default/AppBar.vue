@@ -11,7 +11,7 @@
         >
 
         <template v-slot:append>
-          <p class="mr-2" style="font-size: large">1102500034183</p>
+          <p class="mr-2" style="font-size: large">{{ userInfo.pid }}</p>
           <v-icon class="mr-5">mdi-account</v-icon>
         </template>
       </v-app-bar>
@@ -40,11 +40,14 @@
 </template>
 
 <script>
+import api from "@/api/booking.js";
+
 export default {
   emits: ["toggle-drawer"],
   data() {
     return {
       drawer: false,
+      userInfo: null,
       path: {
         booking: [
           {
@@ -73,6 +76,12 @@ export default {
       },
     };
   },
+  provide() {
+    return {
+      citizenIdProvide: this.userInfo.pid,
+      citizenNameProvide: this.userInfo.name,
+    };
+  },
   computed: {
     showPath() {
       const path = this.$route.path.startsWith("/officer")
@@ -91,6 +100,18 @@ export default {
     goToPath(path) {
       this.$router.push(path);
     },
+    async getUserInfo() {
+      try {
+        const response = await api.getUserInfo();
+
+        this.userInfo = response.data;
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    },
+  },
+  mounted() {
+    this.getUserInfo();
   },
 };
 </script>

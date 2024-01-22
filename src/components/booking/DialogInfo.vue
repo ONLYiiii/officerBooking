@@ -35,9 +35,17 @@
   </v-dialog>
 </template>
 <script>
+//* Utilities Import
 import { getFullDate } from "@/utilities/formatDate";
+
+//* Package Import
 import { mapActions } from "pinia";
+
+//* Stores Import
 import { useBookingDetailsStore } from "@/stores/booking_details";
+//* api Import
+
+import api from "@/api/booking.js";
 export default {
   props: {
     dialogVisible: Boolean,
@@ -56,25 +64,57 @@ export default {
     selectedServiceTitle: String,
   },
   emits: ["toggleDialogVisible"],
+  inject: ["citizenIdProvide"],
+  data() {
+    return {
+      citizenId: this.citizenIdProvide,
+      bookingId: null,
+    };
+  },
   methods: {
     ...mapActions(useBookingDetailsStore, ["setNewValue"]),
-    async confirmAndGoToPdfScreen() {
-      const sendData = {
-        citizen_id: "1102500034183",
-        booking_id: Math.floor(Math.random() * 90000 + 10000).toString(),
-        rcode: this.selectProvince + this.selectedDistrict,
-        date_booking: getFullDate(this.selectedDate),
-        type_work: this.selectedType,
-        type_service: this.selectedService,
-        time_booking: this.bookTime,
-        status: 0,
-      };
+    // async confirmAndGoToPdfScreen() {
+    //   const sendData = {
+    //     citizen_id: "1102500034183",
+    //     booking_id: 0,
+    //     rcode: this.selectProvince + this.selectedDistrict,
+    //     date_booking: getFullDate(this.selectedDate),
+    //     type_work: this.selectedType,
+    //     type_service: this.selectedService,
+    //     time_booking: this.bookTime,
+    //     status: 0,
+    //   };
 
-      this.GotopdfScreen(sendData);
-    },
-    GotopdfScreen(sendData) {
+    //   this.GotopdfScreen(sendData);
+    // },
+    async GotopdfScreen() {
+      const sendData = await this.postBooking();
       this.setNewValue(sendData);
       this.$router.push("/pdf");
+    },
+    async postBooking() {
+      const apiRequestBody = {
+        citizenId: this.citizenId,
+        rcode: this.selectedDistrict,
+        dateBooking: getFullDate(this.selectedDate),
+        typeWork: this.selectedType,
+        typeService: this.selectedService,
+        timeBooking: this.bookTime,
+      };
+      const response = await api.postBooking(apiRequestBody);
+      return response.data;
+      /*
+        response.data = {
+          "citizenId": 1341600131552,
+          "rcode": "1202",
+          "dateBooking": 25670110,
+          "typeWork": 1,
+          "typeService": "0101",
+          "timeBooking": 1,
+          "status": 0,
+          "bookingId": 2
+        }
+      */
     },
   },
   computed: {

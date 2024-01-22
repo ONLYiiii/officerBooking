@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import { maxDate, allowedDate } from "@/utilities/calendarConfig";
+import { allowedDate } from "@/utilities/calendarConfig";
 
 export default {
   props: ["date", "maxDate"],
-  emits: ["update-date"],
+  emits: ["update:date"],
   data() {
     return {
       viewMode: "month",
@@ -44,11 +44,11 @@ export default {
         return this.date;
       },
       set(newValue) {
-        this.$emit("update-date", newValue);
+        this.$emit("update:date", newValue);
       },
     },
     maxDateComputed() {
-      return maxDate();
+      return this.maxDate ?? new Date();
     },
   },
   methods: {

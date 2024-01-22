@@ -1,21 +1,48 @@
-export default function sendEmail() {
+import api from "@/api/booking";
+
+export default async function sendEmail({
+  email,
+  name,
+  bookingId,
+  work,
+  service,
+  province,
+  district,
+  dateBooking,
+  fileBase64,
+}) {
   const htmlEmail = {
-    to: "kieangaor@gmail.com",
-    subject: "&#9989;การนัดหมายขอเข้ารับบริการโรงเเรม สำเร็จ",
+    to: email,
+    subject: `การนัดหมายขอเข้ารับบริการ${work} สำเร็จ`,
     body: `<html>
             <body>
-                <p>เรียนคุณ นิจวรีย์</p>
-                <p>ระบบนัดหมายขอเข้ารับบริการขอจัดส่งใบสรุปข้อมูลการนัดหมายเข้ารับบริการงานโรงเเรม</p>
+                <p>เรียนคุณ ${name}</p>
+                <p>ระบบนัดหมายขอเข้ารับบริการขอจัดส่งใบสรุปข้อมูลการนัดหมายเข้ารับบริการ${work}</p>
                 <p>ให้แก่ท่านตามไฟล์แนบ</p>
                 <br /><br />
-                <p>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ<strong>1</strong></p>
-                <p>เข้ารับบริการวันที่<strong> 13 ธันวาคม พ.ศ.2566</strong></p>
-                <h4>บริการงานโรงเเรม : ขอใบอนุญาติประกอบธุกิจโรงเเรม</h4>
-                <h4>จังหวัดกรุงเทพ ศูนย์บริการประชาชน</h4>
+                <p>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ<strong>${bookingId}</strong></p>
+                <p>เข้ารับบริการวันที่<strong> ${dateBooking}</strong></p>
+                <h4>บริการงานโรงเเรม : ${service}</h4>
+                <h4>${
+                  province !== "กรุงเทพมหานคร" ? "จังหวัด" : ""
+                }${province} ${district}</h4>
                 <br /><br />
                 <p>จึงเรียนมาเพื่อโปรดทราบ</p>
                 <p>สำนักการสอบสวนเเละนิติการ</p>
             </body>
         </html>`,
+    attachments: [
+      {
+        filename: `การนัดหมายขอเข้ารับบริการ${work}.pdf`,
+        base64: fileBase64,
+      },
+    ],
   };
+
+  await sendMail(htmlEmail);
+}
+
+async function sendMail(htmlEmail) {
+  const response = await api.sendMail(htmlEmail);
+  const sendEmailData = response.data;
 }

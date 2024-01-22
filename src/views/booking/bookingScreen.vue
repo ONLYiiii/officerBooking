@@ -45,8 +45,8 @@
               <v-col v-if="allFieldsFilled">
                 <custom-calendar
                   v-if="!mobileBreak"
-                  :date="selectedDate"
-                  @update-date="updateDate"
+                  v-model:date="selectedDate"
+                  :max-date="maxDate"
                 ></custom-calendar>
                 <v-btn v-else @click="() => (calendarDialog = !calendarDialog)">
                   เลือกวันที่
@@ -54,6 +54,7 @@
                 <CalendarDialog
                   v-model:dialog="calendarDialog"
                   v-model:selectDate="selectedDate"
+                  :max-date="maxDate"
                 />
               </v-col>
               <!-- /Date Picker Component -->
@@ -106,17 +107,28 @@ import CustomCalendar from "@/components/booking/CustomCalendar.vue";
 import BookingSummary from "@/components/booking/BookingSummary.vue";
 import CalendarDialog from "@/components/booking/CalendarDialog.vue";
 
+// JSON Import
 import holiday from "@/json/holiday.json";
 import provinceJson from "@/json/province.json";
-import district11Json from "@/json/district-11.json";
-import district12Json from "@/json/district-12.json";
-import district13Json from "@/json/district-13.json";
+// import district11Json from "@/json/district-11.json";
+// import district12Json from "@/json/district-12.json";
+// import district13Json from "@/json/district-13.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
+
+// Utilities Import
 import { getFullDate, formatDate } from "@/utilities/formatDate";
-import { mapStores } from "pinia";
+import addDate from "@/utilities/addDate";
+
+// Stores Import
 import { useBookingDetailsStore } from "@/stores/booking_details";
+
+// API Import
+import api from "@/api/booking.js";
+
+// Package Import
 import Swal from "sweetalert2";
+import { mapStores } from "pinia";
 
 export default {
   components: {
@@ -127,6 +139,7 @@ export default {
     CalendarDialog,
   },
   data: () => ({
+    holidayData: null,
     autocompleteProps: {
       province: {
         header: "จังหวัด",
@@ -156,6 +169,7 @@ export default {
         itemTitle: "aaDesc",
         itemValue: "aaCode",
         modelValue: null,
+        oldModelValue: null,
         disabled: false,
       },
       work: {
@@ -187,19 +201,21 @@ export default {
         itemTitle: "service",
         itemValue: "code",
         modelValue: null,
+        oldModelValue: null,
         disabled: false,
       },
     },
 
     holiday: holiday,
-    district11: district11Json,
-    district12: district12Json,
-    district13: district13Json,
+    // district11: district11Json,
+    // district12: district12Json,
+    // district13: district13Json,
     service: service,
     dialogVisible: false,
     Bookingtime: "",
     selectedDate: null,
     calendarDialog: false,
+    maxDate: null,
   }),
   methods: {
     showSummaryInfo() {
@@ -221,6 +237,37 @@ export default {
     },
     updateDate(newValue) {
       this.selectedDate = newValue;
+    },
+    async getDistrict(cc) {
+      try {
+        let resDatas = await api.getDistrict(cc);
+        let datas = resDatas.data;
+        datas.push({
+          code: "0083",
+          description: "ศูนย์บริการประชาชน",
+          descriptionEnglish: "",
+        });
+        datas.push({
+          code: "0084",
+          description: "กองทะเบียน",
+          descriptionEnglish: "",
+        });
+        datas.push(datas);
+        return datas;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBookingOver() {
+      const duration = api.getBookingOver(
+        this.autocompleteProps.work.modelValue,
+        this.autocompleteProps.service.modelValue
+      );
+      return addDate(new Date(), duration);
+    },
+    async getHoliday() {
+      const response = await api.getHoliday();
+      this.holidayData = response;
     },
   },
   computed: {
@@ -292,31 +339,48 @@ export default {
   },
   watch: {
     autocompleteProps: {
-      handler(newValue) {
-        //* Province and District
+      async handler(newValue) {
+        //* Province and District Items
         if (
           newValue.province.modelValue !== null &&
           newValue.province.modelValue !== newValue.province.oldModelValue
         ) {
           this.autocompleteProps.district.modelValue = null;
-          switch (newValue.province.modelValue) {
-            case "11":
-              this.autocompleteProps.district.items = this.district11;
-              break;
-            case "12":
-              this.autocompleteProps.district.items = this.district12;
-              break;
-            case "13":
-              this.autocompleteProps.district.items = this.district13;
-              break;
-            default:
-              this.autocompleteProps.district.items = null;
-          }
+
+          let resDatas = await this.getDistrict(
+            this.autocompleteProps.province.modelValue
+          );
+          console.log(resDatas);
+          this.autocompleteProps.district.items = resDatas;
+
+          // switch (newValue.province.modelValue) {
+          //   case "11":
+          //     this.autocompleteProps.district.items = this.district11;
+          //     break;
+          //   case "12":
+          //     this.autocompleteProps.district.items = this.district12;
+          //     break;
+          //   case "13":
+          //     this.autocompleteProps.district.items = this.district13;
+          //     break;
+          //   default:
+          //     this.autocompleteProps.district.items = null;
+          // }
+
           this.autocompleteProps.province.oldModelValue =
             newValue.province.modelValue;
         }
 
-        //* Work and Service
+        //* District
+        if (
+          newValue.district.modelValue !== null &&
+          newValue.district.modelValue !== newValue.district.oldModelValue
+        ) {
+          this.autocompleteProps.district.oldModelValue =
+            newValue.district.modelValue;
+        }
+
+        //* Work and Service Item
         if (
           newValue.work.modelValue !== null &&
           newValue.work.modelValue !== newValue.work.oldModelValue
@@ -330,6 +394,25 @@ export default {
             value.code.startsWith(typeCode)
           );
           this.autocompleteProps.work.oldModelValue = newValue.work.modelValue;
+        }
+
+        //* Service
+        if (
+          newValue.service.modelValue !== null &&
+          newValue.service.modelValue !== newValue.service.oldModelValue
+        ) {
+          this.autocompleteProps.service.oldModelValue =
+            newValue.service.modelValue;
+        }
+
+        //* Get BookOver
+        if (
+          newValue.work.modelValue !== null &&
+          newValue.work.modelValue !== newValue.work.oldModelValue &&
+          newValue.service.modelValue !== null &&
+          newValue.service.modelValue !== newValue.service.oldModelValue
+        ) {
+          this.maxDate = await this.getBookingOver();
         }
 
         //* Uncomplete Input Data Alert
@@ -352,15 +435,15 @@ export default {
       }
     },
     selectedDate: function (newDate, oldDate) {
-      const index = holiday.findIndex(
-        (value) => getFullDate(new Date(newDate)) === value.date
+      const index = this.holidayData.findIndex(
+        (value) => getFullDate(new Date(newDate)) === value.holidayDate
       );
       if (index === -1) {
         return;
       } else {
         Swal.fire({
           title: "เเจ้งเตือน",
-          text: `ไม่สามารถเลือกวันที่นี้ได้เนื่องจากเป็น${this.holiday[index].title}`,
+          text: `ไม่สามารถเลือกวันที่นี้ได้เนื่องจากเป็น${this.holidayData[index].holidayDesc}`,
           icon: "info",
           confirmButtonText: "ปิด",
         });
@@ -370,6 +453,9 @@ export default {
     mobileBreak: function () {
       this.calendarDialog = false;
     },
+  },
+  mounted() {
+    this.getHoliday();
   },
 };
 </script>

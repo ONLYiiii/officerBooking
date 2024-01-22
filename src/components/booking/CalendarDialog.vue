@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import { maxDate, allowedDate } from "@/utilities/calendarConfig";
+import { allowedDate } from "@/utilities/calendarConfig";
 
 export default {
-  props: ["dialog", "selectDate"],
+  props: ["dialog", "selectDate", "maxDate"],
   emits: ["update:dialog", "update:selectDate"],
   data() {
     return {
@@ -61,7 +61,7 @@ export default {
       },
     },
     maxDateComputed() {
-      return maxDate();
+      return this.maxDate ?? new Date();
     },
   },
   watch: {
