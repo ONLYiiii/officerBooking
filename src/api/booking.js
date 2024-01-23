@@ -1,7 +1,7 @@
 import axios from "axios";
 
 async function getUserInfo() {
-  //finish
+  //finish in app.vue
   try {
     return await axios.get("/api/manage/login/auth/profile");
   } catch (error) {
@@ -21,7 +21,7 @@ async function getDistrict(cc) {
 }
 
 async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
-  //finish
+  //finish in officer /statScreen
   const baseUrl = `api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
   let queryString = "?";
 
@@ -48,7 +48,7 @@ async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
 }
 
 async function postBooking(body) {
-  //finish
+  //finish in DialogInfo
   return axios.request({
     method: "post",
     url: `api/booking/manage/booking`,
@@ -65,7 +65,7 @@ async function putBooking(bookingId, citizenId, body) {
 }
 
 async function getBookingOver(typeWork, typeService) {
-  //finish
+  //finish in /bookingScreen
   return axios.request({
     method: "get",
     url: `/api/booking/manage/booking/bookingOver/${typeWork}?typeService=${typeService}`,
@@ -73,6 +73,7 @@ async function getBookingOver(typeWork, typeService) {
 }
 
 async function getCitizenId(citizenId) {
+  //finish /bookingListScreen
   return axios.request({
     method: "get",
     url: `/api/booking/manage/booking/citizenId/${citizenId}`,
@@ -80,6 +81,7 @@ async function getCitizenId(citizenId) {
 }
 
 async function getRcode(rcode, status) {
+  //finish
   return axios.request({
     method: "get",
     url: `/api/booking/manage/booking/rcode/${rcode}?status=${status}`,
@@ -104,6 +106,7 @@ async function sendMail(body) {
 }
 
 async function putBookingStatus(bookingId, citizenId, body) {
+  //finish
   return axios.request({
     method: "put",
     url: `api/booking/manage/booking/${bookingId}/${citizenId}`,

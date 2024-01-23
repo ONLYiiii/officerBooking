@@ -112,7 +112,7 @@
           >
         </v-col>
       </v-row>
-      <v-data-table :items="dataTable" :headers="headers">
+      <!-- <v-data-table :items="dataTable" :headers="headers">
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
         </template>
@@ -128,7 +128,8 @@
         <template v-slot:item.dateBooking="{ item }">
           <span>{{ converter("date", item.dateBooking) }}</span>
         </template>
-      </v-data-table>
+      </v-data-table> -->
+      <TableList :items="dataTable" :headers="headers"></TableList>
     </v-card>
   </v-container>
 </template>
@@ -136,29 +137,36 @@
 <script>
 //Package Import
 import Swal from "sweetalert2";
+
 //JSON Import
 import typework from "@/json/typework.json";
 import statusData from "@/json/statusData.json";
 import service from "@/json/service.json";
 // import fakeData from "@/json/fakeData.json";
+
 //Component Import
+import TableList from "@/components/TableList.vue";
 import dataBox from "@/components/officerBooking/dataBox.vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+
+// API Import
 import api from "@/api/booking.js";
 //Utilities Import
-import {
-  convertWorkCode,
-  convertServiceCode,
-  convertTimeBooking,
-  convertDate,
-} from "@/utilities/convertCode.js";
+// import {
+//   convertWorkCode,
+//   convertServiceCode,
+//   convertTimeBooking,
+//   convertDate,
+// } from "@/utilities/convertCode.js";
 import { getFullDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
+
 export default {
   components: {
     dataBox,
     VueDatePicker,
+    TableList,
   },
   data() {
     return {
@@ -183,7 +191,7 @@ export default {
       ],
 
       headers: [
-        { title: "รหัสการจอง", key: "BookingID" },
+        { title: "รหัสการจอง", key: "bookingId" },
         { title: "เลขประจำตัวประชาชน ", key: "citizenId" },
         { title: "ประเภทงาน", key: "typeWork" },
         { title: "บริการที่เข้ารับ", key: "typeService" },
@@ -227,20 +235,20 @@ export default {
     handlePrint() {
       print(this.filteredData, this.startEndDate);
     },
-    converter(mode, data) {
-      switch (mode) {
-        case "work":
-          return convertWorkCode(data);
-        case "service":
-          return convertServiceCode(data);
-        case "time":
-          return convertTimeBooking(data);
-        case "date":
-          return convertDate(data);
-        default:
-          return null;
-      }
-    },
+    // converter(mode, data) {
+    //   switch (mode) {
+    //     case "work":
+    //       return convertWorkCode(data);
+    //     case "service":
+    //       return convertServiceCode(data);
+    //     case "time":
+    //       return convertTimeBooking(data);
+    //     case "date":
+    //       return convertDate(data);
+    //     default:
+    //       return null;
+    //   }
+    // },
     // formatDatePicker(date) {
     //   const date1 = date[0] ? formatDate(date[0]) : "";
     //   const date2 = date[1] ? formatDate(date[1]) : "";
