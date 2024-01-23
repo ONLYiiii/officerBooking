@@ -38,6 +38,8 @@ import TableListVue from "@/components/TableList.vue";
 // API Import
 import api from "@/api/booking.js";
 
+import { getUserInfoStore } from "@/stores/getter_stores";
+
 export default {
   components: {
     TableListVue,
@@ -55,7 +57,18 @@ export default {
       items: [],
     };
   },
-  computed: {},
+  computed: {
+    userInfoStore() {
+      return getUserInfoStore();
+    },
+
+    userInfo() {
+      return this.userInfoStore.userInfo;
+    },
+  },
+  async created() {
+    await api.getCitizenId();
+  },
   methods: {
     async cancelBooking() {
       Swal.fire({
@@ -68,8 +81,13 @@ export default {
     },
     async getCitizenId() {
       this.items.length = 0;
-      const response = await api.getCitizenId();
-      this.items.push(...response.data);
+      try {
+        const response = await api.getCitizenId(this.userInfo.pid);
+        console.log("response:: ", response);
+        this.items.push(...response.data);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async putBookingStatus(item) {
       const apiRequest = {

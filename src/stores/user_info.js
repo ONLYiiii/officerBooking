@@ -13,7 +13,7 @@ export const useUserInfoStore = defineStore("userInfo", {
       try {
         const response = await api.getUserInfo();
         this.userInfo = response.data;
-        console.log(this.userInfo);
+     
       } catch (error) {
         console.error("Error fetching user info:", error);
       }

@@ -72,25 +72,25 @@ export default {
     //     return dateString === currentDate;
     //   });
     // },
-    // countRowsNewDate() {
-    //   let totalCount = 0;
-    //   let morningCount = 0;
-    //   let afternoonCount = 0;
+    countRowsNewDate() {
+      let totalCount = 0;
+      let morningCount = 0;
+      let afternoonCount = 0;
 
-    //   this.filteredData.forEach((item) => {
-    //     totalCount++;
-    //     if (item.timeBooking) {
-    //       afternoonCount++;
-    //     } else {
-    //       morningCount++;
-    //     }
-    //   });
-    //   return {
-    //     totalCount,
-    //     morningCount,
-    //     afternoonCount,
-    //   };
-    // },
+      this.items.forEach((item) => {
+        totalCount++;
+        if (item.timeBooking) {
+          afternoonCount++;
+        } else {
+          morningCount++;
+        }
+      });
+      return {
+        totalCount,
+        morningCount,
+        afternoonCount,
+      };
+    },
   },
   methods: {
     async getRcode() {

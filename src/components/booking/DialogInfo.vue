@@ -3,19 +3,23 @@
     <v-card
       min-height="10vh"
       :min-width="screenOrientation === 'landscape' ? '30vw' : '90vw'"
+      class="text-center"
+      style="line-height: 15px;"
     >
       <v-card-title class="titledialog d-flex align-center"
         >ยืนยันการจอง</v-card-title
       >
 
       <v-card-text
-        >ยืนยันการจองนัดหมายขอเข้ารับบริการ วันที่ {{ getFormattedDate }}
+        >ยืนยันการจองนัดหมายขอเข้ารับบริการ
       </v-card-text>
-      <v-card-text>เข้ารับบริการ : {{ selectedTypeTitle }}</v-card-text>
-      <v-card-text>งานบริการ : {{ selectedServiceTitle }}</v-card-text>
       <v-card-text
-        >จังหวัด {{ selectedProvinceTitle }} อำเภอ/เขต
-        {{ selectedDistrictTitle }}</v-card-text
+        >วันที่ {{ getFormattedDate }}
+      </v-card-text>
+      <v-card-text>{{ selectedTypeTitle }}</v-card-text>
+      <v-card-text>{{ selectedServiceTitle }}</v-card-text>
+      <v-card-text
+        >{{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}</v-card-text
       >
       <v-card-text>{{ bookTimeString }}</v-card-text>
       <v-card-actions>
@@ -40,8 +44,9 @@ import { getFullDate } from "@/utilities/formatDate";
 
 //* Stores Import
 import {
-  getUserInfoStores,
+  getUserInfoStore,
   getBookingDetailsStore,
+  getDistrictStore
 } from "@/stores/getter_stores";
 
 //* api Import
@@ -57,7 +62,7 @@ export default {
     selectedTypeTitle: String,
     selectedServiceTitleselectedServiceTitle: String,
     selectedDistrictTitle: String,
-    selectProvince: String,
+    selectedProvince: String,
     selectedDistrict: String,
     selectedType: Number,
     selectedService: Number,
@@ -75,7 +80,7 @@ export default {
     //   const sendData = {
     //     citizen_id: "1102500034183",
     //     booking_id: 0,
-    //     rcode: this.selectProvince + this.selectedDistrict,
+    //     rcode: this.selectedProvince + this.selectedDistrict,
     //     date_booking: getFullDate(this.selectedDate),
     //     type_work: this.selectedType,
     //     type_service: this.selectedService,
@@ -88,13 +93,15 @@ export default {
     async GotopdfScreen() {
       const sendData = await this.postBooking();
       this.bookingDetailsStores.setNewValue(sendData);
-      this.$router.push("/pdf");
+      console.log(this.selectedDistrictTitle)
+      this.districtStore.setNewValue(this.selectedDistrictTitle);
+      this.$router.push("/booking/pdf");
     },
     async postBooking() {
       const apiRequestBody = {
         citizenId: this.userInfo.pid,
-        rcode: this.selectedDistrict,
-        dateBooking: getFullDate(this.selectedDate),
+        rcode: `${this.selectedDistrict.length === 4 ? '' : this.selectedProvince}${this.selectedDistrict}`,
+        dateBooking: +getFullDate(this.selectedDate),
         typeWork: this.selectedType,
         typeService: this.selectedService,
         timeBooking: this.bookTime,
@@ -118,14 +125,17 @@ export default {
     },
   },
   computed: {
-    userInfoStores() {
-      return getUserInfoStores();
+    districtStore() {
+      return getDistrictStore();
+    },
+    userInfoStore() {
+      return getUserInfoStore();
     },
     bookingDetailsStores() {
       return getBookingDetailsStore();
     },
     userInfo() {
-      return this.userInfoStores.userInfo;
+      return this.userInfoStore.userInfo;
     },
     dialogVisibleModel: {
       get() {

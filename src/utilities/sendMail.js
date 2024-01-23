@@ -34,7 +34,7 @@ export default async function sendEmail({
     attachments: [
       {
         filename: `การนัดหมายขอเข้ารับบริการ${work}.pdf`,
-        base64: fileBase64,
+        base64: fileBase64 + '',
       },
     ],
   };
@@ -43,6 +43,7 @@ export default async function sendEmail({
 }
 
 async function sendMail(htmlEmail) {
+  console.log(htmlEmail)
   const response = await api.sendMail(htmlEmail);
-  const sendEmailData = response.data;
+  console.log(response.status)
 }

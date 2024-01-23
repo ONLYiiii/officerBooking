@@ -17,13 +17,13 @@ export const useBookingDetailsStore = defineStore("bookingDetails", {
   },
   actions: {
     setNewValue(newValue) {
-      this.bookingDetails.citizen_id = newValue.citizen_id;
-      this.bookingDetails.booking_id = newValue.booking_id;
+      this.bookingDetails.citizen_id = newValue.citizenId;
+      this.bookingDetails.booking_id = newValue.bookingId;
       this.bookingDetails.rcode = newValue.rcode;
-      this.bookingDetails.date_booking = newValue.date_booking;
-      this.bookingDetails.type_work = newValue.type_work;
-      this.bookingDetails.type_service = newValue.type_service;
-      this.bookingDetails.time_booking = newValue.time_booking;
+      this.bookingDetails.date_booking = newValue.dateBooking + '';
+      this.bookingDetails.type_work = newValue.typeWork;
+      this.bookingDetails.type_service = newValue.typeService;
+      this.bookingDetails.time_booking = newValue.timeBooking;
       this.bookingDetails.status = newValue.status;
     },
     printData() {

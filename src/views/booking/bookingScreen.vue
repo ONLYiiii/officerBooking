@@ -71,6 +71,7 @@
               :selected-district-title="selectedDistrictTitle"
               :selected-type-title="selectedTypeTitle"
               :selected-service-title="selectedServiceTitle"
+              :selected-province="autocompleteProps.province.modelValue"
               @book-morning-time="bookMorningTime"
               @book-afternoon-time="bookAfternoonTime"
             />
@@ -90,7 +91,7 @@
       :selected-service-title="selectedServiceTitle"
       :selected-type-title="selectedTypeTitle"
       :selected-district-title="selectedDistrictTitle"
-      :select-province="autocompleteProps.province.modelValue"
+      :selected-province="autocompleteProps.province.modelValue"
       :selectedDistrict="autocompleteProps.district.modelValue"
       :selectedType="autocompleteProps.work.modelValue"
       :selectedService="autocompleteProps.service.modelValue"
@@ -142,7 +143,7 @@ export default {
             return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
           },
         ],
-        items: provinceJson,
+        items: provinceJson.sort(),
         itemTitle: "ccDesc",
         itemValue: "ccCode",
         oldModelValue: null,
@@ -231,8 +232,9 @@ export default {
     async getDistrict(cc) {
       try {
         let resDatas = await api.getDistrict(cc);
-        let datas = resDatas.data;
-        datas.push({
+        const datas = []
+        if (+cc === 10) {
+          datas.push({
           code: "0083",
           description: "ศูนย์บริการประชาชน",
           descriptionEnglish: "",
@@ -242,7 +244,9 @@ export default {
           description: "กองทะเบียน",
           descriptionEnglish: "",
         });
-        datas.push(datas);
+        }
+        
+        datas.push(...resDatas.data);
         return datas;
       } catch (error) {
         console.log(error);
@@ -289,9 +293,9 @@ export default {
     selectedDistrictTitle() {
       if (this.autocompleteProps.district.modelValue) {
         const index = this.autocompleteProps.district.items.findIndex(
-          (value) => value.aaCode === this.autocompleteProps.district.modelValue
+          (value) => value.code === this.autocompleteProps.district.modelValue
         );
-        return this.autocompleteProps.district.items[index].aaDesc;
+        return this.autocompleteProps.district.items[index].description;
       }
 
       return "กรุณาเลือกอำเภอ/เขต";
@@ -343,7 +347,6 @@ export default {
           let resDatas = await this.getDistrict(
             this.autocompleteProps.province.modelValue
           );
-          console.log(resDatas);
           this.autocompleteProps.district.items = resDatas;
 
           // switch (newValue.province.modelValue) {
@@ -435,7 +438,7 @@ export default {
       }
     },
     selectedDate: function (newDate, oldDate) {
-      console.log("holiday", this.holidayData);
+    
       const index = this.holidayData.findIndex(
         (value) => getFullDate(new Date(newDate)) === value.holidayDate
       );

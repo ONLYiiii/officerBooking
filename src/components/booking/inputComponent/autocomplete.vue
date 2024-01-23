@@ -14,6 +14,7 @@
       color="#1081E9"
       :disabled="disabled"
       @click="noUpdateData"
+      hide-details="auto"
     ></v-autocomplete>
   </div>
 </template>

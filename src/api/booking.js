@@ -22,7 +22,7 @@ async function getDistrict(cc) {
 
 async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
   //finish in officer /statScreen
-  const baseUrl = `api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
+  const baseUrl = `/api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
   let queryString = "?";
 
   if (typeWork) {
@@ -47,19 +47,24 @@ async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
   });
 }
 
+// async function postBooking(body) {
+//   //finish in DialogInfo
+//   return axios.request({
+//     method: "post",
+//     url: `api/booking/manage/booking`,
+//     body,
+//   });
+// }
+
 async function postBooking(body) {
-  //finish in DialogInfo
-  return axios.request({
-    method: "post",
-    url: `api/booking/manage/booking`,
-    body,
-  });
+  return axios.post('/api/booking/manage/booking', body)
 }
+
 
 async function putBooking(bookingId, citizenId, body) {
   return axios.request({
     method: "put",
-    url: `api/booking/manage/booking/${bookingId}/${citizenId}`,
+    url: `/api/booking/manage/booking/${bookingId}/${citizenId}`,
     body,
   });
 }
@@ -92,24 +97,29 @@ async function getHoliday() {
   //finish
   return axios.request({
     method: "get",
-    url: `api/booking/manage/booking/holiday`,
+    url: `/api/booking/manage/booking/holiday`,
   });
 }
 
+// async function sendMail(body) {
+//   //finish
+//   return axios.request({
+//     method: "post",
+//     url: `api/booking/manage/booking/sendmail`,
+//     body,
+//   });
+// }
+
 async function sendMail(body) {
-  //finish
-  return axios.request({
-    method: "post",
-    url: `api/booking/manage/booking/sendmail`,
-    body,
-  });
+  return axios.post('/api/booking/manage/booking/sendmail', body)
 }
+
 
 async function putBookingStatus(bookingId, citizenId, body) {
   //finish
   return axios.request({
     method: "put",
-    url: `api/booking/manage/booking/${bookingId}/${citizenId}`,
+    url: `/api/booking/manage/booking/${bookingId}/${citizenId}`,
     body,
   });
 }

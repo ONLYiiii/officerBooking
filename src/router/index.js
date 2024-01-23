@@ -5,35 +5,30 @@ const routes = [
   {
     path: "/",
     component: () => import("@/layouts/default/Default.vue"),
+    redirect: '/booking',
     children: [
       {
-        path: "/",
+        path: "/booking/",
         name: "bookingScreen",
         component: () => import("@/views/booking/bookingScreen.vue"),
       },
       {
-        path: "/pdf",
+        path: "/booking/pdf",
         name: "printpdfScreen",
         component: () => import("@/views/booking/printpdfScreen.vue"),
       },
       {
-        path: "/list",
+        path: "/booking/list",
         name: "bookingListScreen",
         component: () => import("@/views/booking/bookingListScreen.vue"),
       },
-    ],
-  },
-  {
-    path: "/officer",
-    component: () => import("@/layouts/default/Default.vue"),
-    children: [
       {
-        path: "/officer",
+        path: "/booking/officer",
         name: "bookingListOfficerScreen",
         component: () => import("@/views/officerBooking/bookingListScreen.vue"),
       },
       {
-        path: "/officer/stat",
+        path: "/booking/officer/stat",
         name: "statScreen",
         component: () => import("@/views/officerBooking/statScreen.vue"),
       },

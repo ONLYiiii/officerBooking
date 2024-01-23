@@ -1,19 +1,20 @@
 <template>
-  <div class="ml-5 mt-4" style="line-height: 50px">
-    <div style="line-height: 60px">
+  <div class="ml-5">
+    <div style="line-height: 50px">
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
         วันที่ {{ getFormattedDate }}
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        จังหวัด{{ selectedProvinceTitle }} อำเภอ/เขต{{ selectedDistrictTitle }}
+        {{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        นัดหมายขอเข้ารับบริการ{{ selectedTypeTitle }} :
+        <span v-if="!$vuetify.display.mobile">นัดหมายขอเข้ารับบริการ : </span>
+        {{ selectedTypeTitle }} 
       </h2>
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        {{ selectedServiceTitle }}
+        <span v-if="!$vuetify.display.mobile">งานบริการ : </span>{{ selectedServiceTitle }}
       </h2>
     </div>
     <v-row class="mt-2">
@@ -24,8 +25,8 @@
         :key="index"
       >
         <h2
-          class="text-red text-center Info-custom"
-          :style="{ fontSize: computedFontSize }"
+          class="text-red text-center Info-custom pb-2"
+          :style="{ fontSize: computedFontSize, lineHeight: '30px' }"
         >
           <span v-html="item.title"></span>
         </h2>
@@ -53,6 +54,7 @@ export default {
     selectedDistrictTitle: String,
     selectedTypeTitle: String,
     selectedServiceTitle: String,
+    selectedProvince: String,
   },
   emits: ["bookMorningTime", "bookAfternoonTime"],
   data() {
@@ -77,17 +79,17 @@ export default {
     },
     computedFontSize() {
       return this.$vuetify.display.smAndDown
-        ? "18px"
+        ? "16px"
         : this.$vuetify.display.mdAndDown
-        ? "19px"
-        : "20px";
+        ? "17px"
+        : "18px";
     },
     computedButtonFontSize() {
       return this.$vuetify.display.smAndDown
-        ? "18px"
+        ? "16px"
         : this.$vuetify.display.mdAndDown
-        ? "19px"
-        : "20px";
+        ? "17px"
+        : "25px";
     },
   },
 };

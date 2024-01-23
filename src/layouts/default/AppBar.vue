@@ -55,24 +55,24 @@ export default {
           {
             title: "ระบบนัดหมายเข้ารับบริการ",
             name: "bookingScreen",
-            path: "/",
+            path: "/booking",
           },
           {
             title: "รายการนัดหมายเข้ารับบริการของฉัน",
             name: "bookinglistScreen",
-            path: "/list",
+            path: "/booking/list",
           },
         ],
         officer: [
           {
             title: "รายการนัดหมายเข้ารับบริการ",
             name: "bookingListOfficerScreen",
-            path: "/officer",
+            path: "/booking/officer",
           },
           {
             title: "สถิติรายการนัดหมายเข้ารับบริการ",
             name: "statScreen",
-            path: "/officer/stat",
+            path: "/booking/officer/stat",
           },
         ],
       },

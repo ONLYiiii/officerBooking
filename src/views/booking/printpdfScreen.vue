@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="text-center">
     <v-row>
-      <v-col style="line-height: 70px">
+      <v-col style="line-height: 55px">
         <div :style="{ fontSize: computedFontSize }">
           <h2>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :</h2>
           <h1
@@ -25,7 +25,7 @@
             }}
           </h2>
         </div>
-        <v-row justify="center" class="mt-5" align="center">
+        <v-row justify="center" class="mt-3" align="center">
           <v-col cols="10" sm="10" lg="2" md="5">
             <v-btn
               size="x-large"
@@ -77,7 +77,7 @@
         <v-card-text
           :style="{
             color: 'red',
-            lineHeight: '40px',
+            lineHeight: '30px',
             fontSize: computedFontSizebelow,
             fontWeight: 'bold',
           }"
@@ -105,6 +105,7 @@ import service from "@/json/service.json";
 import {
   getBookingDetailsStore,
   getUserInfoStore,
+  getDistrictStore
 } from "@/stores/getter_stores";
 
 //* API Import
@@ -196,6 +197,9 @@ export default {
     },
   },
   computed: {
+    districtStore() {
+      return getDistrictStore();
+    },
     bookingDetailsStores() {
       return getBookingDetailsStore();
     },
@@ -216,16 +220,7 @@ export default {
       return null;
     },
     districtName() {
-      const rcode_district = this.bookingDetails.rcode.substring(2);
-
-      if (rcode_district && this.updateDistrict.length !== 0) {
-        const index = this.updateDistrict.findIndex(
-          (value) => value.aaCode === rcode_district
-        );
-        return this.updateDistrict[index].aaDesc;
-      }
-
-      return null;
+      return this.districtStore.district
     },
     typeworkName() {
       if (this.bookingDetails.type_work) {
@@ -261,7 +256,7 @@ export default {
         ? "15px"
         : this.$vuetify.display.mdAndDown
         ? "16px"
-        : "18px";
+        : "14px";
     },
     bookingIdFontSize() {
       return this.$vuetify.display.smAndDown
