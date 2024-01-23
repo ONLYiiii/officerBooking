@@ -110,9 +110,6 @@ import CalendarDialog from "@/components/booking/CalendarDialog.vue";
 // JSON Import
 import holiday from "@/json/holiday.json";
 import provinceJson from "@/json/province.json";
-// import district11Json from "@/json/district-11.json";
-// import district12Json from "@/json/district-12.json";
-// import district13Json from "@/json/district-13.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
 
@@ -120,15 +117,11 @@ import service from "@/json/service.json";
 import { getFullDate, formatDate } from "@/utilities/formatDate";
 import addDate from "@/utilities/addDate";
 
-// Stores Import
-import { useBookingDetailsStore } from "@/stores/booking_details";
-
 // API Import
 import api from "@/api/booking.js";
 
 // Package Import
 import Swal from "sweetalert2";
-import { mapStores } from "pinia";
 
 export default {
   components: {
@@ -166,8 +159,8 @@ export default {
           },
         ],
         items: [],
-        itemTitle: "aaDesc",
-        itemValue: "aaCode",
+        itemTitle: "description",
+        itemValue: "code",
         modelValue: null,
         oldModelValue: null,
         disabled: false,
@@ -207,9 +200,6 @@ export default {
     },
 
     holiday: holiday,
-    // district11: district11Json,
-    // district12: district12Json,
-    // district13: district13Json,
     service: service,
     dialogVisible: false,
     Bookingtime: "",
@@ -259,19 +249,22 @@ export default {
       }
     },
     async getBookingOver() {
-      const duration = api.getBookingOver(
+      const resDuration = await api.getBookingOver(
         this.autocompleteProps.work.modelValue,
         this.autocompleteProps.service.modelValue
       );
-      return addDate(new Date(), duration);
+      console.log(
+        "resDuration.data.duration ::: ",
+        resDuration.data[0].duration
+      );
+      return addDate(new Date(), resDuration.data[0].duration);
     },
     async getHoliday() {
       const response = await api.getHoliday();
-      this.holidayData = response;
+      this.holidayData = response.data;
     },
   },
   computed: {
-    ...mapStores(useBookingDetailsStore),
     allFieldsFilled() {
       return !!(
         this.autocompleteProps.province.modelValue &&
@@ -406,11 +399,18 @@ export default {
         }
 
         //* Get BookOver
+        // if (
+        //   newValue.work.modelValue !== null &&
+        //   newValue.work.modelValue !== newValue.work.oldModelValue &&
+        //   newValue.service.modelValue !== null &&
+        //   newValue.service.modelValue !== newValue.service.oldModelValue
+        // ) {
+        //   this.maxDate = await this.getBookingOver();
+        // }
+
         if (
           newValue.work.modelValue !== null &&
-          newValue.work.modelValue !== newValue.work.oldModelValue &&
-          newValue.service.modelValue !== null &&
-          newValue.service.modelValue !== newValue.service.oldModelValue
+          newValue.service.modelValue !== null
         ) {
           this.maxDate = await this.getBookingOver();
         }
@@ -435,6 +435,7 @@ export default {
       }
     },
     selectedDate: function (newDate, oldDate) {
+      console.log("holiday", this.holidayData);
       const index = this.holidayData.findIndex(
         (value) => getFullDate(new Date(newDate)) === value.holidayDate
       );

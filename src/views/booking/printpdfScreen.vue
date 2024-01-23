@@ -98,24 +98,22 @@ import sendEmail from "@/utilities/sendMail";
 
 //* JSON Import
 import provinceJson from "@/json/province.json";
-// import district11Json from "@/json/district-11.json";
-// import district12Json from "@/json/district-12.json";
-// import district13Json from "@/json/district-13.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
 
 //* Stores Import
-import { useBookingDetailsStore } from "@/stores/booking_details";
+import {
+  getBookingDetailsStore,
+  getUserInfoStore,
+} from "@/stores/getter_stores";
 
 //* API Import
 import api from "@/api/booking.js";
 
 //* Package Import
-import { mapState } from "pinia";
 import Swal from "sweetalert2";
 
 export default {
-  inject: ["citizenNameProvide"],
   data() {
     return {
       showTextField: false,
@@ -126,9 +124,7 @@ export default {
       },
       province: provinceJson,
       updateDistrict: [],
-      // district11: district11Json,
-      // district12: district12Json,
-      // district13: district13Json,
+
       typework: typework,
       service: service,
       citizenName: this.citizenNameProvide,
@@ -179,7 +175,7 @@ export default {
       );
       const sendData = {
         email: this.emailSummary,
-        name: this.citizenName,
+        name: this.userInfoStore.userInfo.name,
         bookingId: this.bookingDetails.booking_id,
         work: this.typeworkName,
         service: this.serviceName,
@@ -200,7 +196,15 @@ export default {
     },
   },
   computed: {
-    ...mapState(useBookingDetailsStore, ["bookingDetails"]),
+    bookingDetailsStores() {
+      return getBookingDetailsStore();
+    },
+    userInfoStore() {
+      return getUserInfoStore();
+    },
+    bookingDetails() {
+      return this.bookingDetailsStores.bookingDetails;
+    },
     provinceName() {
       const rcode_province = this.bookingDetails.rcode.substring(0, 2);
       if (rcode_province) {

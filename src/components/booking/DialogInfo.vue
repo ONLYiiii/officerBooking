@@ -27,7 +27,7 @@
         >
           ยกเลิก
         </v-btn>
-        <v-btn color="#1081E9" variant="flat" @click="confirmAndGoToPdfScreen">
+        <v-btn color="#1081E9" variant="flat" @click="GotopdfScreen">
           ยืนยัน
         </v-btn>
       </v-card-actions>
@@ -38,14 +38,15 @@
 //* Utilities Import
 import { getFullDate } from "@/utilities/formatDate";
 
-//* Package Import
-import { mapActions } from "pinia";
-
 //* Stores Import
-import { useBookingDetailsStore } from "@/stores/booking_details";
-//* api Import
+import {
+  getUserInfoStores,
+  getBookingDetailsStore,
+} from "@/stores/getter_stores";
 
+//* api Import
 import api from "@/api/booking.js";
+
 export default {
   props: {
     dialogVisible: Boolean,
@@ -64,15 +65,12 @@ export default {
     selectedServiceTitle: String,
   },
   emits: ["toggleDialogVisible"],
-  inject: ["citizenIdProvide"],
   data() {
     return {
-      citizenId: this.citizenIdProvide,
       bookingId: null,
     };
   },
   methods: {
-    ...mapActions(useBookingDetailsStore, ["setNewValue"]),
     // async confirmAndGoToPdfScreen() {
     //   const sendData = {
     //     citizen_id: "1102500034183",
@@ -89,19 +87,21 @@ export default {
     // },
     async GotopdfScreen() {
       const sendData = await this.postBooking();
-      this.setNewValue(sendData);
+      this.bookingDetailsStores.setNewValue(sendData);
       this.$router.push("/pdf");
     },
     async postBooking() {
       const apiRequestBody = {
-        citizenId: this.citizenId,
+        citizenId: this.userInfo.pid,
         rcode: this.selectedDistrict,
         dateBooking: getFullDate(this.selectedDate),
         typeWork: this.selectedType,
         typeService: this.selectedService,
         timeBooking: this.bookTime,
       };
+      console.log(apiRequestBody);
       const response = await api.postBooking(apiRequestBody);
+      console.log("callback ", response);
       return response.data;
       /*
         response.data = {
@@ -118,6 +118,15 @@ export default {
     },
   },
   computed: {
+    userInfoStores() {
+      return getUserInfoStores();
+    },
+    bookingDetailsStores() {
+      return getBookingDetailsStore();
+    },
+    userInfo() {
+      return this.userInfoStores.userInfo;
+    },
     dialogVisibleModel: {
       get() {
         return this.dialogVisible;

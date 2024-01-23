@@ -13,7 +13,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn style="font-size: 16px color:'red'" @click="closeDialog"
+        <v-btn
+          style="font-size: 16px color:'red'"
+          @click="startupDialogStore.closeDialog()"
           >ปิด</v-btn
         >
       </v-card-actions>
@@ -22,10 +24,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "pinia";
-import { useStartupDialogStore } from "@/stores/startup_dialog";
 //Component Import
 import dataBox from "@/components/officerBooking/dataBox.vue";
+
+//Stores Import
+import { getStartupDialogStore } from "@/stores/getter_stores";
 
 export default {
   components: {
@@ -49,7 +52,6 @@ export default {
     };
   },
   computed: {
-    ...mapState(useStartupDialogStore, ["dialog"]),
     screenOrientation() {
       const orientation =
         this.$vuetify.display.width > this.$vuetify.display.height
@@ -62,15 +64,17 @@ export default {
     },
     dialogModel: {
       get() {
-        return this.dialog;
+        return this.startupDialogStore.dialog;
       },
       set() {
-        this.closeDialog();
+        this.startupDialogStore.closeDialog();
       },
     },
   },
   methods: {
-    ...mapActions(useStartupDialogStore, ["closeDialog"]),
+    startupDialogStore() {
+      return getStartupDialogStore();
+    },
   },
 };
 </script>
