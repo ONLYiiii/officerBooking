@@ -86,7 +86,7 @@ export default {
   // },
   computed: {
     showPath() {
-      const path = this.$route.path.startsWith("/officer")
+      const path = this.$route.path.startsWith("/booking/officer")
         ? this.path.officer
         : this.path.booking;
       return path;

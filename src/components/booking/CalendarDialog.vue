@@ -3,6 +3,7 @@
     <v-card>
       <v-card-text class="d-flex justify-center pa-0">
         <v-date-picker
+          color="#154C8B"
           v-model="selectedDate"
           :allowed-dates="callAllowedDate"
           :min="new Date()"

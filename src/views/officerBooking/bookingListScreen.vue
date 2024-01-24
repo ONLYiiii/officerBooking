@@ -59,7 +59,7 @@ export default {
     };
   },
   computed: {
-    userInfo() {
+    userInfoStore() {
       return getUserInfoStore();
     },
     // filteredData() {
@@ -94,8 +94,12 @@ export default {
   },
   methods: {
     async getRcode() {
-      const response = await api.getRcode(this.userInfo.userInfo.rcode, 0);
-      this.items.push(...response.data);
+      try {
+        const response = await api.getRcode(this.userInfoStore.userInfo.rcode);
+        this.items.push(...response.data);
+      } catch (error) {
+        console.error("getRcode Error:", error, error);
+      }
     },
   },
   async mounted() {

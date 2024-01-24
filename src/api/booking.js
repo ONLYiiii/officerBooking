@@ -57,9 +57,8 @@ async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
 // }
 
 async function postBooking(body) {
-  return axios.post('/api/booking/manage/booking', body)
+  return axios.post("/api/booking/manage/booking", body);
 }
-
 
 async function putBooking(bookingId, citizenId, body) {
   return axios.request({
@@ -87,9 +86,14 @@ async function getCitizenId(citizenId) {
 
 async function getRcode(rcode, status) {
   //finish
+  let fullUrl = `/api/booking/manage/booking/rcode/${rcode}`;
+  if (status) {
+    fullUrl += `?status=${status}`;
+  }
+
   return axios.request({
     method: "get",
-    url: `/api/booking/manage/booking/rcode/${rcode}?status=${status}`,
+    url: fullUrl,
   });
 }
 
@@ -111,9 +115,8 @@ async function getHoliday() {
 // }
 
 async function sendMail(body) {
-  return axios.post('/api/booking/manage/booking/sendmail', body)
+  return axios.post("/api/booking/manage/booking/sendmail", body);
 }
-
 
 async function putBookingStatus(bookingId, citizenId, body) {
   //finish

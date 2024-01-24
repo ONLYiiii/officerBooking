@@ -143,7 +143,9 @@ export default {
             return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
           },
         ],
-        items: provinceJson.sort(),
+        items: provinceJson.sort((a, b) =>
+          a.ccDesc.localeCompare(b.ccDesc, "th-TH")
+        ),
         itemTitle: "ccDesc",
         itemValue: "ccCode",
         oldModelValue: null,
@@ -187,7 +189,6 @@ export default {
         rule: [
           (value) => {
             if (value) return true;
-
             return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
           },
         ],
@@ -232,36 +233,40 @@ export default {
     async getDistrict(cc) {
       try {
         let resDatas = await api.getDistrict(cc);
-        const datas = []
+        const datas = [];
         if (+cc === 10) {
           datas.push({
-          code: "0083",
-          description: "ศูนย์บริการประชาชน",
-          descriptionEnglish: "",
-        });
-        datas.push({
-          code: "0084",
-          description: "กองทะเบียน",
-          descriptionEnglish: "",
-        });
+            code: "0083",
+            description: "ศูนย์บริการประชาชน",
+            descriptionEnglish: "",
+          });
+          datas.push({
+            code: "0084",
+            description: "กองทะเบียน",
+            descriptionEnglish: "",
+          });
         }
-        
+
         datas.push(...resDatas.data);
         return datas;
       } catch (error) {
-        console.log(error);
+        console.error("getDistrict Error:", error);
       }
     },
     async getBookingOver() {
-      const resDuration = await api.getBookingOver(
-        this.autocompleteProps.work.modelValue,
-        this.autocompleteProps.service.modelValue
-      );
-      console.log(
-        "resDuration.data.duration ::: ",
-        resDuration.data[0].duration
-      );
-      return addDate(new Date(), resDuration.data[0].duration);
+      try {
+        const resDuration = await api.getBookingOver(
+          this.autocompleteProps.work.modelValue,
+          this.autocompleteProps.service.modelValue
+        );
+        console.log(
+          "resDuration.data.duration ::: ",
+          resDuration.data[0].duration
+        );
+        return addDate(new Date(), resDuration.data[0].duration);
+      } catch (error) {
+        console.error("getBookingOver Error:", error);
+      }
     },
     async getHoliday() {
       const response = await api.getHoliday();
@@ -349,20 +354,6 @@ export default {
           );
           this.autocompleteProps.district.items = resDatas;
 
-          // switch (newValue.province.modelValue) {
-          //   case "11":
-          //     this.autocompleteProps.district.items = this.district11;
-          //     break;
-          //   case "12":
-          //     this.autocompleteProps.district.items = this.district12;
-          //     break;
-          //   case "13":
-          //     this.autocompleteProps.district.items = this.district13;
-          //     break;
-          //   default:
-          //     this.autocompleteProps.district.items = null;
-          // }
-
           this.autocompleteProps.province.oldModelValue =
             newValue.province.modelValue;
         }
@@ -401,16 +392,6 @@ export default {
             newValue.service.modelValue;
         }
 
-        //* Get BookOver
-        // if (
-        //   newValue.work.modelValue !== null &&
-        //   newValue.work.modelValue !== newValue.work.oldModelValue &&
-        //   newValue.service.modelValue !== null &&
-        //   newValue.service.modelValue !== newValue.service.oldModelValue
-        // ) {
-        //   this.maxDate = await this.getBookingOver();
-        // }
-
         if (
           newValue.work.modelValue !== null &&
           newValue.service.modelValue !== null
@@ -438,7 +419,6 @@ export default {
       }
     },
     selectedDate: function (newDate, oldDate) {
-    
       const index = this.holidayData.findIndex(
         (value) => getFullDate(new Date(newDate)) === value.holidayDate
       );

@@ -16,6 +16,12 @@
         </template>
       </v-data-table> -->
       <TableListVue :items="items" :headers="headers">
+        <template v-slot:item.rcode="{ item }">
+          <span>
+            {{ findDistrict(item) }}
+          </span>
+        </template>
+
         <template v-slot:item.cancel="{ item }">
           <v-btn
             class="text-none ms-4 text-white"
@@ -38,7 +44,11 @@ import TableListVue from "@/components/TableList.vue";
 // API Import
 import api from "@/api/booking.js";
 
+// Store Import
 import { getUserInfoStore } from "@/stores/getter_stores";
+
+// Json Import
+import provinceJson from "@/json/province.json";
 
 export default {
   components: {
@@ -52,6 +62,7 @@ export default {
         { title: "บริการที่เข้ารับ", value: "typeService" },
         { title: "ช่วงเวลา", value: "timeBooking" },
         { title: "วันที่จอง", value: "dateBooking" },
+        { title: "สถานที่นัดหมาย", value: "rcode" },
         { title: "ยกเลิกนัดหมาย", key: "cancel", sortable: false },
       ],
       items: [],
@@ -86,7 +97,7 @@ export default {
         console.log("response:: ", response);
         this.items.push(...response.data);
       } catch (error) {
-        console.log(error);
+        console.error("getCitizenId Error:", error);
       }
     },
     async putBookingStatus(item) {
@@ -101,6 +112,46 @@ export default {
       const statusCode = response.status;
       if (statusCode === 200) {
         await this.cancelBooking();
+      }
+    },
+    async getDistrict(cc) {
+      try {
+        let resDatas = await api.getDistrict(cc);
+        const datas = [];
+        if (+cc === 10) {
+          datas.push({
+            code: "0083",
+            description: "ศูนย์บริการประชาชน",
+            descriptionEnglish: "",
+          });
+          datas.push({
+            code: "0084",
+            description: "กองทะเบียน",
+            descriptionEnglish: "",
+          });
+        }
+        datas.push(...resDatas.data);
+        return datas;
+      } catch (error) {
+        console.error("getDistrict Error:", error);
+      }
+    },
+    async findDistrict(item) {
+      const ccCode = item.rcode.substring(0, 2);
+      const districtCode = item.rcode.substring(2);
+      if (ccCode !== "00") {
+        const district = await this.getDistrict(ccCode);
+        const index = district.findIndex((item) => item.code === districtCode);
+        const indexProvince = provinceJson.findIndex(
+          (item) => item.ccCode === ccCode
+        );
+        return `${provinceJson[indexProvince].ccDesc} ${district[index].description}`;
+      } else {
+        if (ccCode === "0083") {
+          return "กรุงเทพมหานคร ศูนย์บริการประชาชน";
+        } else {
+          return "กรุงเทพมหานคร กองทะเบียน";
+        }
       }
     },
   },

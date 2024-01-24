@@ -15,6 +15,7 @@
       :disabled="disabled"
       @click="noUpdateData"
       hide-details="auto"
+      density="comfortable"
     ></v-autocomplete>
   </div>
 </template>
