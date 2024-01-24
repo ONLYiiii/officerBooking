@@ -16,7 +16,7 @@
           <h2>วันที่ {{ getFormattedDate }}</h2>
           <h2>ประเภทงาน : {{ typeworkName }}</h2>
           <h2>งานบริการ : {{ serviceName }}</h2>
-          <h2>จังหวัด{{ provinceName }} อำเภอ/เขต{{ districtName }}</h2>
+          <h2>{{ placeText }}</h2>
           <h2>
             {{
               bookingDetails.time_booking === 1
@@ -138,10 +138,9 @@ export default {
     handleprint() {
       print(
         this.bookingDetails,
-        this.provinceName,
-        this.districtName,
         this.typeworkName,
         this.serviceName,
+        this.placeText,
         true
       );
     },
@@ -268,6 +267,18 @@ export default {
     getFormattedDate() {
       return formatDateString(this.bookingDetails.date_booking);
     },
+    placeText() {
+      const ccCode = this.bookingDetails.rcode.substring(0,2);
+      let districtText = 'อำเภอ';
+      let provinceText = '';
+      if (ccCode === '10' || ccCode === '00') {
+        districtText = '';
+        provinceText = this.provinceName;
+      } else {
+        provinceText = `จังหวัด${this.provinceName}`
+      }
+      return `${provinceText} ${districtText}${this.districtName}`
+    }
   },
   async mounted() {
     this.updateDistrict.push(

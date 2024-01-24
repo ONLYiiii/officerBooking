@@ -9,30 +9,30 @@ pdfMake.fonts = fonts;
 
 export default function print(
   bookingDetails,
-  provinceName,
-  districtName,
   typeworkName,
   serviceName,
+  placeText,
   isPrint
 ) {
   const formattedDate = formatDateString(bookingDetails.date_booking);
   var docDefinition = {
-    pageSize: "A5",
+    pageSize: "A4",
     content: [
       {
         text: [
-          `เลขนัดหมายขอเข้ารับบริการของคุณคือ :\n`,
+          {text:`เลขนัดหมายขอเข้ารับบริการของคุณคือ :\n`,lineHeight: 1.2,},
           {
             text: `${bookingDetails.booking_id}\n`,
-            fontSize: 20,
+            fontSize: 25,
             color: "#1081E9",
             characterSpacing: 2,
             bold: true,
+            lineHeight: 1.2,
           },
           `วันที่  ${formattedDate}\n`,
           `ประเภทงาน : ${typeworkName} \n`,
           `งานบริการ : ${serviceName} \n`,
-          `จังหวัด${provinceName} ${districtName}\n`,
+          `${placeText}\n`,
           `${
             bookingDetails.time_booking === 1
               ? "ช่วงเช้า (เวลา 09.00 - 11.00)"
@@ -46,7 +46,7 @@ export default function print(
         ],
         margin: [0, 80, 0, 0],
         style: {
-          fontSize: 12,
+          fontSize: 16,
           alignment: "center",
         },
       },
@@ -55,7 +55,7 @@ export default function print(
     defaultStyle: {
       font: "Kanit",
 
-      lineHeight: 1.7,
+      lineHeight: 1.5,
     },
   };
 
