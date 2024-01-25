@@ -22,8 +22,8 @@
         </template>
 
         <template v-slot:item.rcodeDesc="{ item }">
-        <span>{{  item.rcodeDesc }}</span>
-      </template>
+          <span>{{ item.rcodeDesc }}</span>
+        </template>
 
         <template v-slot:item.cancel="{ item }">
           <v-btn
@@ -55,6 +55,8 @@
       </TableListVue> -->
     </v-card>
   </v-container>
+
+  <ConfirmDialog> </ConfirmDialog>
 </template>
 <script>
 import {
@@ -64,7 +66,7 @@ import {
   convertDate,
 } from "@/utilities/convertCode.js";
 
-import {sleep} from "@/utilities/utils.js"
+import { sleep } from "@/utilities/utils.js";
 
 import Swal from "sweetalert2";
 
@@ -107,6 +109,12 @@ export default {
     await this.getCitizenId();
   },
   methods: {
+    showDialog() {
+      this.dialogVisible = true;
+    },
+    closeDialog() {
+      this.dialogVisible = false;
+    },
     converter(mode, data) {
       switch (mode) {
         case "work":
@@ -121,14 +129,27 @@ export default {
           return null;
       }
     },
-    async cancelBooking() {
+    async cancelBooking(item) {
       Swal.fire({
-        title: "เเจ้งเตือน",
-        text: "ระบบยกเลิกรายการจองเรียบร้อยเเล้ว",
-        icon: "success",
-        confirmButtonText: "ปิด",
+        title: "ยืนยันการลบ",
+        text: "คุณต้องการจะลบข้อมูลรายการนี้ใช่หรือไม่",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "ยืนยัน",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await this.putBookingStatus(item);
+          await Swal.fire({
+            title: "เเจ้งเตือน",
+            text: "ระบบยกเลิกรายการจองเรียบร้อยเเล้ว",
+            icon: "success",
+            confirmButtonText: "ปิด",
+          });
+          await this.getCitizenId();
+        }
       });
-      await this.getCitizenId();
     },
     async getCitizenId() {
       this.items.length = 0;
@@ -136,7 +157,7 @@ export default {
         const response = await api.getCitizenId(
           this.userInfoStore.userInfo.pid
         );
-       
+
         const promises = response.data.map(async (item, index) => {
           item.rcodeDesc = await this.findDistrict(item.rcode);
           return item;
@@ -144,8 +165,8 @@ export default {
 
         await Promise.all(promises);
         this.items.push(...promises);
-        
-        // return response.data; 
+
+        // return response.data;
 
         // console.log('Items: ',this.items)
         // console.log("response:: ", this.items);
@@ -196,13 +217,12 @@ export default {
 
       if (ccCode !== "00") {
         let district = await api.getDistrict(ccCode);
-        
+
         let aa = district.data.find(
           (item) => item.code === districtCode
         ).description;
         let cc = provinceJson.find((item) => item.ccCode === ccCode).ccDesc;
-        returnValue = `${cc} ${aa}`
-
+        returnValue = `${cc} ${aa}`;
       } else {
         if (rcode === "0083") {
           returnValue = "กรุงเทพมหานคร ศูนย์บริการประชาชน";
