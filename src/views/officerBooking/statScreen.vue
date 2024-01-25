@@ -153,14 +153,11 @@ import "@vuepic/vue-datepicker/dist/main.css";
 // API Import
 import api from "@/api/booking.js";
 //Utilities Import
-// import {
-//   convertWorkCode,
-//   convertServiceCode,
-//   convertTimeBooking,
-//   convertDate,
-// } from "@/utilities/convertCode.js";
 import { getFullDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
+
+//Stores Import
+import { getUserInfoStore } from "@/stores/getter_stores";
 
 export default {
   components: {
@@ -192,12 +189,13 @@ export default {
       ],
 
       headers: [
-        { title: "รหัสการจอง", key: "bookingId" },
+        { title: "เลขนัดหมาย", key: "bookingId" },
         { title: "เลขประจำตัวประชาชน ", key: "citizenId" },
         { title: "ประเภทงาน", key: "typeWork" },
-        { title: "บริการที่เข้ารับ", key: "typeService" },
+        { title: "งานบริการ", key: "typeService" },
         { title: "ช่วงเวลา", key: "timeBooking" },
-        { title: "วันที่จอง", key: "dateBooking" },
+        { title: "วันที่", key: "dateBooking" },
+        { title: "สถานะ", key: "status" },
       ],
       gridCols: [
         { cols: 12, sm: 4, lg: 2 },
@@ -281,7 +279,8 @@ export default {
           dateEnd,
           this.selectedWork,
           typeService,
-          this.selectedStatus
+          this.selectedStatus,
+          this.userInfo.rcode
         );
         console.log(resDatas);
         this.amountCount.totalCount = resDatas.data.amount;
@@ -295,53 +294,12 @@ export default {
   },
 
   computed: {
-    // filteredData() {
-    //   const data = [];
-    //   if (this.startEndDate) {
-    //     if (this.startEndDate.length === 2) {
-    //       // startEndDate สามารถใช้ได้เลย
-    //       const timeStart = this.startEndDate[0].getTime();
-    //       const timeEnd = this.startEndDate[1].getTime();
-    //       const filterTimeData = this.dataTable.filter((item) => {
-    //         const itemDateSplit = splitDateString(item.dateBooking);
-    //         const itemTime = new Date(...itemDateSplit).getTime();
-    //         return timeStart <= itemTime && itemTime <= timeEnd;
-    //       });
-    //       data.push(...filterTimeData);
-    //     } else {
-    //       const selectedDate = formatDate(this.startEndDate, true);
-    //       // Debuging
-    //       console.log(`Selected Date: ${selectedDate}`);
-    //       const filterTimeData = this.dataTable.filter((item) => {
-    //         const itemDate = formatDateString(item.dateBooking);
-    //         // Debuging
-    //         console.log(`Item Date: ${itemDate}`);
-    //         return selectedDate === itemDate;
-    //       });
-    //       data.push(...filterTimeData);
-    //     }
-    //   } else {
-    //     data.push(...this.dataTable);
-    //   }
-    //   if (this.selectedWork === 0) {
-    //     return data;
-    //   } else if (this.selectedService.length !== 0) {
-    //     return data.filter(
-    //       (item) =>
-    //         item.typeWork === this.selectedWork &&
-    //         this.selectedService.includes(item.typeService)
-    //     );
-    //   } else {
-    //     return data.filter((item) => item.typeWork === this.selectedWork);
-    //   }
-    // },
-    // countRows() {
-    //   return {
-    //     totalCount,
-    //     morningCount,
-    //     afternoonCount,
-    //   };
-    // },
+    userInfoStore() {
+      return getUserInfoStore();
+    },
+    userInfo() {
+      return this.userInfoStore.userInfo;
+    },
   },
   watch: {
     selectedWork: function () {

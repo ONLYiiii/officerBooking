@@ -20,28 +20,39 @@ async function getDistrict(cc) {
   });
 }
 
-async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
+async function getReport(
+  dateStart,
+  dateEnd,
+  typeWork,
+  typeService,
+  status,
+  rcode
+) {
   //finish in officer /statScreen
   const path = `/api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
   const dummyBaseUrl = "https://dummy.com";
 
-  const url = new URL(path, dummyBaseUrl)
+  const url = new URL(path, dummyBaseUrl);
 
   if (typeWork) {
-    url.searchParams.set('typeWork', typeWork);
+    url.searchParams.set("typeWork", typeWork);
   }
 
   if (typeService) {
-    url.searchParams.set('typeService', typeService);
+    url.searchParams.set("typeService", typeService);
   }
 
   if (status !== null) {
-    url.searchParams.set('status', status);
+    url.searchParams.set("status", status);
+  }
+
+  if (rcode) {
+    url.searchParams.set("rcode", rcode);
   }
 
   const fullUrl = url.pathname + url.search;
 
-  console.log(fullUrl)
+  console.log(fullUrl);
 
   return axios.request({
     method: "get",
@@ -86,18 +97,18 @@ async function getCitizenId(citizenId) {
   });
 }
 
-async function getRcode(rcode, status) {
-  //finish
-  let fullUrl = `/api/booking/manage/booking/rcode/${rcode}`;
-  if (status) {
-    fullUrl += `?status=${status}`;
-  }
+// async function getRcode(rcode, status) {
+//   //finish
+//   let fullUrl = `/api/booking/manage/booking/rcode/${rcode}`;
+//   if (status) {
+//     fullUrl += `?status=${status}`;
+//   }
 
-  return axios.request({
-    method: "get",
-    url: fullUrl,
-  });
-}
+//   return axios.request({
+//     method: "get",
+//     url: fullUrl,
+//   });
+// }
 
 async function getHoliday() {
   //finish
@@ -137,7 +148,7 @@ export default {
   putBooking,
   getBookingOver,
   getCitizenId,
-  getRcode,
+  // getRcode,
   getHoliday,
   sendMail,
   putBookingStatus,

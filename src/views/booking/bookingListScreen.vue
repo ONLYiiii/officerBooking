@@ -69,7 +69,7 @@ import {
   convertServiceCode,
   convertTimeBooking,
   convertDate,
-  convertStatus
+  convertStatus,
 } from "@/utilities/convertCode.js";
 
 import { sleep } from "@/utilities/utils.js";
@@ -133,11 +133,10 @@ export default {
         case "date":
           return convertDate(data + "");
         case "status":
-          return convertStatus(data)
+          return convertStatus(data);
         default:
           return null;
       }
-
     },
     async cancelBooking(item) {
       Swal.fire({

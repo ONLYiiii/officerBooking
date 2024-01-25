@@ -18,33 +18,26 @@
 
     <slot></slot>
   </v-data-table> -->
-   <v-data-table :items="tableItems" :headers="tableHeaders">
+  <v-data-table :items="tableItems" :headers="tableHeaders">
+    <template v-slot:item.typeWork="{ item }">
+      <span>{{ converter("work", item.typeWork) }}</span>
+    </template>
 
-      <template v-slot:item.typeWork="{ item }">
-        <span>{{ converter("work", item.typeWork) }}</span>
-      </template>
+    <template v-slot:item.typeService="{ item }">
+      <span>{{ converter("service", item.typeService) }}</span>
+    </template>
 
-      <template v-slot:item.typeService="{ item }">
-        <span>{{ converter("service", item.typeService) }}</span>
-      </template>
+    <template v-slot:item.timeBooking="{ item }">
+      <span>{{ converter("time", item.timeBooking) }}</span>
+    </template>
 
-      <template v-slot:item.timeBooking="{ item }">
-        <span>{{ converter("time", item.timeBooking) }}</span>
-      </template>
+    <template v-slot:item.dateBooking="{ item }">
+      <span>{{ converter("date", item.dateBooking) }}</span>
+    </template>
 
-      <template v-slot:item.dateBooking="{ item }">
-        <span>{{ converter("date", item.dateBooking) }}</span>
-      </template>
-    
-        <template v-slot:item.cancel="{ item }">
-          <v-btn
-            class="text-none ms-4 text-white"
-            color="red"
-            variant="flat"
-            @click="cancelBooking(item)"
-            >ยกเลิก</v-btn
-          >
-        </template>
+    <template v-slot:item.status="{ item }">
+      <span>{{ converter("status", item.status) }}</span>
+    </template>
   </v-data-table>
 </template>
 
@@ -55,6 +48,7 @@ import {
   convertServiceCode,
   convertTimeBooking,
   convertDate,
+  convertStatus,
 } from "@/utilities/convertCode.js";
 
 export default {
@@ -63,7 +57,7 @@ export default {
     return {
       tableItems: this.items,
       tableHeaders: this.headers,
-    }
+    };
   },
   methods: {
     converter(mode, data) {
@@ -75,7 +69,9 @@ export default {
         case "time":
           return convertTimeBooking(data);
         case "date":
-          return convertDate(data + '');
+          return convertDate(data + "");
+        case "status":
+          return convertStatus(data);
         default:
           return null;
       }
