@@ -158,13 +158,7 @@ export default {
           this.userInfoStore.userInfo.pid
         );
 
-        const promises = response.data.map(async (item, index) => {
-          item.rcodeDesc = await this.findDistrict(item.rcode);
-          return item;
-        });
-
-        await Promise.all(promises);
-        this.items.push(...promises);
+        this.items.push(...response.data);
 
         // return response.data;
 
@@ -188,55 +182,6 @@ export default {
         await this.cancelBooking();
       }
     },
-    async getDistrict(cc) {
-      try {
-        let resDatas = await api.getDistrict(cc);
-        const datas = [];
-        if (+cc === 10) {
-          datas.push({
-            code: "0083",
-            description: "ศูนย์บริการประชาชน",
-            descriptionEnglish: "",
-          });
-          datas.push({
-            code: "0084",
-            description: "กองทะเบียน",
-            descriptionEnglish: "",
-          });
-        }
-        datas.push(...resDatas.data);
-        return datas;
-      } catch (error) {
-        console.error("getDistrict Error:", error);
-      }
-    },
-    async findDistrict(rcode) {
-      let returnValue = "";
-      const ccCode = rcode.substring(0, 2);
-      const districtCode = rcode.substring(2);
-
-      if (ccCode !== "00") {
-        let district = await api.getDistrict(ccCode);
-
-        let aa = district.data.find(
-          (item) => item.code === districtCode
-        ).description;
-        let cc = provinceJson.find((item) => item.ccCode === ccCode).ccDesc;
-        returnValue = `${cc} ${aa}`;
-      } else {
-        if (rcode === "0083") {
-          returnValue = "กรุงเทพมหานคร ศูนย์บริการประชาชน";
-        } else {
-          returnValue = "กรุงเทพมหานคร กองทะเบียน";
-        }
-      }
-
-      return returnValue;
-    },
-
-    // setDistrict(districtList, ){
-
-    // }
   },
 };
 </script>
