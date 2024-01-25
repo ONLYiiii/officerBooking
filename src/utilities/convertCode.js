@@ -16,9 +16,21 @@ export function convertServiceCode(serviceCode) {
   return service[index].service;
 }
 export function convertTimeBooking(timeBooking) {
-  return timeBooking === 0 ? "เช้า" : "บ่าย";
+  return timeBooking === 1 ? "เช้า" : "บ่าย";
 }
 export function convertDate(dateBooking) {
   return formatShortDate(dateBooking);
   // return formatDateString(dateBooking);
+}
+export function convertStatus(status) {
+  switch(status) {
+    case 0:
+      return 'นัดหมาย'
+    case 1:
+      return 'ยกเลิก'
+    case 2:
+      return ''
+    default:
+      return 'ผิดพลาด'
+  }
 }

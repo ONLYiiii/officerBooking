@@ -22,24 +22,26 @@ async function getDistrict(cc) {
 
 async function getReport(dateStart, dateEnd, typeWork, typeService, status) {
   //finish in officer /statScreen
-  const baseUrl = `/api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
-  let queryString = "?";
+  const path = `/api/booking/manage/booking/report/${dateStart}/${dateEnd}`;
+  const dummyBaseUrl = "https://dummy.com";
+
+  const url = new URL(path, dummyBaseUrl)
 
   if (typeWork) {
-    queryString += `typeWork=${typeWork}&`;
+    url.searchParams.set('typeWork', typeWork);
   }
 
   if (typeService) {
-    queryString += `typeService=${typeService}&`;
+    url.searchParams.set('typeService', typeService);
   }
 
-  if (status) {
-    queryString += `status=${status}&`;
+  if (status !== null) {
+    url.searchParams.set('status', status);
   }
 
-  queryString[queryString.lastIndexOf("&")] = "";
+  const fullUrl = url.pathname + url.search;
 
-  const fullUrl = baseUrl + queryString === "?" ? "" : queryString;
+  console.log(fullUrl)
 
   return axios.request({
     method: "get",
@@ -122,7 +124,7 @@ async function putBookingStatus(bookingId, citizenId, body) {
   //finish
   return axios.request({
     method: "put",
-    url: `/api/booking/manage/booking/${bookingId}/${citizenId}`,
+    url: `/api/booking/manage/booking/status/${bookingId}/${citizenId}`,
     body,
   });
 }

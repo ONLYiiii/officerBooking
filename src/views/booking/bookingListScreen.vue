@@ -25,12 +25,17 @@
           <span>{{ item.rcodeDesc }}</span>
         </template>
 
+        <template v-slot:item.status="{ item }">
+          <span>{{ converter("status", item.status) }}</span>
+        </template>
+
         <template v-slot:item.cancel="{ item }">
           <v-btn
             class="text-none ms-4 text-white"
             color="red"
             variant="flat"
             @click="cancelBooking(item)"
+            :disabled="item.status"
             >ยกเลิก</v-btn
           >
         </template>
@@ -64,6 +69,7 @@ import {
   convertServiceCode,
   convertTimeBooking,
   convertDate,
+  convertStatus
 } from "@/utilities/convertCode.js";
 
 import { sleep } from "@/utilities/utils.js";
@@ -93,8 +99,9 @@ export default {
         { title: "ประเภทงาน", key: "typeWork" },
         { title: "งานบริการ", key: "typeService" },
         { title: "ช่วงเวลา", key: "timeBooking" },
-        { title: "วันที่", key: "dateBooking" },
+        { title: "วันที่", key: "dateBooking", width: 120 },
         { title: "สถานที่นัดหมาย", key: "rcodeDesc" },
+        { title: "สถานะ", key: "status" },
         { title: "ยกเลิกนัดหมาย", key: "cancel", sortable: false },
       ],
       items: [],
@@ -125,9 +132,12 @@ export default {
           return convertTimeBooking(data);
         case "date":
           return convertDate(data + "");
+        case "status":
+          return convertStatus(data)
         default:
           return null;
       }
+
     },
     async cancelBooking(item) {
       Swal.fire({
@@ -137,6 +147,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
+        cancelButtonText: "ยกเลิก",
         confirmButtonText: "ยืนยัน",
       }).then(async (result) => {
         if (result.isConfirmed) {
@@ -169,17 +180,14 @@ export default {
       }
     },
     async putBookingStatus(item) {
-      const apiRequest = {
-        status: 0,
-      };
-      const response = await api.putBookingStatus(
-        item.bookingId,
-        item.citizenId,
-        apiRequest
-      );
-      const statusCode = response.status;
-      if (statusCode === 200) {
-        await this.cancelBooking();
+      try {
+        const apiRequest = {
+          status: 1,
+        };
+        console.log(item);
+        await api.putBookingStatus(item.bookingId, item.citizenId, apiRequest);
+      } catch (error) {
+        console.error(error);
       }
     },
   },

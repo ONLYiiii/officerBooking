@@ -83,7 +83,7 @@
       :grid-cols="gridCols"
       justify="center"
       :box-font-size="boxFontSize"
-      :count-rows="countRows"
+      :count-rows="amountCount"
     />
 
     <v-card
@@ -170,6 +170,7 @@ export default {
   },
   data() {
     return {
+      amountCount: { totalCount: 0, morningCount: 0, afternoonCount: 0 },
       service: service,
       selectedWork: 0,
       selectedService: [],
@@ -280,11 +281,15 @@ export default {
           dateEnd,
           this.selectedWork,
           typeService,
-          this.status
+          this.selectedStatus
         );
-        this.dataTable.push(...resDatas);
+        console.log(resDatas);
+        this.amountCount.totalCount = resDatas.data.amount;
+        this.amountCount.morningCount = resDatas.data.timeBooking1;
+        this.amountCount.afternoonCount = resDatas.data.timeBooking2;
+        this.dataTable.push(...resDatas.data.bookingDetail);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
   },
@@ -292,33 +297,25 @@ export default {
   computed: {
     // filteredData() {
     //   const data = [];
-
     //   if (this.startEndDate) {
     //     if (this.startEndDate.length === 2) {
     //       // startEndDate สามารถใช้ได้เลย
     //       const timeStart = this.startEndDate[0].getTime();
     //       const timeEnd = this.startEndDate[1].getTime();
-
     //       const filterTimeData = this.dataTable.filter((item) => {
     //         const itemDateSplit = splitDateString(item.dateBooking);
     //         const itemTime = new Date(...itemDateSplit).getTime();
-
     //         return timeStart <= itemTime && itemTime <= timeEnd;
     //       });
-
     //       data.push(...filterTimeData);
     //     } else {
     //       const selectedDate = formatDate(this.startEndDate, true);
-
     //       // Debuging
     //       console.log(`Selected Date: ${selectedDate}`);
-
     //       const filterTimeData = this.dataTable.filter((item) => {
     //         const itemDate = formatDateString(item.dateBooking);
-
     //         // Debuging
     //         console.log(`Item Date: ${itemDate}`);
-
     //         return selectedDate === itemDate;
     //       });
     //       data.push(...filterTimeData);
@@ -326,7 +323,6 @@ export default {
     //   } else {
     //     data.push(...this.dataTable);
     //   }
-
     //   if (this.selectedWork === 0) {
     //     return data;
     //   } else if (this.selectedService.length !== 0) {
@@ -339,25 +335,13 @@ export default {
     //     return data.filter((item) => item.typeWork === this.selectedWork);
     //   }
     // },
-    countRows() {
-      let totalCount = 0;
-      let morningCount = 0;
-      let afternoonCount = 0;
-
-      this.dataTable.forEach((item) => {
-        totalCount++;
-        if (item.timeBooking) {
-          afternoonCount++;
-        } else {
-          morningCount++;
-        }
-      });
-      return {
-        totalCount,
-        morningCount,
-        afternoonCount,
-      };
-    },
+    // countRows() {
+    //   return {
+    //     totalCount,
+    //     morningCount,
+    //     afternoonCount,
+    //   };
+    // },
   },
   watch: {
     selectedWork: function () {
