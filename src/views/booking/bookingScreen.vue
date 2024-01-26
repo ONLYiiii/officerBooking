@@ -232,7 +232,6 @@ export default {
     },
     async getDistrict(cc) {
       try {
-        let resDatas = await api.getDistrict(cc);
         const datas = [];
         if (+cc === 10) {
           datas.push({
@@ -240,14 +239,15 @@ export default {
             description: "ศูนย์บริการประชาชน",
             descriptionEnglish: "",
           });
-          datas.push({
-            code: "0084",
-            description: "กองทะเบียน",
-            descriptionEnglish: "",
-          });
+          this.autocompleteProps.district.modelValue = '0083'
+          this.autocompleteProps.district.disabled = true
+        } else {
+          let resDatas = await api.getDistrict(cc);
+          datas.push(...resDatas.data);
+          this.autocompleteProps.district.disabled = false
         }
 
-        datas.push(...resDatas.data);
+        
         return datas;
       } catch (error) {
         console.error("getDistrict Error:", error);

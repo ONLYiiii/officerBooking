@@ -14,7 +14,7 @@
         </template>
 
         <template v-slot:item.timeBooking="{ item }">
-          <span>{{ converter("time", item.timeBooking) }}</span>
+          <span v-html="converter('time', item.timeBooking)"></span>
         </template>
 
         <template v-slot:item.dateBooking="{ item }">
@@ -22,7 +22,7 @@
         </template>
 
         <template v-slot:item.rcodeDesc="{ item }">
-          <span>{{ item.rcodeDesc }}</span>
+          <span v-html="getPlaceText(item)"></span>
         </template>
 
         <template v-slot:item.status="{ item }">
@@ -95,14 +95,14 @@ export default {
   data() {
     return {
       headers: [
-        { title: "เลขนัดหมาย", key: "bookingId" },
-        { title: "ประเภทงาน", key: "typeWork" },
-        { title: "งานบริการ", key: "typeService" },
-        { title: "ช่วงเวลา", key: "timeBooking" },
-        { title: "วันที่", key: "dateBooking", width: 120 },
-        { title: "สถานที่นัดหมาย", key: "rcodeDesc" },
-        { title: "สถานะ", key: "status" },
-        { title: "ยกเลิกนัดหมาย", key: "cancel", sortable: false },
+        { title: "เลขนัดหมาย", key: "bookingId", align: 'center', sortable: false },
+        { title: "ประเภทงาน", key: "typeWork", align: 'center', sortable: false },
+        { title: "งานบริการ", key: "typeService", align: 'center', sortable: false },
+        { title: "ช่วงเวลา", key: "timeBooking", align: 'center', sortable: false },
+        { title: "วันที่", key: "dateBooking", width: 120, align: 'center', sortable: false },
+        { title: "สถานที่นัดหมาย", key: "rcodeDesc", align: 'center', sortable: false },
+        { title: "สถานะ", key: "status", align: 'center', sortable: false },
+        { title: "ยกเลิกนัดหมาย", key: "cancel", align: 'center', sortable: false },
       ],
       items: [],
     };
@@ -189,6 +189,9 @@ export default {
         console.error(error);
       }
     },
+    getPlaceText(item) {
+      return `<span>${item.rcodeDescription.description}<br/>${item.rcodeCcDescription.description}</span>`
+    }
   },
 };
 </script>

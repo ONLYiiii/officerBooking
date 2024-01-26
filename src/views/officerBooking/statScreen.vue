@@ -1,14 +1,12 @@
 <template>
   <v-container>
-    <v-row class="pa-5">
-      <v-col cols="12">
-        <v-row align="center">
-          <v-col cols="6" md="2" lg="2">
-            <p>ข้อมูลนัดหมายวันที่</p>
-          </v-col>
+    <v-row class="pt-5" align="center" justify="center">
+      <v-col cols="12" sm="12" md="12" lg="12">
+        <v-row>
           <v-col cols="12" md="5" lg="5">
             <vue-date-picker
               v-model="startEndDate"
+              label="วันที่นัดหมายเริ่มต้นสิ้นสุด"
               locale="th-TH"
               :format="formatDatePicker"
               :enable-time-picker="false"
@@ -19,35 +17,25 @@
               range
             />
           </v-col>
-          <v-col>
-            <v-row align="center">
-              <v-col cols="3">
-                <p>สถานนะการนัดหมาย</p>
-              </v-col>
-              <v-col cols="4">
-                <br />
-                <v-select
-                  v-model="selectedStatus"
-                  label="Select"
-                  item-title="status"
-                  item-value="key"
-                  :items="status"
-                  variant="outlined"
-                ></v-select>
-              </v-col>
-            </v-row>
+
+          <v-col cols="12" md="5" lg="5">
+            <v-select
+              v-model="selectedStatus"
+              label="สถานะการนัดหมาย"
+              item-title="status"
+              item-value="key"
+              :items="status"
+              variant="outlined"
+              density="compact"
+              base-color="primary"
+              color="primary"
+              hide-details="auto"
+            ></v-select>
           </v-col>
         </v-row>
-      </v-col>
-      <v-col cols="12">
-        <v-row align="center">
-          <v-col cols="12" lg="2">
-            <p>เลือกประเภทงานเเละบริการที่ต้องการ</p>
-          </v-col>
-
-          <v-col cols="12" lg="5">
+        <v-row>
+          <v-col cols="12" md="5" lg="5">
             <div>
-              <br />
               <v-autocomplete
                 label="เลือกประเภทงาน"
                 v-model="selectedWork"
@@ -56,12 +44,15 @@
                 item-title="work"
                 item-value="code"
                 variant="outlined"
+                density="compact"
+                base-color="primary"
+                color="primary"
+                hide-details="auto"
               ></v-autocomplete>
             </div>
           </v-col>
-          <v-col cols="12" lg="5">
+          <v-col cols="12" md="5" lg="5">
             <div>
-              <br />
               <v-autocomplete
                 :items="filterService"
                 v-model="selectedService"
@@ -71,6 +62,8 @@
                 multiple
                 chips
                 variant="outlined"
+                density="compact"
+                hide-details="auto"
                 @click="handleServiceInput"
               ></v-autocomplete>
             </div>
@@ -79,56 +72,46 @@
       </v-col>
     </v-row>
 
-    <data-box
-      :grid-cols="gridCols"
-      justify="center"
-      :box-font-size="boxFontSize"
-      :count-rows="amountCount"
-    />
+    <div >
+      <data-box
+        :grid-cols="gridCols"
+        justify="center"
+        :box-font-size="boxFontSize"
+        :count-rows="amountCount"
+        class="mt-6"
+        
+      />
+    </div>
 
     <v-card
       style="border-width: 2px; align: center"
       max-width="100%"
       class="mt-10"
+      color=#154C8B
     >
       <v-row
         class="pa-1"
         justify="space-between"
-        style="background-color: #dadada"
+
       >
         <v-col>
           <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
         </v-col>
-        <v-col class="d-flex justify-end mr-1">
+        <v-col class="d-flex justify-end align-center mr-1">
           <v-btn
-            class="text-none ms-4 text-white"
-            color="red"
+            class="text-none ms-4 "
+            color="white"
+            
             variant="flat"
-            height="45"
-            width="70"
+            height="35"
+            width="100"
             align="center"
             @click="handlePrint"
-            >พิมพ์</v-btn
+            >ส่งออก PDF</v-btn
           >
         </v-col>
       </v-row>
-      <!-- <v-data-table :items="dataTable" :headers="headers">
-        <template v-slot:item.typeWork="{ item }">
-          <span>{{ converter("work", item.typeWork) }}</span>
-        </template>
 
-        <template v-slot:item.typeService="{ item }">
-          <span>{{ converter("service", item.typeService) }}</span>
-        </template>
-
-        <template v-slot:item.timeBooking="{ item }">
-          <span>{{ converter("time", item.timeBooking) }}</span>
-        </template>
-
-        <template v-slot:item.dateBooking="{ item }">
-          <span>{{ converter("date", item.dateBooking) }}</span>
-        </template>
-      </v-data-table> -->
       <TableList :items="dataTable" :headers="headers"></TableList>
     </v-card>
   </v-container>
@@ -189,13 +172,43 @@ export default {
       ],
 
       headers: [
-        { title: "เลขนัดหมาย", key: "bookingId" },
-        { title: "เลขประจำตัวประชาชน ", key: "citizenId" },
-        { title: "ประเภทงาน", key: "typeWork" },
-        { title: "งานบริการ", key: "typeService" },
-        { title: "ช่วงเวลา", key: "timeBooking" },
-        { title: "วันที่", key: "dateBooking" },
-        { title: "สถานะ", key: "status" },
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          sortable: false,
+        },
+        {
+          title: "เลขประจำตัวประชาชน ",
+          key: "citizenId",
+          align: "center",
+          sortable: false,
+        },
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "center",
+          sortable: false,
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "center",
+          sortable: false,
+        },
+        {
+          title: "ช่วงเวลา",
+          key: "timeBooking",
+          align: "center",
+          sortable: false,
+        },
+        {
+          title: "วันที่",
+          key: "dateBooking",
+          align: "center",
+          sortable: false,
+        },
+        { title: "สถานะ", key: "status", align: "center", sortable: false },
       ],
       gridCols: [
         { cols: 12, sm: 4, lg: 2 },
@@ -232,7 +245,7 @@ export default {
       }
     },
     handlePrint() {
-      print(this.filteredData, this.startEndDate);
+      print(this.dataTable, this.startEndDate);
     },
     // converter(mode, data) {
     //   switch (mode) {
@@ -326,11 +339,14 @@ export default {
       this.getReport();
     },
   },
+  async mounted() {
+    await this.getReport();
+  }
 };
 </script>
 <style>
 .customDatePicker {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 7px;
+  padding-bottom: 8px;
 }
 </style>

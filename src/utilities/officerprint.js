@@ -6,7 +6,6 @@ import { formatDate } from "@/utilities/formatDate";
 import {
   convertWorkCode,
   convertServiceCode,
-  convertTimeBooking,
   convertDate,
 } from "@/utilities/convertCode.js";
 
@@ -17,23 +16,23 @@ pdfMake.fonts = fonts;
 export default function print(filteredData, startEndDate) {
   const tableBody = [];
   const tableHeader = [
-    { text: "รหัสการจอง", alignment: "center" },
+    { text: "เลขนัดหมาย", alignment: "center" },
     { text: "เลขประจำตัว\nประชาชน", alignment: "center" },
     { text: "ประเภทงาน", alignment: "center" },
-    { text: "บริการที่เข้ารับ", alignment: "center" },
+    { text: "งานบริการ", alignment: "center" },
     { text: "ช่วงเวลา", alignment: "center" },
-    { text: "วันที่จอง", alignment: "center" },
+    { text: "วันที่", alignment: "center" },
   ];
   tableBody.push(tableHeader);
 
   filteredData.forEach((item) => {
     const row = [
-      { text: item.BookingID, alignment: "center" },
+      { text: item.bookingId, alignment: "center" },
       { text: item.citizenId, alignment: "center" },
       convertWorkCode(item.typeWork),
       convertServiceCode(item.typeService),
       { text: convertTimeBooking(item.timeBooking), alignment: "center" },
-      { text: convertDate(item.dateBooking), alignment: "center" },
+      { text: convertDate(item.dateBooking + ''), alignment: "center" },
     ];
     tableBody.push(row);
   });
@@ -62,7 +61,7 @@ export default function print(filteredData, startEndDate) {
       { text: contentText },
       {
         table: {
-          widths: [95, 95, 180, 200, 45, 90],
+          widths: [70, 80, '*', '*', 80, 90],
           headerRows: 1,
           body: tableBody,
         },
@@ -71,7 +70,7 @@ export default function print(filteredData, startEndDate) {
     defaultStyle: {
       font: "Kanit",
       lineHeight: 1.4,
-      fontSize: 11,
+      fontSize: 10,
     },
     footer: function (currentPage, pageCount) {
       return {
@@ -84,4 +83,13 @@ export default function print(filteredData, startEndDate) {
 
   const pdfDocGenerator = pdfMake.createPdf(docDefinition);
   pdfDocGenerator.open();
+}
+
+function convertTimeBooking(timeBooking) {
+  if (timeBooking === 1) {
+    return `เช้า (09.00-11.00)`;
+  } else {
+    return `บ่าย (13.00-15.00)`;
+  }
+  
 }

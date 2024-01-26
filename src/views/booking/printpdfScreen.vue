@@ -3,7 +3,7 @@
     <v-row>
       <v-col style="line-height: 55px">
         <div :style="{ fontSize: computedFontSize }">
-          <h2>หมายเลขนัดหมายขอเข้ารับบริการของคุณคือ :</h2>
+          <h2>เลขนัดหมายขอเข้ารับบริการของคุณ</h2>
           <h1
             :style="{
               color: '#1081e9',
@@ -66,7 +66,7 @@
                   color="#154C8B"
                   variant="flat"
                   rounded="lg"
-                  @click="sendEmail"
+                  @click="sendMail"
                 >
                   <v-icon color="white" size="30">mdi-arrow-right-bold</v-icon>
                 </v-btn>
@@ -82,7 +82,7 @@
             fontWeight: 'bold',
           }"
         >
-          *กรุณาแจ้ง หมายเลขนัดหมายล่วงหน้า หรือ<br />
+          *กรุณาแจ้ง เลขนัดหมายล่วงหน้า หรือ<br />
           เลขประจำตัวประชาชนต่อเจ้าหน้าที่เมื่อเข้ารับบริการตามวันเวลาที่จอง<br />
           เเละมาตามวันที่เเละเวลาที่นัดหมาย
         </v-card-text>
@@ -164,10 +164,9 @@ export default {
         console.log(error);
       }
     },
-    async sendEmail() {
+    async sendMail() {
       const fileBase64 = print(
         this.bookingDetails,
-        this.provinceName,
         this.districtName,
         this.typeworkName,
         this.serviceName,
@@ -209,11 +208,15 @@ export default {
       return this.bookingDetailsStores.bookingDetails;
     },
     provinceName() {
-      const rcode_province = this.bookingDetails.rcode.substring(0, 2);
+      let rcode_province = this.bookingDetails.rcode.substring(0, 2);
       if (rcode_province) {
+        if (rcode_province === '00') {
+          rcode_province = '10';
+        }
         const index = this.province.findIndex(
           (value) => value.ccCode === rcode_province
         );
+        console.log("rcode: ",rcode_province)
         return this.province[index].ccDesc;
       }
       return null;
@@ -277,7 +280,7 @@ export default {
       } else {
         provinceText = `จังหวัด${this.provinceName}`
       }
-      return `${provinceText} ${districtText}${this.districtName}`
+      return `${districtText}${this.districtName} ${provinceText}`
     }
   },
   async mounted() {

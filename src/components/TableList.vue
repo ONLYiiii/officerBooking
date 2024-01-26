@@ -18,7 +18,7 @@
 
     <slot></slot>
   </v-data-table> -->
-  <v-data-table :items="tableItems" :headers="tableHeaders">
+  <v-data-table :items="tableItems" :headers="tableHeaders" >
     <template v-slot:item.typeWork="{ item }">
       <span>{{ converter("work", item.typeWork) }}</span>
     </template>
@@ -28,7 +28,7 @@
     </template>
 
     <template v-slot:item.timeBooking="{ item }">
-      <span>{{ converter("time", item.timeBooking) }}</span>
+      <span v-html="converter('time', item.timeBooking)"></span>
     </template>
 
     <template v-slot:item.dateBooking="{ item }">

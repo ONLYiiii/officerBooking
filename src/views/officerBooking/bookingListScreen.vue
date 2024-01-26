@@ -1,25 +1,25 @@
 <template>
   <v-container>
-    <v-col>
+
       <v-row align="center">
-        <v-col cols="3">
-          <p>สถานนะการนัดหมาย</p>
-        </v-col>
         <v-col cols="4">
           <br />
           <v-select
             v-model="selectedStatus"
-            label="Select"
+            label="สถานะการนัดหมาย"
             item-title="status"
             item-value="key"
             :items="status"
             variant="outlined"
+            density="compact"
+            base-color="primary"
+            color="primary"
           ></v-select>
         </v-col>
       </v-row>
-    </v-col>
-    <v-card style="border-width: 2px; align: center" max-width="100%">
-      <div style="background-color: #dadada; height: 50px; display: flex">
+  
+    <v-card style="border-width: 2px; align: center" max-width="100%" color=#154C8B>
+      <div style="height: 50px; display: flex">
         <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
       </div>
       <!-- <v-data-table :items="filteredData" :headers="headers">
@@ -42,7 +42,7 @@
 
       <TableListVue :items="items" :headers="headers"></TableListVue>
     </v-card>
-    <startup-dialog-vue :count-rows="countRowsNewDate" />
+    <startup-dialog-vue :count-rows="amountCount" />
   </v-container>
 </template>
 
@@ -69,17 +69,19 @@ export default {
   },
   data() {
     return {
+      selectedStatus: null,
       status: statusData,
       headers: [
-        { title: "เลขนัดหมาย", key: "bookingId" },
-        { title: "เลขประจำตัวประชาชน ", key: "citizenId" },
-        { title: "ประเภทงาน", key: "typeWork" },
-        { title: "งานบริการ", key: "typeService" },
-        { title: "ช่วงเวลา", key: "timeBooking" },
-        { title: "วันที่", key: "dateBooking" },
-        { title: "สถานะ", key: "status" },
+        { title: "เลขนัดหมาย", key: "bookingId" , align: 'center', sortable: false},
+        { title: "เลขประจำตัวประชาชน ", key: "citizenId" , align: 'center', sortable: false},
+        { title: "ประเภทงาน", key: "typeWork" , align: 'center', sortable: false},
+        { title: "งานบริการ", key: "typeService" , align: 'center', sortable: false},
+        { title: "ช่วงเวลา", key: "timeBooking", align: 'center', sortable: false },
+        { title: "วันที่", key: "dateBooking", align: 'center', sortable: false },
+        { title: "สถานะ", key: "status" , align: 'center', sortable: false},
       ],
       items: [],
+      amountCount: { totalCount: 0, morningCount: 0, afternoonCount: 0 },
     };
   },
   computed: {
@@ -122,7 +124,7 @@ export default {
   methods: {
     async getReport() {
       try {
-        this.dataTable.length = 0;
+        this.items.length = 0;
 
         let resDatas = await api.getReport(
           getFullDate(new Date()),
@@ -136,7 +138,7 @@ export default {
         this.amountCount.totalCount = resDatas.data.amount;
         this.amountCount.morningCount = resDatas.data.timeBooking1;
         this.amountCount.afternoonCount = resDatas.data.timeBooking2;
-        this.dataTable.push(...resDatas.data.bookingDetail);
+        this.items.push(...resDatas.data.bookingDetail);
       } catch (error) {
         console.error(error);
       }
@@ -150,8 +152,13 @@ export default {
     //   }
     // },
   },
+  watch: {
+    selectedStatus: function () {
+      this.getReport();
+    },
+  },
   async mounted() {
-    await this.getRcode();
+    await this.getReport();
   },
 };
 </script>

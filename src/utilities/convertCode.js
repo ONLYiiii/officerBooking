@@ -16,7 +16,12 @@ export function convertServiceCode(serviceCode) {
   return service[index].service;
 }
 export function convertTimeBooking(timeBooking) {
-  return timeBooking === 1 ? "เช้า" : "บ่าย";
+  if (timeBooking === 1) {
+    return `<p class="text-center">เช้า<br/>(09.00-11.00)</p>`;
+  } else {
+    return `<p class="text-center">บ่าย<br/>(13.00-15.00)</p>`
+  }
+  
 }
 export function convertDate(dateBooking) {
   return formatShortDate(dateBooking);
