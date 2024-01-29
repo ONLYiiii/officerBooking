@@ -10,9 +10,9 @@
       <div class="w-100 h-100 d-flex justify-center">
         <v-card
           max-width="180"
-          min-height="140"
+          min-height="130"
           min-width="10vw"
-          max-height="140"
+          max-height="130"
           variant="outlined"
           class="boxStyles"
         >
@@ -30,7 +30,7 @@
                 color: item.color,
               }"
             >
-              {{ item.amount }}
+              {{ item.amount ?? 0 }}
             </h1>
           </v-card-item>
         </v-card>
@@ -77,7 +77,7 @@ export default {
       switch (displaySize) {
         case "lg":
           fontSize = this.boxFontSize.lg;
-          amountFontSize = "30px";
+          amountFontSize = "36px";
           break;
         case "md":
           fontSize = this.boxFontSize.md;
@@ -93,14 +93,14 @@ export default {
           break;
         default:
           fontSize = this.boxFontSize.default;
-          amountFontSize = "32px";
+          amountFontSize = "35px";
       }
       return { fontSize, amountFontSize };
     },
     titleAmount() {
       return [
         {
-          title: "<p>จำนวนนัดหมาย<br>ทั้งหมด</p>",
+          title: "<h3>คิวทั้งหมด<h3/>",
           amount: this.countRows.totalCount,
           cols: this.gridCols[0].cols,
           sm: this.gridCols[0].sm,
@@ -108,7 +108,7 @@ export default {
           color: "#00A725",
         },
         {
-          title: "<p>จำนวนนัดหมาย<br>มารับบริการช่วงเช้า</p>",
+          title: "<h3>ช่วงเช้า</h3>",
           amount: this.countRows.morningCount,
           cols: this.gridCols[1].cols,
           sm: this.gridCols[1].sm,
@@ -116,7 +116,7 @@ export default {
           color: "#1081E9",
         },
         {
-          title: "<p>จำนวนนัดหมาย<br>มารับบริการช่วงบ่าย</p>",
+          title: "<h3>ช่วงบ่าย</h3>",
           amount: this.countRows.afternoonCount,
           cols: this.gridCols[2].cols,
           sm: this.gridCols[2].sm,
@@ -131,6 +131,9 @@ export default {
 
 <style scoped>
 .boxStyles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-width: 3px;
   border-color: #154c8b;
   /* box-shadow: 0 2px 6px 0 #1081e9; */

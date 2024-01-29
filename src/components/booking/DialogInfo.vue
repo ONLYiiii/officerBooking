@@ -7,15 +7,15 @@
       style="line-height: 15px"
     >
       <v-card-title class="titledialog d-flex align-center" color="primary"
-        >ยืนยันการจอง</v-card-title
+        >ยืนยันการนัดหมาย</v-card-title
       >
 
-      <v-card-text>ยืนยันการจองนัดหมายขอเข้ารับบริการ </v-card-text>
+      <v-card-text>ยืนยันการนัดหมายขอเข้ารับบริการ </v-card-text>
       <v-card-text>วันที่ {{ getFormattedDate }} </v-card-text>
       <v-card-text>{{ selectedTypeTitle }}</v-card-text>
       <v-card-text>{{ selectedServiceTitle }}</v-card-text>
       <v-card-text
-        >{{ selectedProvince === "10" ? "" : "จังหวัด"
+        >ณ {{ selectedProvince === "10" ? "" : "จังหวัด"
         }}{{ selectedProvinceTitle }}
         {{ selectedProvince === "10" ? "" : "อำเภอ"
         }}{{ selectedDistrictTitle }}</v-card-text

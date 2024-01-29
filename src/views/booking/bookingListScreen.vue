@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="mx-10 my-8">
     <v-card
       style="
         align: center;
@@ -8,23 +8,11 @@
       "
     >
       <div style="height: 50px; display: flex">
-        <v-card-title style="color: white"
-          >รายการนัดหมายขอเข้ารับบริการ</v-card-title
+        <v-card-title style="color: white">
+          รายการนัดหมายขอเข้ารับบริการ</v-card-title
         >
       </div>
       <v-data-table :items="items" :headers="headers">
-        <template v-slot:headers="{ columns }">
-          <tr>
-            <template v-for="(column, index) in columns" :key="index">
-              <td>
-                <span>
-                  <v-icon class="mr-1">{{ column.icon }}</v-icon>
-                  {{ column.title }}
-                </span>
-              </td>
-            </template>
-          </tr>
-        </template>
 
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
@@ -58,8 +46,7 @@
             @click="cancelBooking(item)"
             :disabled="item.status"
           >
-            <span v-if="$vuetify.breakpoint.mdAndUp">ยกเลิก</span>
-            <v-icon v-else icon="bin"></v-icon>
+            <span>ยกเลิก</span>
           </v-btn>
         </template>
       </v-data-table>
@@ -82,7 +69,7 @@
         </template>
       </TableListVue> -->
     </v-card>
-  </v-container>
+  </div>
 
   <ConfirmDialog> </ConfirmDialog>
 </template>
@@ -118,59 +105,65 @@ export default {
   data() {
     return {
       headers: [
-        {
-          title: "เลขนัดหมาย",
-          key: "bookingId",
-          align: "center",
-          sortable: false,
-          icon: "mdi-order-numeric-descending",
-        },
-        {
-          title: "ประเภทงาน",
-          key: "typeWork",
-          align: "center",
-          sortable: false,
-          icon: "mdi-briefcase-outline",
-        },
-        {
-          title: "งานบริการ",
-          key: "typeService",
-          align: "center",
-          sortable: false,
-          icon: "mdi-format-list-bulleted",
-        },
-        {
-          title: "ช่วงเวลา",
-          key: "timeBooking",
-          align: "center",
-          sortable: false,
-          icon: "mdi-clock-time-eight",
-        },
-        {
+      {
           title: "วันที่",
           key: "dateBooking",
           width: 120,
           align: "center",
           sortable: false,
-          icon: "mdi-calendar-month",
+          // icon: "mdi-calendar-month",
         },
+        {
+          title: "ช่วงเวลา",
+          key: "timeBooking",
+          align: "center",
+          width: 120,
+          sortable: false,
+          // icon: "mdi-clock-time-eight",
+        },
+        
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "start",
+          sortable: false,
+          // icon: "mdi-briefcase-outline",
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "start",
+          sortable: false,
+          // icon: "mdi-format-list-bulleted",
+        },
+       
+        
         {
           title: "สถานที่นัดหมาย",
           key: "rcodeDesc",
           align: "center",
           sortable: false,
-          icon: "mdi-map-marker",
+          // icon: "mdi-map-marker",
+        },
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          width: 150,
+          sortable: false,
+          // icon: "mdi-order-numeric-descending",
         },
         {
           title: "สถานะ",
           key: "status",
           align: "center",
           sortable: false,
-          icon: "mdi-list-status",
+          // icon: "mdi-list-status",
         },
         {
           title: "ยกเลิกนัดหมาย",
           key: "cancel",
+          width: 150,
           align: "center",
           sortable: false,
         },
@@ -209,10 +202,10 @@ export default {
           return null;
       }
     },
-    async cancelBooking(item) {
+    cancelBooking(item) {
       Swal.fire({
-        title: "ยืนยันการลบ",
-        text: "คุณต้องการจะลบข้อมูลรายการนี้ใช่หรือไม่",
+        title: "ยืนยันการยกเลิกนัดหมาย",
+        text: "ต้องการยกเลิกนัดหมายรายการนี้?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -221,13 +214,22 @@ export default {
         confirmButtonText: "ยืนยัน",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await this.putBookingStatus(item);
-          await Swal.fire({
+          const status = await this.putBookingStatus(item);
+          if (status === 200) {
+            await Swal.fire({
             title: "เเจ้งเตือน",
-            text: "ระบบยกเลิกรายการจองเรียบร้อยเเล้ว",
+            text: "ดำเนินการเรียบร้อยเเล้ว",
             icon: "success",
             confirmButtonText: "ปิด",
           });
+          } else {
+            await Swal.fire({
+            title: "เเจ้งเตือน",
+            text: "ไม่สามารถยกเลิกได้",
+            icon: "error",
+            confirmButtonText: "ปิด",
+          });
+          }
           await this.getCitizenId();
         }
       });
@@ -244,24 +246,36 @@ export default {
         // return response.data;
 
         // console.log('Items: ',this.items)
-        // console.log("response:: ", this.items);
+        console.log("response:: ", this.items);
       } catch (error) {
         console.error("getCitizenId Error:", error);
       }
     },
     async putBookingStatus(item) {
+      console.log(item);
       try {
         const apiRequest = {
           status: 1,
         };
         console.log(item);
-        await api.putBookingStatus(item.bookingId, item.citizenId, apiRequest);
+        const response = await api.putBookingStatus(
+          item.rcode,
+          item.bookingId,
+          item.citizenId,
+          apiRequest
+        );
+        return response.status
       } catch (error) {
-        console.error(error);
+        console.error("error putBookingStatus: ", error);
       }
     },
     getPlaceText(item) {
-      return `<span>${item.rcodeDescription.description}<br/>${item.rcodeCcDescription.description}</span>`;
+      if (item.rcodeCcDescription) {
+        return `<span>${item.rcodeDescription.description}<br/>${item.rcodeCcDescription.description}</span>`;
+      } else {
+        return `<span>${item.rcodeDescription.description}<br/>กรุงเทพมหานคร</span>`;
+      }
+      
     },
   },
 };

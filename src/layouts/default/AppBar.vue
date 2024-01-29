@@ -11,10 +11,19 @@
         >
 
         <template v-slot:append>
-          <p class="mr-2" style="font-size: large">
-            {{ userInfo ? userInfo.pid : "" }}
-          </p>
-          <v-icon class="mr-5">mdi-account</v-icon>
+          <v-row>
+            <v-col cols="5">
+              <p style="font-size: large">
+              {{ userInfo ? userInfo.name : "" }}
+            </p>
+            </v-col>
+            <v-col cols="1">
+              <v-icon class="mr-5">mdi-account</v-icon>
+            </v-col>
+            <v-col>
+              {{ userInfo ? userInfo.rcodeDescription.description : "" }}
+            </v-col>
+          </v-row>
         </template>
       </v-app-bar>
 

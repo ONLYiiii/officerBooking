@@ -1,0 +1,14 @@
+<template>
+    <vue-date-picker
+              v-model="startEndDate"
+              locale="th-TH"
+              :format="formatDatePicker"
+              :enable-time-picker="false"
+              :start-time="startTime"
+              :clearable="false"
+              input-class-name="customDatePicker"
+              menu-class-name="customMenu"
+              model-auto
+              range
+            />
+</template>

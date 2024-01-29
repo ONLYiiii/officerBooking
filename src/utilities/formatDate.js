@@ -24,7 +24,7 @@ export function formatDateString(dateString) {
   const month = getMonthName(+dateString.substring(4, 6) - 1);
   const year = dateString.substring(0, 4); // Adding 543 to get the Buddhist era year
 
-  return `${day} ${month} ${year}`;
+  return `${+day} ${month} ${year}`;
 }
 
 export function formatShortDate(dateString) {

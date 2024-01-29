@@ -6,7 +6,7 @@
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        {{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}
+        ณ {{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">

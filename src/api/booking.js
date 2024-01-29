@@ -131,11 +131,11 @@ async function sendMail(body) {
   return axios.post("/api/booking/manage/booking/sendmail", body);
 }
 
-async function putBookingStatus(bookingId, citizenId, body) {
+async function putBookingStatus(rcode,bookingId, citizenId, body) {
   //finish
   return axios.request({
     method: "put",
-    url: `/api/booking/manage/booking/status/${bookingId}/${citizenId}`,
+    url: `/api/booking/manage/booking/status/${rcode}/${bookingId}/${citizenId}`,
     body,
   });
 }

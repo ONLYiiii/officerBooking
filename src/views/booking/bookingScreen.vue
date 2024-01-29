@@ -10,7 +10,7 @@
           paddingBottom: '14px',
           // paddingLeft: '36px',
         }"
-        >ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
+        ><v-icon icon="mdi-square-edit-outline" size="20"></v-icon> ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
       >
       <v-card-text style="padding: 40px">
         <v-row>

@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="mx-10 my-8">
     <v-row align="center">
       <v-col cols="4">
         <br />
@@ -42,7 +42,7 @@
       <TableListVue :items="items" :headers="headers"></TableListVue>
     </v-card>
     <startup-dialog-vue :count-rows="amountCount" />
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -71,54 +71,54 @@ export default {
       selectedStatus: null,
       status: statusData,
       headers: [
-        {
-          title: "เลขนัดหมาย",
-          key: "bookingId",
+      {
+          title: "วันที่",
+          key: "dateBooking",
           align: "center",
           sortable: false,
-          icon: "mdi-order-numeric-descending",
-        },
-        {
-          title: "เลขประจำตัวประชาชน ",
-          key: "citizenId",
-          align: "center",
-          sortable: false,
-          icon: "mdi-card-account-details-outline",
-        },
-        {
-          title: "ประเภทงาน",
-          key: "typeWork",
-          align: "center",
-          sortable: false,
-          icon: "mdi-briefcase-outline",
-        },
-        {
-          title: "งานบริการ",
-          key: "typeService",
-          align: "center",
-          sortable: false,
-          icon: "mdi-format-list-bulleted",
+         // icon: "mdi-calendar-month",
         },
         {
           title: "ช่วงเวลา",
           key: "timeBooking",
           align: "center",
           sortable: false,
-          icon: "mdi-clock-time-eight",
+          //icon: "mdi-clock-time-eight",
         },
         {
-          title: "วันที่",
-          key: "dateBooking",
+          title: "เลขประจำตัวประชาชน ",
+          key: "citizenId",
           align: "center",
           sortable: false,
-          icon: "mdi-calendar-month",
+          //icon: "mdi-card-account-details-outline",
+        },
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "start",
+          sortable: false,
+         // icon: "mdi-briefcase-outline",
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "start",
+          sortable: false,
+         // icon: "mdi-format-list-bulleted",
+        },
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          sortable: false,
+          //icon: "mdi-order-numeric-descending",
         },
         {
           title: "สถานะ",
           key: "status",
           align: "center",
           sortable: false,
-          icon: "mdi-list-status",
+          //icon: "mdi-list-status",
         },
       ],
       items: [],
@@ -173,7 +173,8 @@ export default {
           null,
           null,
           this.selectedStatus,
-          this.userInfo.rcode
+          // this.userInfo.rcode
+          '1301'
         );
         console.log(resDatas);
         this.amountCount.totalCount = resDatas.data.amount;

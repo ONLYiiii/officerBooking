@@ -1,18 +1,20 @@
 <template>
-  <v-container>
+  <div class="mx-10 my-8">
     <v-row class="pt-5" align="center" justify="center">
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-row>
           <v-col cols="12" md="5" lg="5">
             <vue-date-picker
               v-model="startEndDate"
-              label="วันที่นัดหมายเริ่มต้นสิ้นสุด"
               locale="th-TH"
               :format="formatDatePicker"
               :enable-time-picker="false"
               :start-time="startTime"
               :clearable="false"
+              select-text="เลือก"
+              cancel-text="ยกเลิก"
               input-class-name="customDatePicker"
+              menu-class-name="customMenu"
               model-auto
               range
             />
@@ -108,7 +110,7 @@
 
       <TableList :items="dataTable" :headers="headers"></TableList>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -130,7 +132,7 @@ import "@vuepic/vue-datepicker/dist/main.css";
 // API Import
 import api from "@/api/booking.js";
 //Utilities Import
-import { getFullDate } from "@/utilities/formatDate";
+import { getFullDate, formatDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
 
 //Stores Import
@@ -166,54 +168,55 @@ export default {
       ],
 
       headers: [
-        {
-          title: "เลขนัดหมาย",
-          key: "bookingId",
+      {
+          title: "วันที่",
+          key: "dateBooking",
           align: "center",
           sortable: false,
-          icon: "mdi-order-numeric-descending",
-        },
-        {
-          title: "เลขประจำตัวประชาชน ",
-          key: "citizenId",
-          align: "center",
-          sortable: false,
-          icon: "mdi-card-account-details-outline",
-        },
-        {
-          title: "ประเภทงาน",
-          key: "typeWork",
-          align: "center",
-          sortable: false,
-          icon: "mdi-briefcase-outline",
-        },
-        {
-          title: "งานบริการ",
-          key: "typeService",
-          align: "center",
-          sortable: false,
-          icon: "mdi-format-list-bulleted",
+         // icon: "mdi-calendar-month",
         },
         {
           title: "ช่วงเวลา",
           key: "timeBooking",
           align: "center",
           sortable: false,
-          icon: "mdi-clock-time-eight",
+          //icon: "mdi-clock-time-eight",
         },
+       
         {
-          title: "วันที่",
-          key: "dateBooking",
+          title: "เลขประจำตัวประชาชน ",
+          key: "citizenId",
           align: "center",
           sortable: false,
-          icon: "mdi-calendar-month",
+          //icon: "mdi-card-account-details-outline",
+        },
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "start",
+          sortable: false,
+         // icon: "mdi-briefcase-outline",
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "start",
+          sortable: false,
+         // icon: "mdi-format-list-bulleted",
+        },
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          sortable: false,
+          //icon: "mdi-order-numeric-descending",
         },
         {
           title: "สถานะ",
           key: "status",
           align: "center",
           sortable: false,
-          icon: "mdi-list-status",
+          //icon: "mdi-list-status",
         },
       ],
       gridCols: [
@@ -267,16 +270,16 @@ export default {
     //       return null;
     //   }
     // },
-    // formatDatePicker(date) {
-    //   const date1 = date[0] ? formatDate(date[0]) : "";
-    //   const date2 = date[1] ? formatDate(date[1]) : "";
+    formatDatePicker(date) {
+      const date1 = date[0] ? formatDate(date[0]) : "";
+      const date2 = date[1] ? formatDate(date[1]) : "";
 
-    //   if (date.length === 2 && date[1] !== null) {
-    //     return `${date1} ถึง ${date2}`;
-    //   } else {
-    //     return date1;
-    //   }
-    // },
+      if (date.length === 2 && date[1] !== null) {
+        return `${date1} ถึง ${date2}`;
+      } else {
+        return date1;
+      }
+    },
 
     async getReport() {
       try {
@@ -299,7 +302,8 @@ export default {
           this.selectedWork,
           typeService,
           this.selectedStatus,
-          this.userInfo.rcode
+          // this.userInfo.rcode
+          '1301'
         );
         console.log(resDatas);
         this.amountCount.totalCount = resDatas.data.amount;
@@ -354,5 +358,11 @@ export default {
 .customDatePicker {
   padding-top: 7px;
   padding-bottom: 8px;
+}
+.customMenu {
+  width: 350px;
+}
+.dp-action-row {
+    width: 100% !important;
 }
 </style>
