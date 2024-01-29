@@ -1,24 +1,23 @@
 <template>
   <v-container>
+    <v-row align="center">
+      <v-col cols="4">
+        <br />
+        <v-select
+          v-model="selectedStatus"
+          label="สถานะการนัดหมาย"
+          item-title="status"
+          item-value="key"
+          :items="status"
+          variant="outlined"
+          density="compact"
+          base-color="primary"
+          color="primary"
+        ></v-select>
+      </v-col>
+    </v-row>
 
-      <v-row align="center">
-        <v-col cols="4">
-          <br />
-          <v-select
-            v-model="selectedStatus"
-            label="สถานะการนัดหมาย"
-            item-title="status"
-            item-value="key"
-            :items="status"
-            variant="outlined"
-            density="compact"
-            base-color="primary"
-            color="primary"
-          ></v-select>
-        </v-col>
-      </v-row>
-  
-    <v-card style="border-width: 2px; align: center" max-width="100%" color=#154C8B>
+    <v-card style="align: center" max-width="100%" color="primary">
       <div style="height: 50px; display: flex">
         <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
       </div>
@@ -72,13 +71,55 @@ export default {
       selectedStatus: null,
       status: statusData,
       headers: [
-        { title: "เลขนัดหมาย", key: "bookingId" , align: 'center', sortable: false},
-        { title: "เลขประจำตัวประชาชน ", key: "citizenId" , align: 'center', sortable: false},
-        { title: "ประเภทงาน", key: "typeWork" , align: 'center', sortable: false},
-        { title: "งานบริการ", key: "typeService" , align: 'center', sortable: false},
-        { title: "ช่วงเวลา", key: "timeBooking", align: 'center', sortable: false },
-        { title: "วันที่", key: "dateBooking", align: 'center', sortable: false },
-        { title: "สถานะ", key: "status" , align: 'center', sortable: false},
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          sortable: false,
+          icon: "mdi-order-numeric-descending",
+        },
+        {
+          title: "เลขประจำตัวประชาชน ",
+          key: "citizenId",
+          align: "center",
+          sortable: false,
+          icon: "mdi-card-account-details-outline",
+        },
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "center",
+          sortable: false,
+          icon: "mdi-briefcase-outline",
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "center",
+          sortable: false,
+          icon: "mdi-format-list-bulleted",
+        },
+        {
+          title: "ช่วงเวลา",
+          key: "timeBooking",
+          align: "center",
+          sortable: false,
+          icon: "mdi-clock-time-eight",
+        },
+        {
+          title: "วันที่",
+          key: "dateBooking",
+          align: "center",
+          sortable: false,
+          icon: "mdi-calendar-month",
+        },
+        {
+          title: "สถานะ",
+          key: "status",
+          align: "center",
+          sortable: false,
+          icon: "mdi-list-status",
+        },
       ],
       items: [],
       amountCount: { totalCount: 0, morningCount: 0, afternoonCount: 0 },

@@ -4,22 +4,21 @@
       min-height="10vh"
       :min-width="screenOrientation === 'landscape' ? '30vw' : '90vw'"
       class="text-center"
-      style="line-height: 15px;"
+      style="line-height: 15px"
     >
-      <v-card-title class="titledialog d-flex align-center"
+      <v-card-title class="titledialog d-flex align-center" color="primary"
         >ยืนยันการจอง</v-card-title
       >
 
-      <v-card-text
-        >ยืนยันการจองนัดหมายขอเข้ารับบริการ
-      </v-card-text>
-      <v-card-text
-        >วันที่ {{ getFormattedDate }}
-      </v-card-text>
+      <v-card-text>ยืนยันการจองนัดหมายขอเข้ารับบริการ </v-card-text>
+      <v-card-text>วันที่ {{ getFormattedDate }} </v-card-text>
       <v-card-text>{{ selectedTypeTitle }}</v-card-text>
       <v-card-text>{{ selectedServiceTitle }}</v-card-text>
       <v-card-text
-        >{{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}</v-card-text
+        >{{ selectedProvince === "10" ? "" : "จังหวัด"
+        }}{{ selectedProvinceTitle }}
+        {{ selectedProvince === "10" ? "" : "อำเภอ"
+        }}{{ selectedDistrictTitle }}</v-card-text
       >
       <v-card-text>{{ bookTimeString }}</v-card-text>
       <v-card-actions>
@@ -46,7 +45,7 @@ import { getFullDate } from "@/utilities/formatDate";
 import {
   getUserInfoStore,
   getBookingDetailsStore,
-  getDistrictStore
+  getDistrictStore,
 } from "@/stores/getter_stores";
 
 //* api Import
@@ -93,14 +92,16 @@ export default {
     async GotopdfScreen() {
       const sendData = await this.postBooking();
       this.bookingDetailsStores.setNewValue(sendData);
-      console.log(this.selectedDistrictTitle)
+      console.log(this.selectedDistrictTitle);
       this.districtStore.setNewValue(this.selectedDistrictTitle);
       this.$router.push("/booking/pdf");
     },
     async postBooking() {
       const apiRequestBody = {
         citizenId: this.userInfo.pid,
-        rcode: `${this.selectedDistrict.length === 4 ? '' : this.selectedProvince}${this.selectedDistrict}`,
+        rcode: `${
+          this.selectedDistrict.length === 4 ? "" : this.selectedProvince
+        }${this.selectedDistrict}`,
         dateBooking: +getFullDate(this.selectedDate),
         typeWork: this.selectedType,
         typeService: this.selectedService,

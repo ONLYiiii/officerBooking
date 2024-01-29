@@ -32,7 +32,7 @@ export default function print(filteredData, startEndDate) {
       convertWorkCode(item.typeWork),
       convertServiceCode(item.typeService),
       { text: convertTimeBooking(item.timeBooking), alignment: "center" },
-      { text: convertDate(item.dateBooking + ''), alignment: "center" },
+      { text: convertDate(item.dateBooking + ""), alignment: "center" },
     ];
     tableBody.push(row);
   });
@@ -61,7 +61,7 @@ export default function print(filteredData, startEndDate) {
       { text: contentText },
       {
         table: {
-          widths: [70, 80, '*', '*', 80, 90],
+          widths: [70, 80, "*", "*", 80, 90],
           headerRows: 1,
           body: tableBody,
         },
@@ -91,5 +91,4 @@ function convertTimeBooking(timeBooking) {
   } else {
     return `บ่าย (13.00-15.00)`;
   }
-  
 }

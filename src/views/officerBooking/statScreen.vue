@@ -72,36 +72,30 @@
       </v-col>
     </v-row>
 
-    <div >
+    <div>
       <data-box
         :grid-cols="gridCols"
         justify="center"
         :box-font-size="boxFontSize"
         :count-rows="amountCount"
         class="mt-6"
-        
       />
     </div>
 
     <v-card
-      style="border-width: 2px; align: center"
+      style="align: center"
       max-width="100%"
       class="mt-10"
-      color=#154C8B
+      color="primary"
     >
-      <v-row
-        class="pa-1"
-        justify="space-between"
-
-      >
+      <v-row class="pa-1" justify="space-between">
         <v-col>
           <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
         </v-col>
         <v-col class="d-flex justify-end align-center mr-1">
           <v-btn
-            class="text-none ms-4 "
+            class="text-none ms-4"
             color="white"
-            
             variant="flat"
             height="35"
             width="100"
@@ -177,38 +171,50 @@ export default {
           key: "bookingId",
           align: "center",
           sortable: false,
+          icon: "mdi-order-numeric-descending",
         },
         {
           title: "เลขประจำตัวประชาชน ",
           key: "citizenId",
           align: "center",
           sortable: false,
+          icon: "mdi-card-account-details-outline",
         },
         {
           title: "ประเภทงาน",
           key: "typeWork",
           align: "center",
           sortable: false,
+          icon: "mdi-briefcase-outline",
         },
         {
           title: "งานบริการ",
           key: "typeService",
           align: "center",
           sortable: false,
+          icon: "mdi-format-list-bulleted",
         },
         {
           title: "ช่วงเวลา",
           key: "timeBooking",
           align: "center",
           sortable: false,
+          icon: "mdi-clock-time-eight",
         },
         {
           title: "วันที่",
           key: "dateBooking",
           align: "center",
           sortable: false,
+          icon: "mdi-calendar-month",
         },
-        { title: "สถานะ", key: "status", align: "center", sortable: false },
+        {
+          title: "สถานะ",
+          key: "status",
+          align: "center",
+          sortable: false,
+          icon: "mdi-list-status",
+        },
       ],
       gridCols: [
         { cols: 12, sm: 4, lg: 2 },
@@ -341,7 +347,7 @@ export default {
   },
   async mounted() {
     await this.getReport();
-  }
+  },
 };
 </script>
 <style>

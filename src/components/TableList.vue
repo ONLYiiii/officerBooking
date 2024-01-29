@@ -1,24 +1,18 @@
 <template>
-  <!-- <v-data-table :items="tableItems" :headers="tableHeaders">
-    <template v-slot:item.typeWork="{ item }">
-      <span>{{ converter("work", item.typeWork) }}</span>
+  <v-data-table :items="tableItems" :headers="tableHeaders">
+    <template v-slot:headers="{ columns }">
+      <tr>
+        <template v-for="(column, index) in columns" :key="index">
+          <td>
+            <span>
+              <v-icon class="mr-1">{{ column.icon }}</v-icon>
+              {{ column.title }}
+            </span>
+          </td>
+        </template>
+      </tr>
     </template>
 
-    <template v-slot:item.typeService="{ item }">
-      <span>{{ converter("service", item.typeService) }}</span>
-    </template>
-
-    <template v-slot:item.timeBooking="{ item }">
-      <span>{{ converter("time", item.timeBooking) }}</span>
-    </template>
-
-    <template v-slot:item.dateBooking="{ item }">
-      <span>{{ converter("date", item.dateBooking) }}</span>
-    </template>
-
-    <slot></slot>
-  </v-data-table> -->
-  <v-data-table :items="tableItems" :headers="tableHeaders" >
     <template v-slot:item.typeWork="{ item }">
       <span>{{ converter("work", item.typeWork) }}</span>
     </template>

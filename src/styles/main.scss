@@ -1,5 +1,19 @@
 @import url("https://fonts.googleapis.com/css?family=Kanit");
 
 * {
+    // Default Font
     font-family: "Kanit", Courier, monospace;
+    // Date Picker Font
+    --dp-font-family: "Kanit", -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell,
+        "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+thead {
+    // Headers Background Color
+    background-color: rgb(var(--v-theme-secondary));
+}
+
+thead > tr > th > div > span {
+    // Headers Text Color
+    color: rgb(var(--v-theme-primary));
 }

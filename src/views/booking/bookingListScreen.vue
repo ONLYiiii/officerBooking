@@ -1,10 +1,31 @@
 <template>
   <v-container>
-    <v-card style="border-width: 2px; align: center" max-width="100%">
-      <div style="background-color: #dadada; height: 50px; display: flex">
-        <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
+    <v-card
+      style="
+        align: center;
+        max-width: 100%;
+        background-color: rgb(var(--v-theme-primary));
+      "
+    >
+      <div style="height: 50px; display: flex">
+        <v-card-title style="color: white"
+          >รายการนัดหมายขอเข้ารับบริการ</v-card-title
+        >
       </div>
       <v-data-table :items="items" :headers="headers">
+        <template v-slot:headers="{ columns }">
+          <tr>
+            <template v-for="(column, index) in columns" :key="index">
+              <td>
+                <span>
+                  <v-icon class="mr-1">{{ column.icon }}</v-icon>
+                  {{ column.title }}
+                </span>
+              </td>
+            </template>
+          </tr>
+        </template>
+
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
         </template>
@@ -36,8 +57,10 @@
             variant="flat"
             @click="cancelBooking(item)"
             :disabled="item.status"
-            >ยกเลิก</v-btn
           >
+            <span v-if="$vuetify.breakpoint.mdAndUp">ยกเลิก</span>
+            <v-icon v-else icon="bin"></v-icon>
+          </v-btn>
         </template>
       </v-data-table>
       <!-- <TableListVue :items="items" :headers="headers">
@@ -95,14 +118,62 @@ export default {
   data() {
     return {
       headers: [
-        { title: "เลขนัดหมาย", key: "bookingId", align: 'center', sortable: false },
-        { title: "ประเภทงาน", key: "typeWork", align: 'center', sortable: false },
-        { title: "งานบริการ", key: "typeService", align: 'center', sortable: false },
-        { title: "ช่วงเวลา", key: "timeBooking", align: 'center', sortable: false },
-        { title: "วันที่", key: "dateBooking", width: 120, align: 'center', sortable: false },
-        { title: "สถานที่นัดหมาย", key: "rcodeDesc", align: 'center', sortable: false },
-        { title: "สถานะ", key: "status", align: 'center', sortable: false },
-        { title: "ยกเลิกนัดหมาย", key: "cancel", align: 'center', sortable: false },
+        {
+          title: "เลขนัดหมาย",
+          key: "bookingId",
+          align: "center",
+          sortable: false,
+          icon: "mdi-order-numeric-descending",
+        },
+        {
+          title: "ประเภทงาน",
+          key: "typeWork",
+          align: "center",
+          sortable: false,
+          icon: "mdi-briefcase-outline",
+        },
+        {
+          title: "งานบริการ",
+          key: "typeService",
+          align: "center",
+          sortable: false,
+          icon: "mdi-format-list-bulleted",
+        },
+        {
+          title: "ช่วงเวลา",
+          key: "timeBooking",
+          align: "center",
+          sortable: false,
+          icon: "mdi-clock-time-eight",
+        },
+        {
+          title: "วันที่",
+          key: "dateBooking",
+          width: 120,
+          align: "center",
+          sortable: false,
+          icon: "mdi-calendar-month",
+        },
+        {
+          title: "สถานที่นัดหมาย",
+          key: "rcodeDesc",
+          align: "center",
+          sortable: false,
+          icon: "mdi-map-marker",
+        },
+        {
+          title: "สถานะ",
+          key: "status",
+          align: "center",
+          sortable: false,
+          icon: "mdi-list-status",
+        },
+        {
+          title: "ยกเลิกนัดหมาย",
+          key: "cancel",
+          align: "center",
+          sortable: false,
+        },
       ],
       items: [],
     };
@@ -190,8 +261,8 @@ export default {
       }
     },
     getPlaceText(item) {
-      return `<span>${item.rcodeDescription.description}<br/>${item.rcodeCcDescription.description}</span>`
-    }
+      return `<span>${item.rcodeDescription.description}<br/>${item.rcodeCcDescription.description}</span>`;
+    },
   },
 };
 </script>

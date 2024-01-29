@@ -100,7 +100,7 @@ export default {
     titleAmount() {
       return [
         {
-          title: "<p>จำนวนคนนัดหมาย<br>ทั้งหมด</p>",
+          title: "<p>จำนวนนัดหมาย<br>ทั้งหมด</p>",
           amount: this.countRows.totalCount,
           cols: this.gridCols[0].cols,
           sm: this.gridCols[0].sm,
@@ -108,7 +108,7 @@ export default {
           color: "#00A725",
         },
         {
-          title: "<p>จำนวนคนนัดหมาย<br>มารับบริการช่วงเช้า</p>",
+          title: "<p>จำนวนนัดหมาย<br>มารับบริการช่วงเช้า</p>",
           amount: this.countRows.morningCount,
           cols: this.gridCols[1].cols,
           sm: this.gridCols[1].sm,
@@ -116,7 +116,7 @@ export default {
           color: "#1081E9",
         },
         {
-          title: "<p>จำนวนคนนัดหมาย<br>มารับบริการช่วงบ่าย</p>",
+          title: "<p>จำนวนนัดหมาย<br>มารับบริการช่วงบ่าย</p>",
           amount: this.countRows.afternoonCount,
           cols: this.gridCols[2].cols,
           sm: this.gridCols[2].sm,

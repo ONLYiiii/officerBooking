@@ -70,12 +70,11 @@ export default {
         this.startupDialogStore.closeDialog();
       },
     },
-  },
-  methods: {
     startupDialogStore() {
       return getStartupDialogStore();
     },
   },
+  methods: {},
 };
 </script>
 

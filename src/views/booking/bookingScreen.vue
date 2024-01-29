@@ -8,7 +8,7 @@
           paddingTop: '14px',
           paddingRight: '16px',
           paddingBottom: '14px',
-          paddingLeft: '36px',
+          // paddingLeft: '36px',
         }"
         >ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
       >
@@ -239,15 +239,14 @@ export default {
             description: "ศูนย์บริการประชาชน",
             descriptionEnglish: "",
           });
-          this.autocompleteProps.district.modelValue = '0083'
-          this.autocompleteProps.district.disabled = true
+          this.autocompleteProps.district.modelValue = "0083";
+          this.autocompleteProps.district.disabled = true;
         } else {
           let resDatas = await api.getDistrict(cc);
           datas.push(...resDatas.data);
-          this.autocompleteProps.district.disabled = false
+          this.autocompleteProps.district.disabled = false;
         }
 
-        
         return datas;
       } catch (error) {
         console.error("getDistrict Error:", error);
