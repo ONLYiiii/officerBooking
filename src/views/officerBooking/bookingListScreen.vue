@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-10 my-8">
+  <div class="mx-10 my-4">
     <v-row align="center">
       <v-col cols="4">
         <br />
@@ -15,12 +15,33 @@
           color="primary"
         ></v-select>
       </v-col>
+      <v-col cols="4">
+        <CustomDatePickerVue v-model="startEndDate" :minDate="new Date()" />
+      </v-col>
     </v-row>
-
-    <v-card style="align: center" max-width="100%" color="primary">
-      <div style="height: 50px; display: flex">
+    <v-card
+      style="align: center"
+      max-width="100%"
+      class="mt-2"
+      color="primary"
+    >
+    <v-row class="pa-1" justify="space-between">
+      <v-col style=" display: flex">
         <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
-      </div>
+      </v-col>
+      <v-col class="d-flex justify-end align-center mr-1">
+          <v-btn
+            class="text-none ms-4"
+            color="white"
+            variant="flat"
+            height="35"
+            width="100"
+            align="center"
+            @click="handlePrint"
+            >ส่งออก PDF</v-btn
+          >
+        </v-col>
+       </v-row>
       <!-- <v-data-table :items="filteredData" :headers="headers">
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
@@ -49,6 +70,7 @@
 // components Import
 import startupDialogVue from "@/components/officerBooking/startupDialog.vue";
 import TableListVue from "@/components/TableList.vue";
+import CustomDatePickerVue from "@/components/officerBooking/CustomDatePicker.vue";
 import { getFullDate } from "@/utilities/formatDate";
 
 // import { formatDateString, formatDate } from "@/utilities/formatDate";
@@ -61,14 +83,18 @@ import api from "@/api/booking.js";
 
 import statusData from "@/json/statusData.json";
 
+import print from "@/utilities/firstOfficerprint";
+
 export default {
   components: {
     startupDialogVue,
     TableListVue,
+    CustomDatePickerVue
   },
   data() {
     return {
-      selectedStatus: null,
+      startEndDate: new Date(),
+      selectedStatus: 0,
       status: statusData,
       headers: [
       {
@@ -161,22 +187,32 @@ export default {
         afternoonCount,
       };
     },
+
   },
   methods: {
     async getReport() {
       try {
         this.items.length = 0;
+        let dateStart;
+        let dateEnd;
+        if (this.startEndDate[0]) {
+          dateStart = getFullDate(this.startEndDate[0]);
+          dateEnd = getFullDate(this.startEndDate[1]);
+        } else {
+          dateStart = getFullDate(this.startEndDate);
+          dateEnd = getFullDate(this.startEndDate);
+        }
 
         let resDatas = await api.getReport(
-          getFullDate(new Date()),
-          getFullDate(new Date()),
+          dateStart,
+          dateEnd,
           null,
           null,
           this.selectedStatus,
-          // this.userInfo.rcode
-          '1301'
+           this.userInfo.rcode
+       
         );
-        console.log(resDatas);
+        console.log('resDatas ', resDatas);
         this.amountCount.totalCount = resDatas.data.amount;
         this.amountCount.morningCount = resDatas.data.timeBooking1;
         this.amountCount.afternoonCount = resDatas.data.timeBooking2;
@@ -184,6 +220,11 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    handlePrint() {
+    //   console.log('filteredData: ', this.items);
+    // console.log('startEndDate: ', this.startEndDate)
+      print(this.items, this.startEndDate);
     },
     // async getRcode() {
     //   try {
@@ -195,6 +236,9 @@ export default {
     // },
   },
   watch: {
+    startEndDate: function () {
+      this.getReport();
+    },
     selectedStatus: function () {
       this.getReport();
     },

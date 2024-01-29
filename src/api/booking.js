@@ -133,11 +133,7 @@ async function sendMail(body) {
 
 async function putBookingStatus(rcode,bookingId, citizenId, body) {
   //finish
-  return axios.request({
-    method: "put",
-    url: `/api/booking/manage/booking/status/${rcode}/${bookingId}/${citizenId}`,
-    body,
-  });
+  return axios.put(`/api/booking/manage/booking/status/${rcode}/${bookingId}/${citizenId}`, body);
 }
 
 export default {

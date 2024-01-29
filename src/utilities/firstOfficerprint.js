@@ -7,7 +7,9 @@ import {
   convertWorkCode,
   convertServiceCode,
   convertDate,
+  convertStatus
 } from "@/utilities/convertCode.js";
+
 import formatPid from '@/utilities/formatPid';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -23,17 +25,22 @@ export default function print(filteredData, startEndDate) {
     { text: "ประเภทงาน", alignment: "center" },
     { text: "งานบริการ", alignment: "center" },
     { text: "เลขนัดหมาย", alignment: "center" },
+    { text: "สถานะ", alignment: "center" },
+   
   ];
   tableBody.push(tableHeader);
 
   filteredData.forEach((item) => {
     const row = [
-      { text: convertDate(item.dateBooking + ""), alignment: "center" },
-      { text: convertTimeBooking(item.timeBooking), alignment: "center" },
-      { text: formatPid(item.citizenId), alignment: "center" },
-      convertWorkCode(item.typeWork),
-      convertServiceCode(item.typeService),
-      { text: item.bookingId, alignment: "center" },
+        { text: convertDate(item.dateBooking + ""), alignment: "center" },
+        { text: convertTimeBooking(item.timeBooking), alignment: "center" },
+        { text: formatPid(item.citizenId), alignment: "center" },
+        convertWorkCode(item.typeWork),
+        convertServiceCode(item.typeService),
+        { text: item.bookingId, alignment: "center" },
+       { text:convertStatus(item.status), alignment: "center"},
+      
+
     ];
     tableBody.push(row);
   });
@@ -45,14 +52,14 @@ export default function print(filteredData, startEndDate) {
       const formattedDateStart = formatDate(startEndDate[0]);
       const formattedDateEnd = formatDate(startEndDate[1]);
 
-      contentText = `ข้อมูลสถิติรายการนัดหมาย ระหว่างวันที่ ${formattedDateStart} ถึง วันที่ ${formattedDateEnd}`;
+      contentText = `ข้อมูลรายการนัดหมาย ระหว่างวันที่ ${formattedDateStart} ถึง วันที่ ${formattedDateEnd}`;
     } else {
       const formattedDate = formatDate(startEndDate);
 
-      contentText = `ข้อมูลสถิติรายการนัดหมาย ประจำวันที่ ${formattedDate}`;
+      contentText = `ข้อมูลรายการนัดหมาย ประจำวันที่ ${formattedDate}`;
     }
   } else {
-    contentText = "ข้อมูลสถิติรายการนัดหมาย";
+    contentText = "ข้อมูลรายการนัดหมาย";
   }
 
   var docDefinition = {
@@ -62,7 +69,7 @@ export default function print(filteredData, startEndDate) {
       { text: contentText },
       {
         table: {
-          widths: [70, 85, 90, "*", "*", 70],
+          widths: [60, 80, 90, "*","*", 70,60],
           headerRows: 1,
           body: tableBody,
         },

@@ -1,10 +1,10 @@
 <template>
-  <div class="mx-10 my-8">
+  <div class="mx-10 my-4">
     <v-row class="pt-5" align="center" justify="center">
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-row>
           <v-col cols="12" md="5" lg="5">
-            <vue-date-picker
+            <!-- <vue-date-picker
               v-model="startEndDate"
               locale="th-TH"
               :format="formatDatePicker"
@@ -17,7 +17,8 @@
               menu-class-name="customMenu"
               model-auto
               range
-            />
+            /> -->
+            <CustomDatePickerVue v-model="startEndDate" />
           </v-col>
 
           <v-col cols="12" md="5" lg="5">
@@ -126,13 +127,12 @@ import service from "@/json/service.json";
 //Component Import
 import TableList from "@/components/TableList.vue";
 import dataBox from "@/components/officerBooking/dataBox.vue";
-import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
+import CustomDatePickerVue from "@/components/officerBooking/CustomDatePicker.vue";
 
 // API Import
 import api from "@/api/booking.js";
 //Utilities Import
-import { getFullDate, formatDate } from "@/utilities/formatDate";
+import { getFullDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
 
 //Stores Import
@@ -141,7 +141,7 @@ import { getUserInfoStore } from "@/stores/getter_stores";
 export default {
   components: {
     dataBox,
-    VueDatePicker,
+    CustomDatePickerVue,
     TableList,
   },
   data() {
@@ -154,18 +154,18 @@ export default {
       status: statusData,
       dataTable: [],
       filterService: [],
-      startEndDate: new Date(),
-      selectedStatus: null,
-      startTime: [
-        {
-          hours: 0,
-          minutes: 0,
-        },
-        {
-          hours: 0,
-          minutes: 0,
-        },
-      ],
+      startEndDate: null,
+      selectedStatus: 0,
+      // startTime: [
+      //   {
+      //     hours: 0,
+      //     minutes: 0,
+      //   },
+      //   {
+      //     hours: 0,
+      //     minutes: 0,
+      //   },
+      // ],
 
       headers: [
       {
@@ -270,16 +270,16 @@ export default {
     //       return null;
     //   }
     // },
-    formatDatePicker(date) {
-      const date1 = date[0] ? formatDate(date[0]) : "";
-      const date2 = date[1] ? formatDate(date[1]) : "";
+    // formatDatePicker(date) {
+    //   const date1 = date[0] ? formatDate(date[0]) : "";
+    //   const date2 = date[1] ? formatDate(date[1]) : "";
 
-      if (date.length === 2 && date[1] !== null) {
-        return `${date1} ถึง ${date2}`;
-      } else {
-        return date1;
-      }
-    },
+    //   if (date.length === 2 && date[1] !== null) {
+    //     return `${date1} ถึง ${date2}`;
+    //   } else {
+    //     return date1;
+    //   }
+    // },
 
     async getReport() {
       try {
@@ -302,10 +302,8 @@ export default {
           this.selectedWork,
           typeService,
           this.selectedStatus,
-          // this.userInfo.rcode
-          '1301'
+          this.userInfo.rcode
         );
-        console.log(resDatas);
         this.amountCount.totalCount = resDatas.data.amount;
         this.amountCount.morningCount = resDatas.data.timeBooking1;
         this.amountCount.afternoonCount = resDatas.data.timeBooking2;
@@ -349,20 +347,5 @@ export default {
       this.getReport();
     },
   },
-  async mounted() {
-    await this.getReport();
-  },
 };
 </script>
-<style>
-.customDatePicker {
-  padding-top: 7px;
-  padding-bottom: 8px;
-}
-.customMenu {
-  width: 350px;
-}
-.dp-action-row {
-    width: 100% !important;
-}
-</style>

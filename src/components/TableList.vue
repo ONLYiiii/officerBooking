@@ -1,6 +1,10 @@
 <template>
   <v-data-table :items="tableItems" :headers="tableHeaders">
 
+    <template v-slot:item.citizenId="{ item }">
+      <span>{{ converter("citizenId", item.citizenId) }}</span>
+    </template>
+
     <template v-slot:item.typeWork="{ item }">
       <span>{{ converter("work", item.typeWork) }}</span>
     </template>
@@ -32,6 +36,7 @@ import {
   convertDate,
   convertStatus,
 } from "@/utilities/convertCode.js";
+import formatPid from '@/utilities/formatPid';
 
 export default {
   props: ["items", "headers"],
@@ -54,6 +59,8 @@ export default {
           return convertDate(data + "");
         case "status":
           return convertStatus(data);
+        case "citizenId":
+          return formatPid(data)
         default:
           return null;
       }

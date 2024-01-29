@@ -11,19 +11,23 @@
         >
 
         <template v-slot:append>
-          <v-row>
-            <v-col cols="5">
-              <p style="font-size: large">
+          <v-list-item class="text-right" v-if="isOfficer">
+            <p style="font-size: medium">
               {{ userInfo ? userInfo.name : "" }}
             </p>
-            </v-col>
-            <v-col cols="1">
-              <v-icon class="mr-5">mdi-account</v-icon>
-            </v-col>
-            <v-col>
-              {{ userInfo ? userInfo.rcodeDescription.description : "" }}
-            </v-col>
-          </v-row>
+            <p style="font-size: smaller; color: lightgray;">{{ userInfo ? userInfo.rcodeDescription.description : "" }}</p>
+          </v-list-item>
+
+          <v-list-item v-else>
+            <p style="font-size: large">
+              {{ userInfo ? userInfo.pid : "" }}
+            </p>
+          </v-list-item>
+
+          <v-list-item class="pl-0">
+            <v-icon>mdi-account</v-icon>
+          </v-list-item>
+          
         </template>
       </v-app-bar>
 
@@ -94,8 +98,11 @@ export default {
   //   };
   // },
   computed: {
+    isOfficer() {
+      return this.$route.path.startsWith("/booking/officer");
+    },
     showPath() {
-      const path = this.$route.path.startsWith("/booking/officer")
+      const path = this.isOfficer
         ? this.path.officer
         : this.path.booking;
       return path;

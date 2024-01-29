@@ -27,11 +27,21 @@ export function formatDateString(dateString) {
   return `${+day} ${month} ${year}`;
 }
 
-export function formatShortDate(dateString) {
-  const day = parseInt(dateString.substring(6));
-  const month = getShortMonthName(+dateString.substring(4, 6) - 1);
-  const year = dateString.substring(0, 4); // Adding 543 to get the Buddhist era year
+export function formatShortDate(date, notDateString) {
+  let day;
+  let month;
+  let year;
 
+  if (notDateString) {
+    day = date.getDate();
+    month = getShortMonthName(date.getMonth());
+    year = date.getFullYear() + 543; // Adding 543 to get the Buddhist era year
+  } else {
+    day = parseInt(date.substring(6));
+    month = getShortMonthName(+date.substring(4, 6) - 1);
+    year = date.substring(0, 4); // Adding 543 to get the Buddhist era
+  }
+  
   return `${day} ${month} ${year}`;
 }
 
