@@ -67,6 +67,7 @@ export default {
     selectedService: Number,
     getFormattedDate: String,
     selectedServiceTitle: String,
+    
   },
   emits: ["toggleDialogVisible"],
   data() {
@@ -75,28 +76,14 @@ export default {
     };
   },
   methods: {
-    // async confirmAndGoToPdfScreen() {
-    //   const sendData = {
-    //     citizen_id: "1102500034183",
-    //     booking_id: 0,
-    //     rcode: this.selectedProvince + this.selectedDistrict,
-    //     date_booking: getFullDate(this.selectedDate),
-    //     type_work: this.selectedType,
-    //     type_service: this.selectedService,
-    //     time_booking: this.bookTime,
-    //     status: 0,
-    //   };
-
-    //   this.GotopdfScreen(sendData);
-    // },
     async GotopdfScreen() {
       const sendData = await this.postBooking();
       this.bookingDetailsStores.setNewValue(sendData);
-      console.log(this.selectedDistrictTitle);
       this.districtStore.setNewValue(this.selectedDistrictTitle);
       this.$router.push("/booking/pdf");
     },
     async postBooking() {
+      
       const apiRequestBody = {
         citizenId: this.userInfo.pid,
         rcode: `${
@@ -107,22 +94,11 @@ export default {
         typeService: this.selectedService,
         timeBooking: this.bookTime,
       };
-      console.log(apiRequestBody);
+ 
       const response = await api.postBooking(apiRequestBody);
-      console.log("callback ", response);
+
       return response.data;
-      /*
-        response.data = {
-          "citizenId": 1341600131552,
-          "rcode": "1202",
-          "dateBooking": 25670110,
-          "typeWork": 1,
-          "typeService": "0101",
-          "timeBooking": 1,
-          "status": 0,
-          "bookingId": 2
-        }
-      */
+    
     },
   },
   computed: {

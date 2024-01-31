@@ -258,10 +258,6 @@ export default {
           this.autocompleteProps.work.modelValue,
           this.autocompleteProps.service.modelValue
         );
-        console.log(
-          "resDuration.data.duration ::: ",
-          resDuration.data[0].duration
-        );
         return addDate(new Date(), resDuration.data[0].duration);
       } catch (error) {
         console.error("getBookingOver Error:", error);

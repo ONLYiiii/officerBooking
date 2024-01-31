@@ -188,7 +188,7 @@ export default {
         title: "ผลดำเนินการ",
         text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล์ ${this.emailSummary} เรียบร้อยเเล้ว`,
         icon: "success",
-        confirmButtonText: "close",
+        confirmButtonText: "ปิด",
       });
     },
   },
@@ -214,7 +214,7 @@ export default {
         const index = this.province.findIndex(
           (value) => value.ccCode === rcode_province
         );
-        console.log("rcode: ", rcode_province);
+
         return this.province[index].ccDesc;
       }
       return null;
@@ -281,11 +281,7 @@ export default {
       return `${districtText}${this.districtName} ${provinceText}`;
     },
   },
-  async mounted() {
-    this.updateDistrict.push(
-      await this.getDistrict(this.bookingDetails.rcode.substring(0, 2))
-    );
-  },
+  async mounted() {},
 };
 </script>
 <style>
