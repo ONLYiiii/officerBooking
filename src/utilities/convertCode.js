@@ -25,7 +25,6 @@ export function convertTimeBooking(timeBooking) {
 }
 export function convertDate(dateBooking) {
   return formatShortDate(dateBooking);
-  // return formatDateString(dateBooking);
 }
 export function convertStatus(status) {
   switch(status) {

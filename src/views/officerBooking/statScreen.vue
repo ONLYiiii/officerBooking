@@ -4,20 +4,6 @@
       <v-col cols="12" sm="12" md="12" lg="12">
         <v-row>
           <v-col cols="12" md="5" lg="5">
-            <!-- <vue-date-picker
-              v-model="startEndDate"
-              locale="th-TH"
-              :format="formatDatePicker"
-              :enable-time-picker="false"
-              :start-time="startTime"
-              :clearable="false"
-              select-text="เลือก"
-              cancel-text="ยกเลิก"
-              input-class-name="customDatePicker"
-              menu-class-name="customMenu"
-              model-auto
-              range
-            /> -->
             <CustomDatePickerVue v-model="startEndDate" />
           </v-col>
 
@@ -115,27 +101,17 @@
 </template>
 
 <script>
-//Package Import
 import Swal from "sweetalert2";
-
-//JSON Import
 import typework from "@/json/typework.json";
 import statusData from "@/json/statusData.json";
 import service from "@/json/service.json";
-// import fakeData from "@/json/fakeData.json";
-
-//Component Import
 import TableList from "@/components/TableList.vue";
 import dataBox from "@/components/officerBooking/dataBox.vue";
 import CustomDatePickerVue from "@/components/officerBooking/CustomDatePicker.vue";
 
-// API Import
 import api from "@/api/booking.js";
-//Utilities Import
 import { getFullDate } from "@/utilities/formatDate";
 import print from "@/utilities/officerprint";
-
-//Stores Import
 import { getUserInfoStore } from "@/stores/getter_stores";
 
 export default {
@@ -156,67 +132,50 @@ export default {
       filterService: [],
       startEndDate: null,
       selectedStatus: 0,
-      // startTime: [
-      //   {
-      //     hours: 0,
-      //     minutes: 0,
-      //   },
-      //   {
-      //     hours: 0,
-      //     minutes: 0,
-      //   },
-      // ],
 
       headers: [
-      {
+        {
           title: "วันที่",
           key: "dateBooking",
           align: "center",
           sortable: false,
-         // icon: "mdi-calendar-month",
         },
         {
           title: "ช่วงเวลา",
           key: "timeBooking",
           align: "center",
           sortable: false,
-          //icon: "mdi-clock-time-eight",
         },
-       
+
         {
           title: "เลขประจำตัวประชาชน ",
           key: "citizenId",
           align: "center",
           sortable: false,
-          //icon: "mdi-card-account-details-outline",
         },
         {
           title: "ประเภทงาน",
           key: "typeWork",
           align: "start",
           sortable: false,
-         // icon: "mdi-briefcase-outline",
         },
         {
           title: "งานบริการ",
           key: "typeService",
           align: "start",
           sortable: false,
-         // icon: "mdi-format-list-bulleted",
         },
         {
           title: "เลขนัดหมาย",
           key: "bookingId",
           align: "center",
           sortable: false,
-          //icon: "mdi-order-numeric-descending",
         },
         {
           title: "สถานะ",
           key: "status",
           align: "center",
           sortable: false,
-          //icon: "mdi-list-status",
         },
       ],
       gridCols: [
@@ -256,31 +215,6 @@ export default {
     handlePrint() {
       print(this.dataTable, this.startEndDate);
     },
-    // converter(mode, data) {
-    //   switch (mode) {
-    //     case "work":
-    //       return convertWorkCode(data);
-    //     case "service":
-    //       return convertServiceCode(data);
-    //     case "time":
-    //       return convertTimeBooking(data);
-    //     case "date":
-    //       return convertDate(data);
-    //     default:
-    //       return null;
-    //   }
-    // },
-    // formatDatePicker(date) {
-    //   const date1 = date[0] ? formatDate(date[0]) : "";
-    //   const date2 = date[1] ? formatDate(date[1]) : "";
-
-    //   if (date.length === 2 && date[1] !== null) {
-    //     return `${date1} ถึง ${date2}`;
-    //   } else {
-    //     return date1;
-    //   }
-    // },
-
     async getReport() {
       try {
         this.dataTable.length = 0;
@@ -324,7 +258,6 @@ export default {
   },
   watch: {
     selectedWork: function () {
-      //-----------------------------------------------------
       const typeCode = `${this.selectedWork > 9 ? "" : "0"}${
         this.selectedWork
       }`;
@@ -333,7 +266,6 @@ export default {
           return value.code.startsWith(typeCode);
         });
       }
-      //-----------------------------------------------------
       this.selectedService.length = 0;
       this.getReport();
     },

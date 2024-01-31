@@ -82,34 +82,28 @@
             fontWeight: 'bold',
           }"
         >
-          *กรุณาแจ้ง เลขนัดหมายขอเข้ารับบริการ หรือ เลขประจำตัวประชาชน<br />ต่อเจ้าหน้าเมื่อเข้ารับบริการตามวันเเละเวลาที่นัดหมาย
+          *กรุณาแจ้ง เลขนัดหมายขอเข้ารับบริการ<br />ต่อเจ้าหน้าเมื่อเข้ารับบริการตามวันเเละเวลาที่นัดหมาย
         </v-card-text>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-//* Utilities Import
 import print from "@/utilities/print";
 import { formatDateString } from "@/utilities/formatDate";
 import sendEmail from "@/utilities/sendMail";
-
-//* JSON Import
 import provinceJson from "@/json/province.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
 
-//* Stores Import
 import {
   getBookingDetailsStore,
   getUserInfoStore,
   getDistrictStore,
 } from "@/stores/getter_stores";
 
-//* API Import
 import api from "@/api/booking.js";
 
-//* Package Import
 import Swal from "sweetalert2";
 
 export default {
@@ -175,18 +169,18 @@ export default {
         fileBase64: data,
       };
       const response = await sendEmail(sendData);
-      
+
       if (response.status === 201) {
         Swal.fire({
           title: "ผลดำเนินการ",
-          text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล์ ${this.emailSummary} เรียบร้อยเเล้ว`,
+          text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล ${this.emailSummary} เรียบร้อยเเล้ว`,
           icon: "success",
           confirmButtonText: "ปิด",
         });
       } else {
         Swal.fire({
           title: "ผลดำเนินการ",
-          text: "ไม่สามารถจัดส่งข้อมูลนัดหมายไปยังอีเมลล์ของท่านได้",
+          text: "ไม่สามารถจัดส่งข้อมูลนัดหมายไปยังอีเมลได้",
           icon: "error",
           confirmButtonText: "ปิด",
         });

@@ -3,7 +3,6 @@
 </template>
 
 <script>
-//* Stores Import
 import { getUserInfoStore } from "@/stores/getter_stores";
 
 export default {

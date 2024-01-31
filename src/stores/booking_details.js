@@ -26,8 +26,5 @@ export const useBookingDetailsStore = defineStore("bookingDetails", {
       this.bookingDetails.time_booking = newValue.timeBooking;
       this.bookingDetails.status = newValue.status;
     },
-    printData() {
-      console.log(this.bookingDetails);
-    },
   },
 });

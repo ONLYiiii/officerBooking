@@ -13,7 +13,6 @@
         >
       </div>
       <v-data-table :items="items" :headers="headers">
-
         <template v-slot:item.typeWork="{ item }">
           <span>{{ converter("work", item.typeWork) }}</span>
         </template>
@@ -50,24 +49,6 @@
           </v-btn>
         </template>
       </v-data-table>
-      <!-- <TableListVue :items="items" :headers="headers">
-        {{ items }}
-        <template v-slot:item.rcode="{ item }">
-          <span>
-            {{ findDistrict(item) }}
-          </span>
-        </template>
-
-        <template v-slot:item.cancel="{ item }">
-          <v-btn
-            class="text-none ms-4 text-white"
-            color="red"
-            variant="flat"
-            @click="putBookingStatus(item)"
-            >ยกเลิก</v-btn
-          >
-        </template>
-      </TableListVue> -->
     </v-card>
   </div>
 
@@ -81,37 +62,21 @@ import {
   convertDate,
   convertStatus,
 } from "@/utilities/convertCode.js";
-
-import { sleep } from "@/utilities/utils.js";
-
 import Swal from "sweetalert2";
-
-// Components Import
-import TableListVue from "@/components/TableList.vue";
-
-// API Import
 import api from "@/api/booking.js";
-
-// Store Import
 import { getUserInfoStore } from "@/stores/getter_stores";
 
-// Json Import
-import provinceJson from "@/json/province.json";
-
 export default {
-  components: {
-    // TableListVue,
-  },
+  components: {},
   data() {
     return {
       headers: [
-      {
+        {
           title: "วันที่",
           key: "dateBooking",
           width: 120,
           align: "center",
           sortable: false,
-          // icon: "mdi-calendar-month",
         },
         {
           title: "ช่วงเวลา",
@@ -119,31 +84,26 @@ export default {
           align: "center",
           width: 120,
           sortable: false,
-          // icon: "mdi-clock-time-eight",
         },
-        
+
         {
           title: "ประเภทงาน",
           key: "typeWork",
           align: "start",
           sortable: false,
-          // icon: "mdi-briefcase-outline",
         },
         {
           title: "งานบริการ",
           key: "typeService",
           align: "start",
           sortable: false,
-          // icon: "mdi-format-list-bulleted",
         },
-       
-        
+
         {
           title: "สถานที่นัดหมาย",
           key: "rcodeDesc",
           align: "center",
           sortable: false,
-          // icon: "mdi-map-marker",
         },
         {
           title: "เลขนัดหมาย",
@@ -151,7 +111,6 @@ export default {
           align: "center",
           width: 140,
           sortable: false,
-          // icon: "mdi-order-numeric-descending",
         },
         {
           title: "สถานะ",
@@ -159,7 +118,6 @@ export default {
           align: "center",
           width: 150,
           sortable: false,
-          // icon: "mdi-list-status",
         },
         {
           title: "ยกเลิกนัดหมาย",
@@ -218,18 +176,18 @@ export default {
           const status = await this.putBookingStatus(item);
           if (status === 200) {
             await Swal.fire({
-            title: "เเจ้งเตือน",
-            text: "ดำเนินการเรียบร้อยเเล้ว",
-            icon: "success",
-            confirmButtonText: "ปิด",
-          });
+              title: "เเจ้งเตือน",
+              text: "ดำเนินการเรียบร้อยเเล้ว",
+              icon: "success",
+              confirmButtonText: "ปิด",
+            });
           } else {
             await Swal.fire({
-            title: "เเจ้งเตือน",
-            text: "ไม่สามารถยกเลิกได้",
-            icon: "error",
-            confirmButtonText: "ปิด",
-          });
+              title: "เเจ้งเตือน",
+              text: "ไม่สามารถยกเลิกได้",
+              icon: "error",
+              confirmButtonText: "ปิด",
+            });
           }
           await this.getCitizenId();
         }
@@ -243,29 +201,22 @@ export default {
         );
 
         this.items.push(...response.data);
-
-        // return response.data;
-
-        // console.log('Items: ',this.items)
-        console.log("response:: ", this.items);
       } catch (error) {
         console.error("getCitizenId Error:", error);
       }
     },
     async putBookingStatus(item) {
-      console.log(item);
       try {
         const apiRequest = {
           status: 1,
         };
-        console.log(item);
         const response = await api.putBookingStatus(
           item.rcode,
           item.bookingId,
           item.citizenId,
           apiRequest
         );
-        return response.status
+        return response.status;
       } catch (error) {
         console.error("error putBookingStatus: ", error);
       }
@@ -276,7 +227,6 @@ export default {
       } else {
         return `<span>${item.rcodeDescription.description}<br/>กรุงเทพมหานคร</span>`;
       }
-      
     },
   },
 };

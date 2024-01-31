@@ -8,16 +8,14 @@
           paddingTop: '14px',
           paddingRight: '16px',
           paddingBottom: '14px',
-          // paddingLeft: '36px',
         }"
-        ><v-icon icon="mdi-square-edit-outline" size="20"></v-icon> ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
+        ><v-icon icon="mdi-square-edit-outline" size="20"></v-icon>
+        ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
       >
       <v-card-text style="padding: 40px">
         <v-row>
-          <!-- Left Side -->
           <v-col cols="12" lg="7">
             <v-row>
-              <!-- 4 Autocomplete Component -->
               <v-col
                 cols="12"
                 sm="6"
@@ -34,9 +32,6 @@
                   v-model="item.modelValue"
                 />
               </v-col>
-              <!-- /4 Autocomplete Component -->
-
-              <!-- Date Picker Component -->
               <v-col cols="12" v-if="allFieldsFilled">
                 <p style="color: #7d7d7d; font-family: 'Kanit'">
                   เลือกวันที่จะเข้ารับบริการ
@@ -57,12 +52,8 @@
                   :max-date="maxDate"
                 />
               </v-col>
-              <!-- /Date Picker Component -->
             </v-row>
           </v-col>
-          <!-- /Left Side -->
-
-          <!-- Right Side -->
           <v-col v-if="isCodeVisible">
             <BookingSummary
               :is-code-visible="isCodeVisible"
@@ -76,7 +67,6 @@
               @book-afternoon-time="bookAfternoonTime"
             />
           </v-col>
-          <!-- /Right Side -->
         </v-row>
       </v-card-text>
     </v-card>
@@ -101,27 +91,22 @@
 </template>
 
 <script>
-//Component Import
 import Autocomplete from "@/components/booking/inputComponent/autocomplete.vue";
 import DialogInfo from "@/components/booking/DialogInfo.vue";
 import CustomCalendar from "@/components/booking/CustomCalendar.vue";
 import BookingSummary from "@/components/booking/BookingSummary.vue";
 import CalendarDialog from "@/components/booking/CalendarDialog.vue";
 
-// JSON Import
 import holiday from "@/json/holiday.json";
 import provinceJson from "@/json/province.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
 
-// Utilities Import
 import { getFullDate, formatDate } from "@/utilities/formatDate";
 import addDate from "@/utilities/addDate";
 
-// API Import
 import api from "@/api/booking.js";
 
-// Package Import
 import Swal from "sweetalert2";
 
 export default {
@@ -337,7 +322,6 @@ export default {
   watch: {
     autocompleteProps: {
       async handler(newValue) {
-        //* Province and District Items
         if (
           newValue.province.modelValue !== null &&
           newValue.province.modelValue !== newValue.province.oldModelValue
@@ -353,7 +337,6 @@ export default {
             newValue.province.modelValue;
         }
 
-        //* District
         if (
           newValue.district.modelValue !== null &&
           newValue.district.modelValue !== newValue.district.oldModelValue
@@ -362,14 +345,13 @@ export default {
             newValue.district.modelValue;
         }
 
-        //* Work and Service Item
         if (
           newValue.work.modelValue !== null &&
           newValue.work.modelValue !== newValue.work.oldModelValue
         ) {
           const typeCode = `${newValue.work.modelValue > 9 ? "" : "0"}${
             newValue.work.modelValue
-          }`; //If type is integer
+          }`;
 
           this.autocompleteProps.service.modelValue = null;
           this.autocompleteProps.service.items = this.service.filter((value) =>
@@ -378,7 +360,6 @@ export default {
           this.autocompleteProps.work.oldModelValue = newValue.work.modelValue;
         }
 
-        //* Service
         if (
           newValue.service.modelValue !== null &&
           newValue.service.modelValue !== newValue.service.oldModelValue
@@ -394,7 +375,6 @@ export default {
           this.maxDate = await this.getBookingOver();
         }
 
-        //* Uncomplete Input Data Alert
         if (newValue.service.modelValue && !this.allFieldsFilled) {
           Swal.fire({
             title: "เเจ้งเตือน",

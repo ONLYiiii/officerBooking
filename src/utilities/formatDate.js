@@ -10,7 +10,7 @@ export function getFullDate(date) {
 export function formatDate(date, zeroOddDate) {
   const day = date.getDate();
   const month = getMonthName(date.getMonth());
-  const year = date.getFullYear() + 543; // Adding 543 to get the Buddhist era year
+  const year = date.getFullYear() + 543;
 
   if (zeroOddDate) {
     return `${day < 10 ? `0${day}` : day} ${month} ${year}`;
@@ -22,7 +22,7 @@ export function formatDate(date, zeroOddDate) {
 export function formatDateString(dateString) {
   const day = dateString.substring(6);
   const month = getMonthName(+dateString.substring(4, 6) - 1);
-  const year = dateString.substring(0, 4); // Adding 543 to get the Buddhist era year
+  const year = dateString.substring(0, 4);
 
   return `${+day} ${month} ${year}`;
 }
@@ -35,20 +35,20 @@ export function formatShortDate(date, notDateString) {
   if (notDateString) {
     day = date.getDate();
     month = getShortMonthName(date.getMonth());
-    year = date.getFullYear() + 543; // Adding 543 to get the Buddhist era year
+    year = date.getFullYear() + 543;
   } else {
     day = parseInt(date.substring(6));
     month = getShortMonthName(+date.substring(4, 6) - 1);
-    year = date.substring(0, 4); // Adding 543 to get the Buddhist era
+    year = date.substring(0, 4);
   }
-  
+
   return `${day} ${month} ${year}`;
 }
 
 export function splitDateString(dateString) {
   const day = +dateString.substring(6);
   const month = +dateString.substring(4, 6) - 1;
-  const year = +dateString.substring(0, 4) - 543; // Subtract 543 to get the Christian era year
+  const year = +dateString.substring(0, 4) - 543;
   return [year, month, day];
 }
 

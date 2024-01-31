@@ -39,11 +39,10 @@ export default async function sendEmail({
     ],
   };
 
-  await sendMail(htmlEmail);
+  return await sendMail(htmlEmail);
 }
 
 async function sendMail(htmlEmail) {
-  console.log(htmlEmail)
   const response = await api.sendMail(htmlEmail);
-  console.log(response.status)
+  return response
 }
