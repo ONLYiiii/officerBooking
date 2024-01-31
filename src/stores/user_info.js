@@ -15,15 +15,22 @@ export const useUserInfoStore = defineStore("userInfo", {
     async fetchUserInfo() {
       try {
         const response = await api.getUserInfo();
-        if (response.status === 401) {
+        if (response.status === 200) {
+          this.userInfo = response.data;
+        } else if (response.status === 500) {
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text: "500 Internal Server Error",
+            icon: "error",
+            confirmButtonText: "ปิด",
+          });
+        } else {
           Swal.fire({
             title: "ไม่สามารถใช้งานระบบได้",
             text: "กรุณา Login เข้าสู่ระบบ",
             icon: "error",
             confirmButtonText: "ปิด",
           });
-        } else {
-          this.userInfo = response.data;
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
