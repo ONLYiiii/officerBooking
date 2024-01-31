@@ -84,7 +84,7 @@
         >
           *กรุณาแจ้ง เลขนัดหมายขอเข้ารับบริการ หรือ เลขประจำตัวประชาชน<br />ต่อเจ้าหน้าเมื่อเข้ารับบริการตามวันเเละเวลาที่นัดหมาย
         </v-card-text>
-      </v-col>    
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -103,7 +103,7 @@ import service from "@/json/service.json";
 import {
   getBookingDetailsStore,
   getUserInfoStore,
-  getDistrictStore
+  getDistrictStore,
 } from "@/stores/getter_stores";
 
 //* API Import
@@ -185,8 +185,8 @@ export default {
       await sendEmail(sendData);
 
       Swal.fire({
-        title: "เเจ้งเตือน!",
-        text: `ส่งสรุปข้อมูลการนัดหมายไปที่อีเมลล์ ${this.emailSummary} สำเร็จ`,
+        title: "ผลดำเนินการ",
+        text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล์ ${this.emailSummary} เรียบร้อยเเล้ว`,
         icon: "success",
         confirmButtonText: "close",
       });
@@ -208,19 +208,19 @@ export default {
     provinceName() {
       let rcode_province = this.bookingDetails.rcode.substring(0, 2);
       if (rcode_province) {
-        if (rcode_province === '00') {
-          rcode_province = '10';
+        if (rcode_province === "00") {
+          rcode_province = "10";
         }
         const index = this.province.findIndex(
           (value) => value.ccCode === rcode_province
         );
-        console.log("rcode: ",rcode_province)
+        console.log("rcode: ", rcode_province);
         return this.province[index].ccDesc;
       }
       return null;
     },
     districtName() {
-      return this.districtStore.district
+      return this.districtStore.district;
     },
     typeworkName() {
       if (this.bookingDetails.type_work) {
@@ -269,17 +269,17 @@ export default {
       return formatDateString(this.bookingDetails.date_booking);
     },
     placeText() {
-      const ccCode = this.bookingDetails.rcode.substring(0,2);
-      let districtText = 'อำเภอ';
-      let provinceText = '';
-      if (ccCode === '10' || ccCode === '00') {
-        districtText = '';
+      const ccCode = this.bookingDetails.rcode.substring(0, 2);
+      let districtText = "อำเภอ";
+      let provinceText = "";
+      if (ccCode === "10" || ccCode === "00") {
+        districtText = "";
         provinceText = this.provinceName;
       } else {
-        provinceText = `จังหวัด${this.provinceName}`
+        provinceText = `จังหวัด${this.provinceName}`;
       }
-      return `${districtText}${this.districtName} ${provinceText}`
-    }
+      return `${districtText}${this.districtName} ${provinceText}`;
+    },
   },
   async mounted() {
     this.updateDistrict.push(
