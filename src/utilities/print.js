@@ -12,7 +12,7 @@ export default function print(
   typeworkName,
   serviceName,
   placeText,
-  isPrint
+  fetchSendMail
 ) {
   const formattedDate = formatDateString(bookingDetails.date_booking);
   var docDefinition = {
@@ -61,13 +61,9 @@ export default function print(
 
   const pdfDocGenerator = pdfMake.createPdf(docDefinition);
 
-  if (isPrint) {
+  if (!fetchSendMail) {
     pdfDocGenerator.open();
   } else {
-    let fileBase64 = null;
-    pdfDocGenerator.getBase64((data) => {
-      fileBase64 = data;
-    });
-    return fileBase64;
+    pdfDocGenerator.getBase64(fetchSendMail);
   }
 }

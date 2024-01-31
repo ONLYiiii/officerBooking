@@ -139,7 +139,7 @@ export default {
         this.typeworkName,
         this.serviceName,
         this.placeText,
-        true
+        null
       );
     },
     async getDistrict(cc) {
@@ -162,14 +162,7 @@ export default {
         console.log(error);
       }
     },
-    async sendMail() {
-      const fileBase64 = print(
-        this.bookingDetails,
-        this.districtName,
-        this.typeworkName,
-        this.serviceName,
-        false
-      );
+    async fetchSendMail(data) {
       const sendData = {
         email: this.emailSummary,
         name: this.userInfoStore.userInfo.name,
@@ -179,17 +172,34 @@ export default {
         province: this.provinceName,
         district: this.districtName,
         dateBooking: this.getFormattedDate,
-        fileBase64: fileBase64,
+        fileBase64: data,
       };
-
-      await sendEmail(sendData);
-
-      Swal.fire({
-        title: "ผลดำเนินการ",
-        text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล์ ${this.emailSummary} เรียบร้อยเเล้ว`,
-        icon: "success",
-        confirmButtonText: "ปิด",
-      });
+      const response = await sendEmail(sendData);
+      
+      if (response.status === 201) {
+        Swal.fire({
+          title: "ผลดำเนินการ",
+          text: `จัดส่งข้อมูลนัดหมายไปที่อีเมล์ ${this.emailSummary} เรียบร้อยเเล้ว`,
+          icon: "success",
+          confirmButtonText: "ปิด",
+        });
+      } else {
+        Swal.fire({
+          title: "ผลดำเนินการ",
+          text: "ไม่สามารถจัดส่งข้อมูลนัดหมายไปยังอีเมลล์ของท่านได้",
+          icon: "error",
+          confirmButtonText: "ปิด",
+        });
+      }
+    },
+    sendMail() {
+      print(
+        this.bookingDetails,
+        this.districtName,
+        this.typeworkName,
+        this.serviceName,
+        this.fetchSendMail
+      );
     },
   },
   computed: {
