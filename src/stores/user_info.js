@@ -17,16 +17,14 @@ export const useUserInfoStore = defineStore("userInfo", {
         const response = await api.getUserInfo();
         if (response.status === 401) {
           Swal.fire({
-            title: "ผลดำเนินการ",
-            text: "ไม่สามารถจัดส่งข้อมูลนัดหมายไปยังอีเมลล์ของท่านได้",
+            title: "ไม่สามารถใช้งานระบบได้",
+            text: "กรุณา Login เข้าสู่ระบบ",
             icon: "error",
             confirmButtonText: "ปิด",
           });
         } else {
           this.userInfo = response.data;
         }
-        
-     
       } catch (error) {
         console.error("Error fetching user info:", error);
       }
