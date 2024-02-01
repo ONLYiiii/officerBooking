@@ -1,8 +1,11 @@
 <template>
   <v-dialog v-model="dialogModel" persistent content-class="align-center">
     <v-card :width="cardWidth">
-
-      <v-card-title ><center>ข้อมูลนัดหมายประจำวันที่ {{ formatDateComputed }}</center></v-card-title>
+      <v-card-title
+        ><center>
+          ข้อมูลนัดหมายประจำวันที่ {{ formatDateComputed }}
+        </center></v-card-title
+      >
       <v-card-text>
         <data-box
           :grid-cols="gridCols"
@@ -16,7 +19,7 @@
 
         <v-btn
           color="red"
-          style="font-size: 16px;"
+          style="font-size: 16px"
           @click="startupDialogStore.closeDialog()"
           >ปิด</v-btn
         >
@@ -28,7 +31,7 @@
 <script>
 //Component Import
 import dataBox from "@/components/officerBooking/dataBox.vue";
-import {formatDate} from "@/utilities/formatDate"
+import { formatDate } from "@/utilities/formatDate";
 //Stores Import
 import { getStartupDialogStore } from "@/stores/getter_stores";
 
@@ -66,7 +69,7 @@ export default {
     },
     dialogModel: {
       get() {
-        return this.startupDialogStore.dialog;
+        return this.startupDialogStore.dialogComputed;
       },
       set() {
         this.startupDialogStore.closeDialog();
@@ -77,7 +80,7 @@ export default {
     },
     formatDateComputed() {
       return formatDate(new Date());
-    }
+    },
   },
 };
 </script>
