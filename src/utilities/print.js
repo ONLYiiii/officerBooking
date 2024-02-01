@@ -20,7 +20,7 @@ export default function print(
     content: [
       {
         text: [
-          {text:`เลขนัดหมายขอเข้ารับบริการของคุณ \n`,lineHeight: 1.2,},
+          {text:`เลขนัดหมายขอเข้ารับบริการของคุณ  \n`,lineHeight: 1.2,},
           {
             text: `${bookingDetails.booking_id}\n`,
             fontSize: 25,
