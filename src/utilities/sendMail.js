@@ -41,5 +41,5 @@ export default async function sendEmail({
     ],
   };
 
-  return await api.sendMail(htmlEmail);
+  return api.sendMail(htmlEmail);
 }
