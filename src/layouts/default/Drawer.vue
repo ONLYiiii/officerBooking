@@ -29,9 +29,7 @@
 </template>
 
 <script>
-import BookingScreen from "@/views/bookingScreen.vue";
 import DefaultView from "./View.vue";
-import PrintpdfScreen from "@/views/printpdfScreen.vue";
 
 export default {
   components: {

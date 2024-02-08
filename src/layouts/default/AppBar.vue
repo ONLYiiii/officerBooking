@@ -15,7 +15,9 @@
             <p style="font-size: medium">
               {{ userInfo ? userInfo.name : "" }}
             </p>
-            <p style="font-size: smaller; color: lightgray;">{{ userInfo ? userInfo.rcodeDescription.description : "" }}</p>
+            <p style="font-size: smaller; color: lightgray">
+              {{ userInfo ? userInfo.rcodeDescription.description : "" }}
+            </p>
           </v-list-item>
 
           <v-list-item v-else>
@@ -27,7 +29,6 @@
           <v-list-item class="pl-0">
             <v-icon>mdi-account</v-icon>
           </v-list-item>
-          
         </template>
       </v-app-bar>
 
@@ -102,10 +103,7 @@ export default {
       return this.$route.path.startsWith("/booking/officer");
     },
     showPath() {
-      const path = this.isOfficer
-        ? this.path.officer
-        : this.path.booking;
-      return path;
+      return this.isOfficer ? this.path.officer : this.path.booking;
     },
     userInfoStore() {
       return getUserInfoStore();
