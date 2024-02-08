@@ -285,7 +285,6 @@ export default {
       return `${districtText}${this.districtName} ${provinceText}`;
     },
   },
-  async mounted() {},
 };
 </script>
 <style>

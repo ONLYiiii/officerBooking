@@ -2,21 +2,25 @@ export function getFullDate(date) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  return `${year + 543}${month < 10 ? `0${month}` : month}${
+  const res = `${year + 543}${month < 10 ? `0${month}` : month}${
     day < 10 ? `0${day}` : day
   }`;
+  return res;
 }
 
 export function formatDate(date, zeroOddDate) {
   const day = date.getDate();
   const month = getMonthName(date.getMonth());
   const year = date.getFullYear() + 543;
+  let res = "";
 
   if (zeroOddDate) {
-    return `${day < 10 ? `0${day}` : day} ${month} ${year}`;
+    res = `${day < 10 ? `0${day}` : day} ${month} ${year}`;
   } else {
-    return `${day} ${month} ${year}`;
+    res = `${day} ${month} ${year}`;
   }
+
+  return res;
 }
 
 export function formatDateString(dateString) {

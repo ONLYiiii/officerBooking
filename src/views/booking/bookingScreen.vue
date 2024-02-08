@@ -152,7 +152,7 @@ export default {
         header: "ประเภทงาน",
         rule: [
           (value) => {
-            if (!value) return  "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
+            if (!value) return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
           },
         ],
         items: typework.slice(1),
@@ -311,6 +311,7 @@ export default {
       return orientation;
     },
   },
+
   watch: {
     autocompleteProps: {
       async handler(newValue) {
@@ -378,8 +379,10 @@ export default {
           });
         }
       },
+
       deep: true,
     },
+
     allFieldsFilled: function (newValue) {
       if (!newValue) {
         this.selectedDate = null;
