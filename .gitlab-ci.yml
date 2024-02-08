@@ -1,0 +1,60 @@
+before_script:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_REGISTRY
+  - DOCKER_IMAGE="$DOCKER_REGISTRY/ilab/iservices/web/${CI_PROJECT_NAME,,}"
+  - if [ -z "$CI_COMMIT_TAG" ]; then
+    ARG_APP_VERSION="dev";
+    else
+    ARG_APP_VERSION="$CI_COMMIT_TAG";
+    fi
+
+stages:
+  - test
+  - build
+  - delivery
+
+test:
+  stage: test
+  script:
+    - sonar-scanner
+      -Dsonar.sources=src
+      -Dsonar.host.url=$SONAR_HOST
+      -Dsonar.login=$SONAR_TOKEN
+      -Dsonar.projectKey=ILAB-iService-Internet-Web-$CI_PROJECT_NAME
+      -Dsonar.projectName="ILAB / iService / Internet / Web / $CI_PROJECT_NAME"
+      -Dsonar.projectVersion=$CI_PIPELINE_ID
+      -Dsonar.analysis.mode=publish
+      -Dsonar.qualitygate.wait=true
+  except:
+    - tags
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - node_modules/
+  tags:
+    - npm
+
+build:
+  stage: build
+  script:
+    - if [ -z "$CI_BUILD_TAG" ]; then
+      npm version --no-git-tag-version "0.$CI_PIPELINE_ID.0";
+      else
+      npm version --no-git-tag-version "$CI_BUILD_TAG";
+      fi
+    - cp $HOME/.npmrc.readonly ./.npmrc
+    - docker build --build-arg ARG_APP_VERSION=$ARG_APP_VERSION --build-arg NPM_REPOSITORY --build-arg NPM_TOKEN_READONLY --pull -t "$DOCKER_IMAGE:$ARG_APP_VERSION" .
+  needs: ["test"]
+  tags:
+    - docker
+
+delivery:
+  stage: delivery
+  script:
+    - docker tag "$DOCKER_IMAGE:$ARG_APP_VERSION" "$DOCKER_IMAGE:latest"
+    - docker push "$DOCKER_IMAGE:$ARG_APP_VERSION"
+    - docker push "$DOCKER_IMAGE:latest"
+    - docker rmi -f "$DOCKER_IMAGE:$ARG_APP_VERSION" "$DOCKER_IMAGE:latest"
+  tags:
+    - docker
+  when: manual
