@@ -6,15 +6,19 @@
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        ณ {{selectedProvince === '10' ? '' : 'จังหวัด'}}{{ selectedProvinceTitle }} {{selectedProvince === '10' ? '' : 'อำเภอ'}}{{ selectedDistrictTitle }}
+        ณ {{ selectedProvince === "10" ? "" : "จังหวัด"
+        }}{{ selectedProvinceTitle }}
+        {{ selectedProvince === "10" ? "" : "อำเภอ"
+        }}{{ selectedDistrictTitle }}
       </h2>
 
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
         <span v-if="!$vuetify.display.mobile">นัดหมายขอเข้ารับบริการ : </span>
-        {{ selectedTypeTitle }} 
+        {{ selectedTypeTitle }}
       </h2>
       <h2 class="Info-custom" :style="{ fontSize: computedFontSize }">
-        <span v-if="!$vuetify.display.mobile">งานบริการ : </span>{{ selectedServiceTitle }}
+        <span v-if="!$vuetify.display.mobile">งานบริการ : </span
+        >{{ selectedServiceTitle }}
       </h2>
     </div>
     <v-row class="mt-2">
@@ -78,20 +82,22 @@ export default {
       ];
     },
     computedFontSize() {
-      return this.$vuetify.display.smAndDown
+      const setFontSize = this.$vuetify.display.smAndDown
         ? "16px"
         : this.$vuetify.display.mdAndDown
         ? "17px"
         : "18px";
+      return setFontSize;
     },
     computedButtonFontSize() {
-      return this.$vuetify.display.smAndDown
+      const setBtnFontSize = this.$vuetify.display.smAndDown
         ? "16px"
         : this.$vuetify.display.mdAndDown
         ? "17px"
         : "25px";
+
+      return setBtnFontSize;
     },
   },
 };
 </script>
-

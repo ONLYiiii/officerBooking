@@ -56,11 +56,9 @@ export default {
   },
   computed: {
     screenOrientation() {
-      const orientation =
-        this.$vuetify.display.width > this.$vuetify.display.height
-          ? "landscape"
-          : "portrait";
-      return orientation;
+      return this.$vuetify.display.width > this.$vuetify.display.height
+        ? "landscape"
+        : "portrait";
     },
     cardWidth() {
       return this.screenOrientation === "landscape" ? "55vw" : "93vw";
@@ -82,4 +80,3 @@ export default {
   },
 };
 </script>
-
