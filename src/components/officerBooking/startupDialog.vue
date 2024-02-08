@@ -1,11 +1,9 @@
 <template>
   <v-dialog v-model="dialogModel" persistent content-class="align-center">
     <v-card :width="cardWidth">
-      <v-card-title
-        ><center>
-          ข้อมูลนัดหมายประจำวันที่ {{ formatDateComputed }}
-        </center></v-card-title
-      >
+      <v-card-title align="center" justify="center">
+        ข้อมูลนัดหมายประจำวันที่ {{ formatDateComputed }}
+      </v-card-title>
       <v-card-text>
         <data-box
           :grid-cols="gridCols"

@@ -1,8 +1,7 @@
 <template>
-  <div class="mx-10 my-8">
+  <div class="mx-10 my-8" align="center" justify="center">
     <v-card
       style="
-        align: center;
         max-width: 100%;
         background-color: rgb(var(--v-theme-primary));
       "

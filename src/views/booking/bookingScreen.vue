@@ -33,7 +33,7 @@
                 />
               </v-col>
               <v-col cols="12" v-if="allFieldsFilled">
-                <p style="color: #7d7d7d; font-family: 'Kanit'">
+                <p style="color: #7d7d7d;">
                   เลือกวันที่จะเข้ารับบริการ
                 </p>
               </v-col>

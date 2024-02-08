@@ -72,7 +72,6 @@
     </div>
 
     <v-card
-      style="align: center"
       max-width="100%"
       class="mt-10"
       color="primary"

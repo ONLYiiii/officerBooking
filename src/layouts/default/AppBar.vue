@@ -134,7 +134,6 @@ export default {
   font-size: 20px !important;
 }
 .setfont {
-  font-family: "Kanit";
   letter-spacing: 2px;
   font-size: 18px;
 }

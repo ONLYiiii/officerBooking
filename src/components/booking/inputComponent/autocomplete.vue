@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p style="font-color: #1f4680">
+    <p style="color: #1f4680">
       {{ header }}<span style="color: red">*</span>
     </p>
     <v-autocomplete

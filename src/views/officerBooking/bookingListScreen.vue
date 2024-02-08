@@ -19,7 +19,13 @@
         <CustomDatePickerVue v-model="startEndDate" :minDate="new Date()" />
       </v-col>
     </v-row>
-    <v-card style="align: center" max-width="100%" class="mt-2" color="primary">
+    <v-card
+      align="center"
+      justify="center"
+      style=" max-width=100%"
+      class="mt-2"
+      color="primary"
+    >
       <v-row class="pa-1" justify="space-between">
         <v-col style="display: flex">
           <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
