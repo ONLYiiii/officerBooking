@@ -1,4 +1,4 @@
-const bookingRoute = [
+const booking = [
   {
     path: "/booking/",
     name: "bookingScreen",
@@ -16,4 +16,4 @@ const bookingRoute = [
   },
 ];
 
-export default bookingRoute;
+export default booking;

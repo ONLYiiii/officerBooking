@@ -1,4 +1,4 @@
-const officerRoute = [
+const officer = [
   {
     path: "/booking/officer",
     name: "bookingListOfficerScreen",
@@ -11,4 +11,4 @@ const officerRoute = [
   },
 ];
 
-export default officerRoute;
+export default officer;

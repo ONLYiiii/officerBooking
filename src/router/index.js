@@ -1,15 +1,15 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 
-import bookingRoute from "./booking";
-import officerRoute from "./officer";
+import booking from "./booking";
+import officer from "./officer";
 
 const routes = [
   {
     path: "/",
     component: () => import("@/layouts/default/Default.vue"),
     redirect: "/booking",
-    children: [...bookingRoute, ...officerRoute],
+    children: [...booking, ...officer],
   },
 ];
 
