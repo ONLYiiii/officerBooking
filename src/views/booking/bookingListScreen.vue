@@ -1,10 +1,7 @@
 <template>
-  <div class="mx-10 my-8" align="center" justify="center">
+  <div class="mx-10 my-8" justify="center">
     <v-card
-      style="
-        max-width: 100%;
-        background-color: rgb(var(--v-theme-primary));
-      "
+      style="max-width: 100%; background-color: rgb(var(--v-theme-primary))"
     >
       <div style="height: 50px; display: flex">
         <v-card-title style="color: white">
@@ -230,4 +227,3 @@ export default {
   },
 };
 </script>
-<style></style>
