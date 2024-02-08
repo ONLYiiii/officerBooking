@@ -33,9 +33,7 @@
                 />
               </v-col>
               <v-col cols="12" v-if="allFieldsFilled">
-                <p style="color: #7d7d7d;">
-                  เลือกวันที่จะเข้ารับบริการ
-                </p>
+                <p style="color: #7d7d7d">เลือกวันที่จะเข้ารับบริการ</p>
               </v-col>
               <v-col v-if="allFieldsFilled">
                 <custom-calendar
@@ -124,8 +122,7 @@ export default {
         header: "จังหวัด",
         rules: [
           (value) => {
-            if (value) return true;
-            return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
+            if (!value) return "กรุณาเลือกจังหวัดที่ต้องการเข้ารับบริการ";
           },
         ],
         items: provinceJson.sort((a, b) =>
@@ -141,9 +138,7 @@ export default {
         header: "อำเภอ/เขต",
         rules: [
           (value) => {
-            if (value) return true;
-
-            return "กรุณาเลือกอำเภอ/เขตที่ต้องการเข้ารับบริการ";
+            if (!value) return "กรุณาเลือกอำเภอ/เขตที่ต้องการเข้ารับบริการ";
           },
         ],
         items: [],
@@ -157,9 +152,7 @@ export default {
         header: "ประเภทงาน",
         rule: [
           (value) => {
-            if (value) return true;
-
-            return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
+            if (!value) return  "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
           },
         ],
         items: typework.slice(1),
@@ -173,8 +166,7 @@ export default {
         header: "งานบริการ",
         rule: [
           (value) => {
-            if (value) return true;
-            return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
+            if (!value) return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
           },
         ],
         items: [],

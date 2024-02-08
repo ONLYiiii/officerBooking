@@ -24,10 +24,10 @@ export default async function sendEmail({
                 <p>เข้ารับบริการวันที่<strong> ${dateBooking}</strong></p>
                 <h4>บริการ ${work} : ${service}</h4>
                 <h4>ณ ${
-                  district === "ศูนย์บริการประชาชน" ? "" : "อำเภอ"  
+                  district === "ศูนย์บริการประชาชน" ? "" : "อำเภอ"
                 }${district} ${
-                  province === "กรุงเทพมหานคร" ? "" : "จังหวัด"  
-                }${province} </h4>
+      province === "กรุงเทพมหานคร" ? "" : "จังหวัด"
+    }${province} </h4>
                 <br /><br />
                 <p>จึงเรียนมาเพื่อโปรดทราบ</p>
                 <p>สำนักการสอบสวนเเละนิติการ</p>
@@ -36,15 +36,10 @@ export default async function sendEmail({
     attachments: [
       {
         filename: `การนัดหมายขอเข้ารับบริการ${work}.pdf`,
-        base64: fileBase64 + '',
+        base64: fileBase64 + "",
       },
     ],
   };
 
-  return await sendMail(htmlEmail);
-}
-
-async function sendMail(htmlEmail) {
-  const response = await api.sendMail(htmlEmail);
-  return response
+  return await api.sendMail(htmlEmail);
 }

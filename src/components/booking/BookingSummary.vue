@@ -82,21 +82,18 @@ export default {
       ];
     },
     computedFontSize() {
-      const setFontSize = this.$vuetify.display.smAndDown
+      return this.$vuetify.display.smAndDown
         ? "16px"
         : this.$vuetify.display.mdAndDown
         ? "17px"
         : "18px";
-      return setFontSize;
     },
     computedButtonFontSize() {
-      const setBtnFontSize = this.$vuetify.display.smAndDown
+      return this.$vuetify.display.smAndDown
         ? "16px"
         : this.$vuetify.display.mdAndDown
         ? "17px"
         : "25px";
-
-      return setBtnFontSize;
     },
   },
 };
