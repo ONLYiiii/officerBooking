@@ -12,7 +12,7 @@ export default {
     },
   },
   async created() {
-    await this.userInfoStore.fetchUserInfo();
+    // await this.userInfoStore.fetchUserInfo();
   },
 };
 </script>

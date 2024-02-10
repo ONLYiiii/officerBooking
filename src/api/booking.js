@@ -16,7 +16,7 @@ async function getUserInfo() {
 async function getDistrict(cc) {
   return axios.request({
     method: "get",
-    url: `/api/manage/tabdb/ccaattmm/${cc}`,
+    url: `/api/hoteltabdb/ccaattmm/${cc}`,
   });
 }
 
@@ -70,6 +70,9 @@ async function putBooking(bookingId, citizenId, body) {
 }
 
 async function getBookingOver(typeWork, typeService) {
+  console.log(
+    `/api/booking/manage/booking/bookingOver/${typeWork}?typeService=${typeService}`
+  );
   return axios.request({
     method: "get",
     url: `/api/booking/manage/booking/bookingOver/${typeWork}?typeService=${typeService}`,

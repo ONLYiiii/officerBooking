@@ -32,7 +32,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://dopa-iservice.dopa.go.th",
+        target: "https://iservice.dopa.go.th",
         changeOrigin: true,
         secure: false,
         ws: true,

@@ -150,7 +150,7 @@ export default {
       },
       work: {
         header: "ประเภทงาน",
-        rule: [
+        rules: [
           (value) => {
             if (!value) return "กรุณาเลือกประเภทที่ต้องการเข้ารับบริการ";
           },
@@ -164,7 +164,7 @@ export default {
       },
       service: {
         header: "งานบริการ",
-        rule: [
+        rules: [
           (value) => {
             if (!value) return "กรุณาเลือกงานบริการที่ต้องการเข้ารับบริการ";
           },
@@ -208,7 +208,6 @@ export default {
       this.selectedDate = newValue;
     },
     async getDistrict(cc) {
-      console.log("ssssssssssssssssss");
       try {
         const datas = [];
         if (+cc === 10) {
@@ -236,6 +235,7 @@ export default {
           this.autocompleteProps.work.modelValue,
           this.autocompleteProps.service.modelValue
         );
+        console.log("resDuration", resDuration);
         return addDate(new Date(), resDuration.data[0].duration);
       } catch (error) {
         console.error("getBookingOver Error:", error);
@@ -312,66 +312,35 @@ export default {
   },
 
   watch: {
-    autocompleteProps: {
+    "autocompleteProps.province.modelValue": {
       async handler(newValue) {
+        this.autocompleteProps.district.modelValue = null;
+
+        let resDatas = await this.getDistrict(newValue);
+        this.autocompleteProps.district.items = resDatas;
+      },
+    },
+
+    "autocompleteProps.work.modelValue": {
+      async handler(newValue) {
+        const typeCode = `${newValue > 9 ? "" : "0"}${newValue}`;
+
+        this.autocompleteProps.service.modelValue = null;
+        this.autocompleteProps.service.items = this.service.filter((value) =>
+          value.code.startsWith(typeCode)
+        );
+      },
+    },
+
+    "autocompleteProps.service.modelValue": {
+      async handler() {
         if (
-          newValue.province.modelValue !== null &&
-          newValue.province.modelValue !== newValue.province.oldModelValue
-        ) {
-          this.autocompleteProps.district.modelValue = null;
-
-          let resDatas = await this.getDistrict(
-            this.autocompleteProps.province.modelValue
-          );
-          this.autocompleteProps.district.items = resDatas;
-
-          this.autocompleteProps.province.oldModelValue =
-            newValue.province.modelValue;
-        }
-
-        if (
-          newValue.work.modelValue !== null &&
-          newValue.work.modelValue !== newValue.work.oldModelValue
-        ) {
-          const typeCode = `${newValue.work.modelValue > 9 ? "" : "0"}${
-            newValue.work.modelValue
-          }`;
-
-          this.autocompleteProps.service.modelValue = null;
-          this.autocompleteProps.service.items = this.service.filter((value) =>
-            value.code.startsWith(typeCode)
-          );
-          this.autocompleteProps.work.oldModelValue = newValue.work.modelValue;
-        }
-
-        if (
-          newValue.service.modelValue !== null &&
-          newValue.service.modelValue !== newValue.service.oldModelValue
-        ) {
-          this.autocompleteProps.service.oldModelValue =
-            newValue.service.modelValue;
-        }
-
-        if (
-          newValue.work.modelValue !== null &&
-          newValue.service.modelValue !== null
+          this.autocompleteProps.work.modelValue !== null &&
+          this.autocompleteProps.service.modelValue !== null
         ) {
           this.maxDate = await this.getBookingOver();
         }
-
-        if (newValue.service.modelValue && !this.allFieldsFilled) {
-          Swal.fire({
-            title: "เเจ้งเตือน",
-            text: `กรุณาใส่${
-              !newValue.province.modelValue ? "จังหวัดและอำเภอ/เขต" : "อำเภอเขต"
-            }`,
-            icon: "info",
-            confirmButtonText: "ปิด",
-          });
-        }
       },
-
-      deep: true,
     },
 
     allFieldsFilled: function (newValue) {
