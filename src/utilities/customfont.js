@@ -21,10 +21,4 @@ export const fonts = {
     italics: `${window.location.origin}/${kanitItalic}`,
     bolditalics: `${window.location.origin}/${kanitBoldItalic}`,
   },
-  Roboto: {
-    normal: "Roboto-Regular.ttf",
-    bold: "Roboto-Bold.ttf",
-    italics: "Roboto-Italic.ttf",
-    bolditalics: "Roboto-BoldItalic.ttf",
-  },
 };

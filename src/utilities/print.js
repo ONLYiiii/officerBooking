@@ -1,9 +1,6 @@
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { fonts } from "./customfont";
 import { formatDateString } from "../utilities/formatDate";
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
 
@@ -15,12 +12,12 @@ export default function print(
   fetchSendMail
 ) {
   const formattedDate = formatDateString(bookingDetails.date_booking);
-  var docDefinition = {
+  const docDefinition = {
     pageSize: "A4",
     content: [
       {
         text: [
-          {text:`เลขนัดหมายขอเข้ารับบริการของคุณ  \n`,lineHeight: 1.2,},
+          { text: `เลขนัดหมายขอเข้ารับบริการของคุณ  \n`, lineHeight: 1.2 },
           {
             text: `${bookingDetails.booking_id}\n`,
             fontSize: 25,

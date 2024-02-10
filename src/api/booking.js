@@ -1,5 +1,7 @@
 import axios from "axios";
-
+axios.defaults.headers = {
+  "X-User-Agent": "iservice/1.0.0",
+};
 async function getUserInfo() {
   try {
     return await axios.get("/api/manage/login/auth/profile");

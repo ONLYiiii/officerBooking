@@ -9,9 +9,10 @@
           paddingRight: '16px',
           paddingBottom: '14px',
         }"
-        ><v-icon icon="mdi-square-edit-outline" size="20"></v-icon>
-        ลงทะเบียนข้อมูลขอเข้ารับบริการ</v-card-title
       >
+        <v-icon icon="mdi-square-edit-outline" size="20"> </v-icon>
+        ลงทะเบียนข้อมูลขอเข้ารับบริการ
+      </v-card-title>
       <v-card-text style="padding: 40px">
         <v-row>
           <v-col cols="12" lg="7">
@@ -207,6 +208,7 @@ export default {
       this.selectedDate = newValue;
     },
     async getDistrict(cc) {
+      console.log("ssssssssssssssssss");
       try {
         const datas = [];
         if (+cc === 10) {

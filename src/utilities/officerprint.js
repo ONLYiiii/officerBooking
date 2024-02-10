@@ -1,5 +1,4 @@
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { fonts } from "./customfont";
 import { formatDate } from "@/utilities/formatDate";
 
@@ -9,8 +8,6 @@ import {
   convertDate,
 } from "@/utilities/convertCode.js";
 import formatPid from "@/utilities/formatPid";
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
 
