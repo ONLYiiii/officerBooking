@@ -82,18 +82,22 @@ export default {
       ];
     },
     computedFontSize() {
-      return this.$vuetify.display.smAndDown
-        ? "16px"
-        : this.$vuetify.display.mdAndDown
-        ? "17px"
-        : "18px";
+      let fontSize = "18px";
+      if (this.$vuetify.display.smAndDown) {
+        fontSize = "16px";
+      } else if (this.$vuetify.display.mdAndDown) {
+        fontSize = "17px";
+      }
+      return fontSize;
     },
     computedButtonFontSize() {
-      return this.$vuetify.display.smAndDown
-        ? "16px"
-        : this.$vuetify.display.mdAndDown
-        ? "17px"
-        : "25px";
+      let fontSize = "25px";
+      if (this.$vuetify.display.smAndDown) {
+        fontSize = "16px";
+      } else if (this.$vuetify.display.mdAndDown) {
+        fontSize = "17px";
+      }
+      return fontSize;
     },
   },
 };

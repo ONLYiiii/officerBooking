@@ -2,8 +2,8 @@ export function getFullDate(date) {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  return `${year + 543}${month < 10 ? `0${month}` : month}${
-    day < 10 ? `0${day}` : day
+  return `${year + 543}${month < 10 ? "0".concat(String(month)) : month}${
+    day < 10 ? "0".concat(String(day)) : day
   }`;
 }
 
@@ -13,7 +13,7 @@ export function formatDate(date, zeroOddDate) {
   const year = date.getFullYear() + 543;
 
   if (zeroOddDate) {
-    return `${day < 10 ? `0${day}` : day} ${month} ${year}`;
+    return `${day < 10 ? "0".concat(String(day)) : day} ${month} ${year}`;
   } else {
     return `${day} ${month} ${year}`;
   }

@@ -67,7 +67,6 @@ export default {
     selectedService: Number,
     getFormattedDate: String,
     selectedServiceTitle: String,
-    
   },
   emits: ["toggleDialogVisible"],
   data() {
@@ -83,7 +82,6 @@ export default {
       this.$router.push("/booking/pdf");
     },
     async postBooking() {
-      
       const apiRequestBody = {
         citizenId: this.userInfo.pid,
         rcode: `${
@@ -94,11 +92,10 @@ export default {
         typeService: this.selectedService,
         timeBooking: this.bookTime,
       };
- 
+
       const response = await api.postBooking(apiRequestBody);
 
       return response.data;
-    
     },
   },
   computed: {

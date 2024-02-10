@@ -7,16 +7,16 @@ import {
   convertWorkCode,
   convertServiceCode,
   convertDate,
-  convertStatus
+  convertStatus,
 } from "@/utilities/convertCode.js";
 
-import formatPid from '@/utilities/formatPid';
+import formatPid from "@/utilities/formatPid";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
 
-export default function print(filteredData, startEndDate) {
+export default function firstOfficerprint(filteredData, startEndDate) {
   const tableBody = [];
   const tableHeader = [
     { text: "วันที่", alignment: "center" },
@@ -26,21 +26,18 @@ export default function print(filteredData, startEndDate) {
     { text: "งานบริการ", alignment: "center" },
     { text: "เลขนัดหมาย", alignment: "center" },
     { text: "สถานะ", alignment: "center" },
-   
   ];
   tableBody.push(tableHeader);
 
   filteredData.forEach((item) => {
     const row = [
-        { text: convertDate(item.dateBooking + ""), alignment: "center" },
-        { text: convertTimeBooking(item.timeBooking), alignment: "center" },
-        { text: formatPid(item.citizenId), alignment: "center" },
-        convertWorkCode(item.typeWork),
-        convertServiceCode(item.typeService),
-        { text: item.bookingId, alignment: "center" },
-       { text:convertStatus(item.status), alignment: "center"},
-      
-
+      { text: convertDate(item.dateBooking + ""), alignment: "center" },
+      { text: convertTimeBooking(item.timeBooking), alignment: "center" },
+      { text: formatPid(item.citizenId), alignment: "center" },
+      convertWorkCode(item.typeWork),
+      convertServiceCode(item.typeService),
+      { text: item.bookingId, alignment: "center" },
+      { text: convertStatus(item.status), alignment: "center" },
     ];
     tableBody.push(row);
   });
@@ -69,7 +66,7 @@ export default function print(filteredData, startEndDate) {
       { text: contentText },
       {
         table: {
-          widths: [60, 80, 90, "*","*", 70,60],
+          widths: [60, 80, 90, "*", "*", 70, 60],
           headerRows: 1,
           body: tableBody,
         },

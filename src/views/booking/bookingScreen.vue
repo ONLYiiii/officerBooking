@@ -145,7 +145,6 @@ export default {
         itemTitle: "description",
         itemValue: "code",
         modelValue: null,
-        oldModelValue: null,
         disabled: false,
       },
       work: {
@@ -304,11 +303,9 @@ export default {
       return this.$vuetify.display.mobile;
     },
     screenOrientation() {
-      const orientation =
-        this.$vuetify.display.width > this.$vuetify.display.height
-          ? "landscape"
-          : "portrait";
-      return orientation;
+      return this.$vuetify.display.width > this.$vuetify.display.height
+        ? "landscape"
+        : "portrait";
     },
   },
 
@@ -328,14 +325,6 @@ export default {
 
           this.autocompleteProps.province.oldModelValue =
             newValue.province.modelValue;
-        }
-
-        if (
-          newValue.district.modelValue !== null &&
-          newValue.district.modelValue !== newValue.district.oldModelValue
-        ) {
-          this.autocompleteProps.district.oldModelValue =
-            newValue.district.modelValue;
         }
 
         if (

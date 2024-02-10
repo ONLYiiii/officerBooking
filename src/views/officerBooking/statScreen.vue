@@ -71,11 +71,7 @@
       />
     </div>
 
-    <v-card
-      max-width="100%"
-      class="mt-10"
-      color="primary"
-    >
+    <v-card max-width="100%" class="mt-10" color="primary">
       <v-row class="pa-1" justify="space-between">
         <v-col>
           <v-card-title>รายการนัดหมายขอเข้ารับบริการ</v-card-title>
@@ -110,7 +106,7 @@ import CustomDatePickerVue from "@/components/officerBooking/CustomDatePicker.vu
 
 import api from "@/api/booking.js";
 import { getFullDate } from "@/utilities/formatDate";
-import print from "@/utilities/officerprint";
+import officerprint from "@/utilities/officerprint";
 import { getUserInfoStore } from "@/stores/getter_stores";
 
 export default {
@@ -212,7 +208,7 @@ export default {
       }
     },
     handlePrint() {
-      print(this.dataTable, this.startEndDate);
+      officerprint(this.dataTable, this.startEndDate);
     },
     async getReport() {
       try {

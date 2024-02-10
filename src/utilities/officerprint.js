@@ -8,13 +8,13 @@ import {
   convertServiceCode,
   convertDate,
 } from "@/utilities/convertCode.js";
-import formatPid from '@/utilities/formatPid';
+import formatPid from "@/utilities/formatPid";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 pdfMake.fonts = fonts;
 
-export default function print(filteredData, startEndDate) {
+export default function officerprint(filteredData, startEndDate) {
   const tableBody = [];
   const tableHeader = [
     { text: "วันที่", alignment: "center" },

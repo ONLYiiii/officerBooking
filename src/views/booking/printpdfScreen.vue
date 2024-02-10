@@ -91,7 +91,7 @@
 <script>
 import print from "@/utilities/print";
 import { formatDateString } from "@/utilities/formatDate";
-import sendEmail from "@/utilities/sendMail";
+import sendEmail from "@/utilities/sendEmail";
 import provinceJson from "@/json/province.json";
 import typework from "@/json/typework.json";
 import service from "@/json/service.json";
@@ -113,7 +113,11 @@ export default {
       emailSummary: "",
       validateEmail: (value) => {
         const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-        return valid || "กรุณากรอกที่อยู่อีเมลล์ที่ถูกต้อง";
+        if (valid) {
+          return "";
+        } else {
+          return "กรุณากรอกที่อยู่อีเมลล์ที่ถูกต้อง";
+        }
       },
       province: provinceJson,
       updateDistrict: [],
@@ -245,29 +249,35 @@ export default {
       return null;
     },
     computedFontSize() {
-      return this.$vuetify.display.xs
-        ? "12px"
-        : this.$vuetify.display.smAndDown
-        ? "13px"
-        : this.$vuetify.display.mdAndDown
-        ? "14px"
-        : "13px";
+      if (this.$vuetify.display.xs) {
+        return "12px";
+      } else if (this.$vuetify.display.smAndDown) {
+        return "13px";
+      } else if (this.$vuetify.display.mdAndDown) {
+        return "14px";
+      } else {
+        return "13px";
+      }
     },
     computedFontSizebelow() {
-      return this.$vuetify.display.xs
-        ? "14px"
-        : this.$vuetify.display.smAndDown
-        ? "15px"
-        : this.$vuetify.display.mdAndDown
-        ? "16px"
-        : "14px";
+      if (this.$vuetify.display.xs) {
+        return "14px";
+      } else if (this.$vuetify.display.smAndDown) {
+        return "15px";
+      } else if (this.$vuetify.display.mdAndDown) {
+        return "16px";
+      } else {
+        return "14px";
+      }
     },
     bookingIdFontSize() {
-      return this.$vuetify.display.smAndDown
-        ? "30px"
-        : this.$vuetify.display.mdAndDown
-        ? "35px"
-        : "40px";
+      if (this.$vuetify.display.smAndDown) {
+        return "30px";
+      } else if (this.$vuetify.display.mdAndDown) {
+        return "35px";
+      } else {
+        return "40px";
+      }
     },
     getFormattedDate() {
       return formatDateString(this.bookingDetails.date_booking);

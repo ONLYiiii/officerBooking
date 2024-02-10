@@ -58,7 +58,7 @@ import { getFullDate } from "@/utilities/formatDate";
 import { getUserInfoStore } from "@/stores/getter_stores";
 import api from "@/api/booking.js";
 import statusData from "@/json/statusData.json";
-import print from "@/utilities/firstOfficerprint";
+import firstOfficerprint from "@/utilities/firstOfficerprint";
 
 export default {
   components: {
@@ -179,7 +179,7 @@ export default {
       }
     },
     handlePrint() {
-      print(this.items, this.startEndDate);
+      firstOfficerprint(this.items, this.startEndDate);
     },
   },
   watch: {
@@ -195,4 +195,3 @@ export default {
   },
 };
 </script>
-
