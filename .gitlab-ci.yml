@@ -44,7 +44,7 @@ build:
       fi
     - cp $HOME/.npmrc.readonly ./.npmrc
     - docker build --build-arg ARG_APP_VERSION=$ARG_APP_VERSION --build-arg NPM_REPOSITORY --build-arg NPM_TOKEN_READONLY --pull -t "$DOCKER_IMAGE:$ARG_APP_VERSION" .
-  needs: ["test"]
+  # needs: ["test"]
   tags:
     - docker
 
