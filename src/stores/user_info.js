@@ -12,6 +12,12 @@ export const useUserInfoStore = defineStore("userInfo", {
     };
   },
   actions: {
+    setUser(pid, name) {
+      this.userInfo = {
+        pid,
+        name,
+      };
+    },
     async fetchUserInfo() {
       try {
         const response = await api.getUserInfo();

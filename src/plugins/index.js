@@ -11,8 +11,22 @@ import { createPinia } from "pinia";
 
 import { i18n } from "./locale";
 
+import VueSweetalert2 from "vue-sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+const options = {
+  confirmButtonColor: "#3F51B5",
+  cancelButtonColor: "#EEEEEE",
+  confirmButtonText: "ตกลง",
+  cancelButtonText: "ยกเลิก",
+};
+
 export function registerPlugins(app) {
   const pinia = createPinia();
 
-  app.use(i18n).use(vuetify).use(router).use(pinia);
+  app
+    .use(i18n)
+    .use(vuetify)
+    .use(router)
+    .use(pinia)
+    .use(VueSweetalert2, options);
 }
