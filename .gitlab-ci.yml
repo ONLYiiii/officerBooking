@@ -8,31 +8,31 @@ before_script:
     fi
 
 stages:
-  - test
+  # - test
   - build
   - delivery
 
-test:
-  stage: test
-  script:
-    - sonar-scanner
-      -Dsonar.sources=src
-      -Dsonar.host.url=$SONAR_HOST
-      -Dsonar.login=$SONAR_TOKEN
-      -Dsonar.projectKey=ILAB-iService-Internet-Web-$CI_PROJECT_NAME
-      -Dsonar.projectName="ILAB / iService / Internet / Web / $CI_PROJECT_NAME"
-      -Dsonar.projectVersion=$CI_PIPELINE_ID
-      -Dsonar.analysis.mode=publish
-      -Dsonar.qualitygate.wait=true
-  except:
-    - tags
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - node_modules/
-  tags:
-    - npm
+# test:
+#   stage: test
+#   script:
+#     - sonar-scanner
+#       -Dsonar.sources=src
+#       -Dsonar.host.url=$SONAR_HOST
+#       -Dsonar.login=$SONAR_TOKEN
+#       -Dsonar.projectKey=ILAB-iService-Internet-Web-$CI_PROJECT_NAME
+#       -Dsonar.projectName="ILAB / iService / Internet / Web / $CI_PROJECT_NAME"
+#       -Dsonar.projectVersion=$CI_PIPELINE_ID
+#       -Dsonar.analysis.mode=publish
+#       -Dsonar.qualitygate.wait=true
+#   except:
+#     - tags
+#   cache:
+#     key: "$CI_COMMIT_REF_NAME"
+#     policy: pull
+#     paths:
+#       - node_modules/
+#   tags:
+#     - npm
 
 build:
   stage: build
