@@ -191,6 +191,7 @@ export default {
     },
   },
   async mounted() {
+    console.log("1111111111");
     await this.getReport();
   },
 };

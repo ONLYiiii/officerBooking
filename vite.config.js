@@ -1,19 +1,14 @@
-// Plugins
 import vue from "@vitejs/plugin-vue";
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
-import ViteFonts from "unplugin-fonts/vite";
 
-// Utilities
 import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "node:url";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue({
       template: { transformAssetUrls },
     }),
-    // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     vuetify({
       autoImport: true,
       styles: {
@@ -33,7 +28,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://iservice.dopa.go.th",
+        target: "https://dopa-iservice.dopa.go.th",
         changeOrigin: true,
         secure: false,
         ws: true,

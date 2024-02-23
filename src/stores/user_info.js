@@ -12,11 +12,8 @@ export const useUserInfoStore = defineStore("userInfo", {
     };
   },
   actions: {
-    setUser(pid, name) {
-      this.userInfo = {
-        pid,
-        name,
-      };
+    setUser(userData) {
+      this.userInfo = userData;
     },
     async fetchUserInfo() {
       try {

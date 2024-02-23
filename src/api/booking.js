@@ -2,14 +2,10 @@ import axios from "axios";
 axios.defaults.headers = {
   "X-User-Agent": "iservice/1.0.0",
 };
-async function getUserInfo(pid, app_code, app_token) {
+
+async function getUserInfo() {
   try {
-    // return await axios.get("/api/manage/login/auth/profile");
-    return await axios.post("/api/hoteltabdb/citizen", {
-      pid: Number(pid),
-      app_code,
-      app_token,
-    });
+    return await axios.get("/api/manage/login/auth/profile");
   } catch (error) {
     if (error.response) {
       return error.response;
