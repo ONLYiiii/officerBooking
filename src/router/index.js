@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     component: () => import("@/layouts/default/Default.vue"),
-    redirect: "/booking",
+    redirect: "/booking/officer",
     children: [...booking, ...officer],
   },
 ];
