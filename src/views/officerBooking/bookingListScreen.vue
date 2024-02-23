@@ -32,6 +32,7 @@
         </v-col>
         <v-col class="d-flex justify-end align-center mr-1">
           <v-btn
+            v-if="btnPdf"
             class="text-none ms-4"
             color="white"
             variant="flat"
@@ -68,6 +69,7 @@ export default {
   },
   data() {
     return {
+      btnPdf: false,
       startEndDate: new Date(),
       selectedStatus: 0,
       status: statusData,

@@ -47,6 +47,22 @@
             </v-list-item-title>
           </v-list-item>
         </v-list>
+        <template v-slot:append>
+          <hr class="mb-4 mx-5" />
+          <div class="px-5 pb-10">
+            <v-btn
+              block
+              text
+              rounded="xl"
+              size="large"
+              color="secondary"
+              prepend-icon="mdi-arrow-left"
+              @click="back()"
+            >
+              ย้อนกลับ
+            </v-btn>
+          </div>
+        </template>
       </v-navigation-drawer>
 
       <!-- Main Component -->
@@ -122,6 +138,9 @@ export default {
     },
     goToPath(path) {
       this.$router.push(path);
+    },
+    back() {
+      this.$router.go(-1).catch(() => {});
     },
   },
 };
